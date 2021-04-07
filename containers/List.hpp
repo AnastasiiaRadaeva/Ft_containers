@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/03/30 15:55:29 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/07 11:57:31 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 # define LIST_HPP
 
 # include <iostream>
+# include <iterator>
 
 // #include <list>
 // std::list<int> list_;
 
 namespace ft
 {
-    template <typename value_type, typename Alloc = std::allocator<value_type>>
+    template <typename value_type, typename Alloc = std::allocator<value_type> >
     class List
     {
         public:
@@ -35,10 +36,10 @@ namespace ft
             typedef typename allocator_type::pointer            pointer;
             typedef typename allocator_type::const_pointer      const_pointer;
 
-            typedef typename value_type                         *iterator;
-            typedef const typename value_type                   *const_iterator;
-            typedef typename value_type                         *reverse_iterator;
-            typedef typename value_type                         *const_reverese_iterator;
+            typedef typename std::iterator<std::bidirectional_iterator_tag, value_type> *iterator;
+            typedef typename value_type                   *const_iterator;
+            typedef typename reverse_iterator<iterator>         *reverse_iterator;
+            typedef typename reverse_iterator<const_iterator>   *const_reverese_iterator;
  
 
 
