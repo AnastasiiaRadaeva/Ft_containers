@@ -14,8 +14,8 @@
 
 int main()
 {
-    ft::List<std::string> list(5, "Hello");
+    ft::List<std::string> list;
     // for (int i = 0; i < 5; i++)
-    //     std::cout << list.getList() << std::endl; 
+        std::cout << list.getList() << std::endl; 
     return (0);
 }

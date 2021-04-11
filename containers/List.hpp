@@ -46,7 +46,7 @@ namespace ft
             node_alloc  _alloc_for_node;
             Alloc       _alloc;
 
-            node<T> *create_node(T value)
+            node<T> *create_node(T value = T())
             {
                 try
                 {
@@ -94,36 +94,36 @@ namespace ft
             explicit List(const allocator_type& alloc = allocator_type()) : _current_size(0)
             {
                 _alloc = alloc;
-                _tail_of_node_list = create_node(0);
+                _tail_of_node_list = create_node();
             }
 
-            explicit List(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _current_size(n)
-            {
-                _alloc = alloc;
-                _tail_of_node_list = create_node(0);
-                _tail_of_node_list->_next = _tail_of_node_list;
-                _tail_of_node_list->_prev = _tail_of_node_list;
-                ft::node<value_type> *tmp_list_1;
-                ft::node<value_type> *tmp_list_2;
-                tmp_list_1 = _tail_of_node_list;
-                for (size_type i = 0; i < n; i++)
-                {
-                    tmp_list_1->_next = create_node(val);
-                    tmp_list_2 = tmp_list_1->_next;
-                    tmp_list_2->_prev = tmp_list_1;
-                    tmp_list_1 = tmp_list_1->_next;
-                }
-                tmp_list_1->_next = _tail_of_node_list;
-                _tail_of_node_list->_prev = tmp_list_1;
+            // explicit List(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _current_size(n)
+            // {
+            //     _alloc = alloc;
+            //     _tail_of_node_list = create_node(0);
+            //     _tail_of_node_list->_next = _tail_of_node_list;
+            //     _tail_of_node_list->_prev = _tail_of_node_list;
+            //     ft::node<value_type> *tmp_list_1;
+            //     ft::node<value_type> *tmp_list_2;
+            //     tmp_list_1 = _tail_of_node_list;
+            //     for (size_type i = 0; i < n; i++)
+            //     {
+            //         tmp_list_1->_next = create_node(val);
+            //         tmp_list_2 = tmp_list_1->_next;
+            //         tmp_list_2->_prev = tmp_list_1;
+            //         tmp_list_1 = tmp_list_1->_next;
+            //     }
+            //     tmp_list_1->_next = _tail_of_node_list;
+            //     _tail_of_node_list->_prev = tmp_list_1;
 
-                tmp_list_1 = _tail_of_node_list->_next;
-                while (tmp_list_1 != _tail_of_node_list)
-                {
-                    std::cout << tmp_list_1->_content << std::endl;
-                    tmp_list_1 = tmp_list_1->_next;
-                }
+            //     tmp_list_1 = _tail_of_node_list->_next;
+            //     while (tmp_list_1 != _tail_of_node_list)
+            //     {
+            //         std::cout << tmp_list_1->_content << std::endl;
+            //         tmp_list_1 = tmp_list_1->_next;
+            //     }
                 
-            }
+            // }
 
             // template <class InputIterator>
             // List(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
