@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 11:04:48 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/08 12:50:24 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/11 12:36:55 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,44 +16,44 @@
 # include <iostream>
 # include <iterator>
 
-namespace ft
-{
-    template <typename value_type>
-    class Iterator
-    {
-        public:
-            value_type  *pointer;
-            value_type  &reference;
-            ptrdiff_t   difference_type;
+// namespace ft
+// {
+//     template <typename value_type>
+//     class Iterator
+//     {
+//         public:
+//             value_type  *pointer;
+//             value_type  &reference;
+//             ptrdiff_t   difference_type;
             
-            Iterator() {}
-            Iterator(Iterator const &copy) {}
-            Iterator &operator=(Iterator const &copy) {if (*this != &copy){} return (*this);}
-            ~Iterator() {}
+//             Iterator() {}
+//             Iterator(Iterator const &copy) {}
+//             Iterator &operator=(Iterator const &copy) {if (*this != &copy){} return (*this);}
+//             ~Iterator() {}
 
-            bool    operator==(Iterator const &b)
-            {
+//             bool    operator==(Iterator const &b)
+//             {
 
-            }
+//             }
 
-            bool    operator!=(Iterator const &b)
-            {
+//             bool    operator!=(Iterator const &b)
+//             {
 
 
-            }
+//             }
 
-            value_type  &operator*() {return (this->_elem);}
-            value_type  &operator->() {return (this->_elem);}
+//             value_type  &operator*() {return (this->_elem);}
+//             value_type  &operator->() {return (this->_elem);}
 
             
 
 
 
-        private:
-            value_type  _elem;
+//         private:
+//             value_type  _elem;
 
 
-    };
-}
+//     };
+// }
 
 #endif
