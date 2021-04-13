@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/11 17:17:57 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/13 17:36:52 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,10 @@
 # include <cstddef>
 # include <memory>
 # include <new>
-# include "iterator.hpp"
+# include "List_iterator.hpp"
 
 namespace ft
 {
-    /**************************/
-    /*                        */
-    /*     Struct of node     */
-    /*                        */
-    /**************************/
-    template <typename T>
-    struct node
-    {
-        T       content;
-        node    *next;
-        node    *prev;        
-    };
-
     /**********************/
     /*                    */
     /*     Class List     */
@@ -52,8 +39,8 @@ namespace ft
             typedef typename allocator_type::const_reference           const_reference;
             typedef typename allocator_type::pointer                   pointer;
             typedef typename allocator_type::const_pointer             const_pointer;
-            // typedef typename ft::iterator<std::bidir>                       iterator;
-            // typedef typename ft::const_iterator<std::bidir>                 const_iterator;
+            typedef typename ft::iterator<value_type>                       iterator;
+            typedef typename ft::const_iterator<value_type>                 const_iterator;
             // typedef typename ft::reverse_iterator<iterator>                 reverse_iterator;
             // typedef typename ft::reverse_iterator<const_iterator>           const_reverese_iterator;
             // typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
@@ -68,13 +55,15 @@ namespace ft
                 return(_tail_of_node_list->content);
             }
 
-            /*** constructors ***/
+            /***************************************************************************/
+            /*** constructors ------------------------------------------------------ ***/
             explicit List(const allocator_type& alloc = allocator_type()) : _current_size(0)
             {
                 _alloc = alloc;
                 _tail_of_node_list = create_node();
                 _tail_of_node_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = _tail_of_node_list;
+                _tail_of_node_list->content = _current_size;
             }
 
             explicit List(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _current_size(n)
@@ -83,6 +72,7 @@ namespace ft
                 _tail_of_node_list = create_node();
                 _tail_of_node_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = _tail_of_node_list;
+                _tail_of_node_list->content = _current_size;
                 ft::node<value_type> *tmp_list_1;
                 ft::node<value_type> *tmp_list_2;
                 tmp_list_1 = _tail_of_node_list;
@@ -101,10 +91,12 @@ namespace ft
             // List(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
             // List(List const &);
             
-            // /* operator= */
+            /***************************************************************************/
+            /*** operator= --------------------------------------------------------- ***/
             // List &operator=(List const &);
             
-            /* destructor */
+            /***************************************************************************/
+            /*** destructor -------------------------------------------------------- ***/
             ~List()
             {
                 //clear
@@ -112,14 +104,14 @@ namespace ft
             }
 
             // /* Iterators */
-            // // iterator                begin();
-            // // const_iterator          begin() const;
-            // // iterator                end();
-            // // const_iterator          end() const;
-            // // reverse_iterator        rbegin();
-            // // const_reverse_iterator  rbegin() const;
-            // // reverse_iterator        rend();
-            // // const_reverse_iterator  rend() const;
+            iterator                begin() { return (iterator(_tail_of_node_list->next));}
+            const_iterator          begin() const { std::cout << "const" << std::endl; return (const_iterator(_tail_of_node_list->next));}
+            iterator                end() { return (iterator(_tail_of_node_list));}
+            const_iterator          end() const { return (const_iterator(_tail_of_node_list));}
+            // reverse_iterator        rbegin();
+            // const_reverse_iterator  rbegin() const;
+            // reverse_iterator        rend();
+            // const_reverse_iterator  rend() const;
 
             /* --- Capacity --- */
             bool        empty() const {return (_current_size == 0 ? true : false);}
@@ -144,6 +136,7 @@ namespace ft
                 _tail_of_node_list->next->prev = new_node;
                 _tail_of_node_list->next = new_node;
                 _current_size++;
+                _tail_of_node_list->content = _current_size;
             }
             // void pop_front();
             void push_back (const value_type& val)
@@ -154,6 +147,7 @@ namespace ft
                 _tail_of_node_list->prev->next = new_node;
                 _tail_of_node_list->prev = new_node;
                 _current_size++;
+                _tail_of_node_list->content = _current_size;
             }
             // void pop_back();
             // iterator insert (iterator position, const value_type& val);
