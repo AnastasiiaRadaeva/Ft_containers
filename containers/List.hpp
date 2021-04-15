@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/13 17:36:52 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/15 19:13:17 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ namespace ft
             typedef typename allocator_type::const_pointer             const_pointer;
             typedef typename ft::iterator<value_type>                       iterator;
             typedef typename ft::const_iterator<value_type>                 const_iterator;
-            // typedef typename ft::reverse_iterator<iterator>                 reverse_iterator;
-            // typedef typename ft::reverse_iterator<const_iterator>           const_reverese_iterator;
+            typedef typename ft::reverse_iterator<iterator>                 reverse_iterator;
+            typedef typename ft::reverse_iterator<const_iterator>           const_reverese_iterator;
             // typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
             typedef size_t                                                  size_type;
             
@@ -105,7 +105,7 @@ namespace ft
 
             // /* Iterators */
             iterator                begin() { return (iterator(_tail_of_node_list->next));}
-            const_iterator          begin() const { std::cout << "const" << std::endl; return (const_iterator(_tail_of_node_list->next));}
+            const_iterator          begin() const { return (const_iterator(_tail_of_node_list->next));}
             iterator                end() { return (iterator(_tail_of_node_list));}
             const_iterator          end() const { return (const_iterator(_tail_of_node_list));}
             // reverse_iterator        rbegin();
