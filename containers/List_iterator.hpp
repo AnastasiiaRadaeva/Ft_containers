@@ -198,7 +198,7 @@ namespace ft
     /*                                */
     /**********************************/
     template <class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
-    class const_reverse_iterator : ft::const_iterator<T>
+    class const_reverse_iterator
     {
         public:
             /************************/
@@ -216,7 +216,7 @@ namespace ft
             /***************************************************************************/
             /*** constructors ------------------------------------------------------ ***/
             const_reverse_iterator() {};
-            const_reverse_iterator(ft::node<value_type> *current_node) : _current_node(current_node) {}
+            const_reverse_iterator(ft::node<value_type> *current_node) : _current_node(current_node) {} //возможно, нужно будет убрать в приватную зону, чтобы к нему не было доступа
             const_reverse_iterator(const_reverse_iterator const &copy) : _current_node(copy._current_node) {}
 
             /***************************************************************************/
@@ -238,8 +238,8 @@ namespace ft
             pointer     operator->() { return (&(this->_current_node->content));}
             const_reverse_iterator    &operator++() //++i
             {
-                if (_current_node && _current_node->next)
-                    _current_node = _current_node->next;
+                if (_current_node && _current_node->prev)
+                    _current_node = _current_node->prev;
                 return (*this);
             }
             const_reverse_iterator    operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
@@ -250,8 +250,8 @@ namespace ft
             }
             const_reverse_iterator    &operator--()
             {
-                if (_current_node && _current_node->prev)
-                    _current_node = _current_node->prev;
+                if (_current_node && _current_node->next)
+                    _current_node = _current_node->next;
                 return (*this);
             }
             const_reverse_iterator    operator--(int)
@@ -273,13 +273,13 @@ namespace ft
                 ft::node<value_type>    const *_current_node;
     };
 
-    /********************/
-    /*                  */
-    /*     Iterator     */
-    /*                  */
-    /********************/
+    /****************************/
+    /*                          */
+    /*     Reverse_iterator     */
+    /*                          */
+    /****************************/
     template <class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
-    class iterator : public ft::const_iterator<T>
+    class reverse_iterator : public ft::const_reverse_iterator<T>
     {
         public:
             /************************/
@@ -296,13 +296,13 @@ namespace ft
 
             /***************************************************************************/
             /*** constructors ------------------------------------------------------ ***/
-            iterator(){};
-            iterator(ft::node<value_type> *current_node) : _current_node(current_node) {}
-            iterator(iterator const &copy) : _current_node(copy._current_node) {}
+            reverse_iterator(){};
+            reverse_iterator(ft::node<value_type> *current_node) : _current_node(current_node) {}
+            reverse_iterator(reverse_iterator const &copy) : _current_node(copy._current_node) {}
 
             /***************************************************************************/
             /*** operator= --------------------------------------------------------- ***/
-            iterator &operator=(iterator const &b)
+            reverse_iterator &operator=(reverse_iterator const &b)
             {
                 if (this != &b)
                     _current_node = b._current_node;
@@ -311,33 +311,33 @@ namespace ft
 
             /***************************************************************************/
             /*** destructor -------------------------------------------------------- ***/
-            /*virtual */~iterator() {}
+            ~reverse_iterator() {}
 
             /***************************************************************************/
             /*** overloads --------------------------------------------------------- ***/
             reference   operator*() { return (_current_node->content);}
             pointer     operator->() { return (&(this->_current_node->content));}
-            iterator    &operator++() //++i
-            {
-                if (_current_node && _current_node->next)
-                    _current_node = _current_node->next;
-                return (*this);
-            }
-            iterator    operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
-            {
-                iterator tmp(*this);
-                operator++();
-                return (tmp);
-            }
-            iterator    &operator--()
+            reverse_iterator    &operator++() //++i
             {
                 if (_current_node && _current_node->prev)
                     _current_node = _current_node->prev;
                 return (*this);
             }
-            iterator    operator--(int)
+            reverse_iterator    operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
             {
-                iterator tmp(*this);
+                reverse_iterator tmp(*this);
+                operator++();
+                return (tmp);
+            }
+            reverse_iterator    &operator--()
+            {
+                if (_current_node && _current_node->next)
+                    _current_node = _current_node->next;
+                return (*this);
+            }
+            reverse_iterator    operator--(int)
+            {
+                reverse_iterator tmp(*this);
                 operator--();
                 return (tmp);
             }

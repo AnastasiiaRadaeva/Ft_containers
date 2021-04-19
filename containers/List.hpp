@@ -41,8 +41,8 @@ namespace ft
             typedef typename allocator_type::const_pointer             const_pointer;
             typedef typename ft::iterator<value_type>                       iterator;
             typedef typename ft::const_iterator<value_type>                 const_iterator;
-            typedef typename ft::reverse_iterator<iterator>                 reverse_iterator;
-            typedef typename ft::reverse_iterator<const_iterator>           const_reverese_iterator;
+            typedef typename ft::reverse_iterator<value_type>                 reverse_iterator;
+            typedef typename ft::const_reverse_iterator<value_type>           const_reverse_iterator;
             // typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
             typedef size_t                                                  size_type;
             
@@ -108,10 +108,10 @@ namespace ft
             const_iterator          begin() const { return (const_iterator(_tail_of_node_list->next));}
             iterator                end() { return (iterator(_tail_of_node_list));}
             const_iterator          end() const { return (const_iterator(_tail_of_node_list));}
-            // reverse_iterator        rbegin();
-            // const_reverse_iterator  rbegin() const;
-            // reverse_iterator        rend();
-            // const_reverse_iterator  rend() const;
+            reverse_iterator        rbegin() { return (reverse_iterator(_tail_of_node_list->prev));}
+            const_reverse_iterator  rbegin() const { return (const_reverese_iterator(_tail_of_node_list->prev));}
+            reverse_iterator        rend() { return (reverse_iterator(_tail_of_node_list->next));}
+            const_reverse_iterator  rend() const { return (const_reverese_iterator(_tail_of_node_list->next));}
 
             /* --- Capacity --- */
             bool        empty() const {return (_current_size == 0 ? true : false);}

@@ -232,9 +232,12 @@ int main()
 
     // std::cout << "Const_reverse_iterator" << std::endl;
     
-    // const std::list<int> standart_const_rev_list_int(3, 8);
+    // std::list<int> standart_const_rev_list_int(3, 8);
     // std::list<int>::const_reverse_iterator b_iter_st_const_rev_list_int = standart_const_rev_list_int.rbegin();
-    // std::cout << (b_iter_st_list_int == b_iter_st_const_rev_list_int) << std::endl;
+    // // std::cout << (b_iter_st_list_int == b_iter_st_const_rev_list_int) << std::endl;
+
+    // const std::list<int> standart_const_rev_list_int(3, 8);
+    // std::list<int>::reverse_iterator b_iter_st_const_rev_list_int = standart_const_rev_list_int.rbegin(); /////////понять, что делать, reverse и const_reverse переводятся друг в друга
 
     // const ft::List<int>   my_const_list_int;
     // ft::List<int>::const_iterator b_iter_my_const_list_int = my_const_list_int.begin();
