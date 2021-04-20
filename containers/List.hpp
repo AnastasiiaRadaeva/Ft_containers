@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/15 19:13:17 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/20 18:05:32 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,22 @@ namespace ft
             /************************/
             /*     Member types     */
             /************************/
-            typedef T                                                   value_type;
-            typedef Alloc                                             allocator_type;
-            typedef typename allocator_type::reference                 reference;
-            typedef typename allocator_type::const_reference           const_reference;
-            typedef typename allocator_type::pointer                   pointer;
-            typedef typename allocator_type::const_pointer             const_pointer;
-            typedef typename ft::iterator<value_type>                       iterator;
-            typedef typename ft::const_iterator<value_type>                 const_iterator;
-            typedef typename ft::reverse_iterator<value_type>                 reverse_iterator;
-            typedef typename ft::const_reverse_iterator<value_type>           const_reverse_iterator;
+            typedef T                                               value_type;
+            typedef Alloc                                           allocator_type;
+            typedef typename allocator_type::reference              reference;
+            typedef typename allocator_type::const_reference        const_reference;
+            typedef typename allocator_type::pointer                pointer;
+            typedef typename allocator_type::const_pointer          const_pointer;
+            typedef typename ft::iterator<value_type>               iterator;
+            typedef typename ft::const_iterator<value_type>         const_iterator;
+            typedef typename ft::reverse_iterator<value_type>       reverse_iterator;
+            typedef typename ft::const_reverse_iterator<value_type> const_reverse_iterator;
             // typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
-            typedef size_t                                                  size_type;
+            typedef size_t                                          size_type;
             
             /****************************/
             /*     Member functions     */
             /****************************/
-            value_type &getList()
-            {
-                _tail_of_node_list->content = "Hi";
-                return(_tail_of_node_list->content);
-            }
 
             /***************************************************************************/
             /*** constructors ------------------------------------------------------ ***/
@@ -87,8 +82,25 @@ namespace ft
                 _tail_of_node_list->prev = tmp_list_1;
             }
 
-            // template <class InputIterator>
-            // List(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+            template <class InputIterator>
+            List(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
+            {
+                _alloc = alloc;
+                _tail_of_node_list = create_node();
+                _tail_of_node_list->next = _tail_of_node_list;
+                _tail_of_node_list->prev = _tail_of_node_list;
+                _tail_of_node_list->content = _current_size;
+                ft::node<value_type> *tmp_list_1;
+                ft::node<value_type> *tmp_list_2;
+                while (first != last)
+                {
+                    tmp_list_1->next = clone_node(*first); // написать эту функцию
+                    tmp_list_2 = tmp_list_1->next;
+                    tmp_list_2->prev = tmp_list_1;
+                    tmp_list_1 = tmp_list_2;
+                    
+                }
+            }
             // List(List const &);
             
             /***************************************************************************/
@@ -109,9 +121,9 @@ namespace ft
             iterator                end() { return (iterator(_tail_of_node_list));}
             const_iterator          end() const { return (const_iterator(_tail_of_node_list));}
             reverse_iterator        rbegin() { return (reverse_iterator(_tail_of_node_list->prev));}
-            const_reverse_iterator  rbegin() const { return (const_reverese_iterator(_tail_of_node_list->prev));}
+            const_reverse_iterator  rbegin() const { return (const_reverse_iterator(_tail_of_node_list->prev));}
             reverse_iterator        rend() { return (reverse_iterator(_tail_of_node_list->next));}
-            const_reverse_iterator  rend() const { return (const_reverese_iterator(_tail_of_node_list->next));}
+            const_reverse_iterator  rend() const { return (const_reverse_iterator(_tail_of_node_list->next));}
 
             /* --- Capacity --- */
             bool        empty() const {return (_current_size == 0 ? true : false);}

@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 10:49:38 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/15 19:10:18 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/20 17:43:25 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,26 +226,32 @@ int main()
     std::list<int>::const_iterator b_iter_st_const_list_int = standart_const_list_int.begin();
     std::cout << (b_iter_st_list_int == b_iter_st_const_list_int) << std::endl;
 
-    const ft::List<int>   my_const_list_int;
+    const ft::List<int>   my_const_list_int(3, 5);
     ft::List<int>::const_iterator b_iter_my_const_list_int = my_const_list_int.begin();
     std::cout << (b_iter_my_list_int == b_iter_my_const_list_int) << std::endl;
 
-    // std::cout << "Const_reverse_iterator" << std::endl;
+    std::cout << "_____________________________________________________" << std::endl;
+    std::cout << "|                                                   |" << std::endl;
+    std::cout << "|     Reverse_iterator / Const_reverse_iterator     |" << std::endl;
+    std::cout << "|___________________________________________________|" << std::endl << std::endl;
     
-    // std::list<int> standart_const_rev_list_int(3, 8);
-    // std::list<int>::const_reverse_iterator b_iter_st_const_rev_list_int = standart_const_rev_list_int.rbegin();
-    // // std::cout << (b_iter_st_list_int == b_iter_st_const_rev_list_int) << std::endl;
+    std::list<int>::const_reverse_iterator b_st_const_rev_list_int = standart_const_list_int.rend();
+    // *b_st_const_rev_list_int = 5;
+    std::cout << *b_st_const_rev_list_int << "\n";
+    // std::cout << *b_st_const_rev_list_int << "\n";
+    // std::cout << (b_iter_st_list_int == b_st_const_rev_list_int) << std::endl;
 
-    // const std::list<int> standart_const_rev_list_int(3, 8);
-    // std::list<int>::reverse_iterator b_iter_st_const_rev_list_int = standart_const_rev_list_int.rbegin(); /////////понять, что делать, reverse и const_reverse переводятся друг в друга
+    ft::List<int>::const_reverse_iterator it_c = my_const_list_int.rbegin();
+    ft::List<int>::const_reverse_iterator it = my_const_list_int.rend();
+    std::cout << (it_c == it) << std::endl;
+    
+    // *it_c = 4;
+    std::cout << *it_c;
 
-    // const ft::List<int>   my_const_list_int;
-    // ft::List<int>::const_iterator b_iter_my_const_list_int = my_const_list_int.begin();
-    // std::cout << (b_iter_my_list_int == b_iter_my_const_list_int) << std::endl;
-
-
-
-
-
+    // ft::List<int>::reverse_iterator b_iter_my_const_rev_list_int;
+    // b_iter_my_const_list_int = my_const_list_int.rbegin();
+    
+    // std::cout << (b_iter_my_const_rev_list_int == b_iter_my_const_list_int) << std::endl;
+    
     return (0);
 }

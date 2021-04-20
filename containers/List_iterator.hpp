@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 11:19:58 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/15 19:11:20 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/20 17:48:01 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,27 +72,27 @@ namespace ft
 
             /***************************************************************************/
             /*** overloads --------------------------------------------------------- ***/
-            reference   operator*() { return (_current_node->content);}
-            pointer     operator->() { return (&(this->_current_node->content));}
-            const_iterator    &operator++() //++i
+            value_type const    &operator*() { return (_current_node->content);}
+            value_type const    *operator->() { return (&(this->_current_node->content));}
+            const_iterator      &operator++() //++i
             {
                 if (_current_node && _current_node->next)
                     _current_node = _current_node->next;
                 return (*this);
             }
-            const_iterator    operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
+            const_iterator      operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
             {
                 const_iterator tmp(*this);
                 operator++();
                 return (tmp);
             }
-            const_iterator    &operator--()
+            const_iterator      &operator--()
             {
                 if (_current_node && _current_node->prev)
                     _current_node = _current_node->prev;
                 return (*this);
             }
-            const_iterator    operator--(int)
+            const_iterator      operator--(int)
             {
                 const_iterator tmp(*this);
                 operator--();
@@ -102,13 +102,13 @@ namespace ft
             /****************************/
             /*     Friend functions     */
             /****************************/
-            template <class iter_first, class iter_second>
-                friend bool operator==(iter_first const &a, iter_second const &b);
-            template <class iter_first, class iter_second>
-                friend bool operator!=(iter_first const &a, iter_second const &b);
+            template <class A>
+                friend bool operator==(ft::const_iterator<A> const &a, ft::const_iterator<A> const &b);
+            template <class A>
+                friend bool operator!=(ft::const_iterator<A> const &a, ft::const_iterator<A> const &b);
 
-            private:
-                ft::node<value_type>    const *_current_node;
+            protected:
+                ft::node<value_type>    *_current_node;
     };
 
     /********************/
@@ -135,15 +135,15 @@ namespace ft
             /***************************************************************************/
             /*** constructors ------------------------------------------------------ ***/
             iterator(){};
-            iterator(ft::node<value_type> *current_node) : _current_node(current_node) {}
-            iterator(iterator const &copy) : _current_node(copy._current_node) {}
+            iterator(ft::node<value_type> *current_node) : ft::const_iterator<value_type>(current_node) {}
+            iterator(iterator const &copy) : ft::const_iterator<value_type>(copy) {}
 
             /***************************************************************************/
             /*** operator= --------------------------------------------------------- ***/
             iterator &operator=(iterator const &b)
             {
                 if (this != &b)
-                    _current_node = b._current_node;
+                    this->_current_node = b._current_node;
                 return (*this);
             }
 
@@ -153,12 +153,12 @@ namespace ft
 
             /***************************************************************************/
             /*** overloads --------------------------------------------------------- ***/
-            reference   operator*() { return (_current_node->content);}
+            reference   operator*() { return (this->_current_node->content);}
             pointer     operator->() { return (&(this->_current_node->content));}
             iterator    &operator++() //++i
             {
-                if (_current_node && _current_node->next)
-                    _current_node = _current_node->next;
+                if (this->_current_node && this->_current_node->next)
+                    this->_current_node = this->_current_node->next;
                 return (*this);
             }
             iterator    operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
@@ -169,8 +169,8 @@ namespace ft
             }
             iterator    &operator--()
             {
-                if (_current_node && _current_node->prev)
-                    _current_node = _current_node->prev;
+                if (this->_current_node && this->_current_node->prev)
+                    this->_current_node = this->_current_node->prev;
                 return (*this);
             }
             iterator    operator--(int)
@@ -183,13 +183,10 @@ namespace ft
             /****************************/
             /*     Friend functions     */
             /****************************/
-            template <class iter_first, class iter_second>
-                friend bool operator==(iter_first const &a, iter_second const &b);
-            template <class iter_first, class iter_second>
-                friend bool operator!=(iter_first const &a, iter_second const &b);
-
-        private:
-            ft::node<value_type>    *_current_node;
+            template <class A>
+                friend bool operator==(ft::const_iterator<A> const &a, ft::const_iterator<A> const &b);
+            template <class A>
+                friend bool operator!=(ft::const_iterator<A> const &a, ft::const_iterator<A> const &b);
     };
 
     /**********************************/
@@ -234,27 +231,27 @@ namespace ft
 
             /***************************************************************************/
             /*** overloads --------------------------------------------------------- ***/
-            reference   operator*() { return (_current_node->content);}
-            pointer     operator->() { return (&(this->_current_node->content));}
-            const_reverse_iterator    &operator++() //++i
+            value_type const        &operator*() { return (this->_current_node->content);}
+            value_type const        *operator->() { return (&(this->_current_node->content));}
+            const_reverse_iterator  &operator++() //++i
             {
                 if (_current_node && _current_node->prev)
                     _current_node = _current_node->prev;
                 return (*this);
             }
-            const_reverse_iterator    operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
+            const_reverse_iterator  operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
             {
                 const_reverse_iterator tmp(*this);
                 operator++();
                 return (tmp);
             }
-            const_reverse_iterator    &operator--()
+            const_reverse_iterator  &operator--()
             {
                 if (_current_node && _current_node->next)
                     _current_node = _current_node->next;
                 return (*this);
             }
-            const_reverse_iterator    operator--(int)
+            const_reverse_iterator  operator--(int)
             {
                 const_reverse_iterator tmp(*this);
                 operator--();
@@ -264,13 +261,13 @@ namespace ft
             /****************************/
             /*     Friend functions     */
             /****************************/
-            template <class iter_first, class iter_second>
-                friend bool operator==(iter_first const &a, iter_second const &b);
-            template <class iter_first, class iter_second>
-                friend bool operator!=(iter_first const &a, iter_second const &b);
+            template <class A>
+                friend bool operator==(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
+            template <class A>
+                friend bool operator!=(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
 
-            private:
-                ft::node<value_type>    const *_current_node;
+            protected:
+                ft::node<value_type>    *_current_node;
     };
 
     /****************************/
@@ -297,15 +294,15 @@ namespace ft
             /***************************************************************************/
             /*** constructors ------------------------------------------------------ ***/
             reverse_iterator(){};
-            reverse_iterator(ft::node<value_type> *current_node) : _current_node(current_node) {}
-            reverse_iterator(reverse_iterator const &copy) : _current_node(copy._current_node) {}
+            reverse_iterator(ft::node<value_type> *current_node) : ft::const_reverse_iterator<value_type>(current_node) {}
+            reverse_iterator(reverse_iterator const &copy) : ft::const_reverse_iterator<value_type>(copy) {}
 
             /***************************************************************************/
             /*** operator= --------------------------------------------------------- ***/
             reverse_iterator &operator=(reverse_iterator const &b)
             {
                 if (this != &b)
-                    _current_node = b._current_node;
+                    this->_current_node = b._current_node;
                 return (*this);
             }
 
@@ -315,12 +312,12 @@ namespace ft
 
             /***************************************************************************/
             /*** overloads --------------------------------------------------------- ***/
-            reference   operator*() { return (_current_node->content);}
-            pointer     operator->() { return (&(this->_current_node->content));}
+            reference           operator*() { return (this->_current_node->content);}
+            pointer             operator->() { return (&(this->_current_node->content));}
             reverse_iterator    &operator++() //++i
             {
-                if (_current_node && _current_node->prev)
-                    _current_node = _current_node->prev;
+                if (this->_current_node && this->_current_node->prev)
+                    this->_current_node = this->_current_node->prev;
                 return (*this);
             }
             reverse_iterator    operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
@@ -331,8 +328,8 @@ namespace ft
             }
             reverse_iterator    &operator--()
             {
-                if (_current_node && _current_node->next)
-                    _current_node = _current_node->next;
+                if (this->_current_node && this->_current_node->next)
+                    this->_current_node = this->_current_node->next;
                 return (*this);
             }
             reverse_iterator    operator--(int)
@@ -344,23 +341,31 @@ namespace ft
 
             /****************************/
             /*     Friend functions     */
-            /****************************/
-            template <class iter_first, class iter_second>
-                friend bool operator==(iter_first const &a, iter_second const &b);
-            template <class iter_first, class iter_second>
-                friend bool operator!=(iter_first const &a, iter_second const &b);
-
-        private:
-            ft::node<value_type>    *_current_node;
+            /****************************/            
+            template <class A>
+                friend bool operator==(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
+            template <class A>
+                friend bool operator!=(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
     };
 
-    template <class iter_first, class iter_second>
-    bool operator==(iter_first const &a, iter_second const &b)
+    template <class T>
+    bool operator==(const_iterator<T> const &a, const_iterator<T> const &b)
     {
         return (a._current_node == b._current_node);
     }
-    template <class iter_first, class iter_second>
-    bool operator!=(iter_first const &a, iter_second const &b)
+    template <class T>
+    bool operator!=(const_iterator<T> const &a, const_iterator<T> const &b)
+    {
+        return (a._current_node != b._current_node);
+    }
+
+    template <class T>
+    bool operator==(const_reverse_iterator<T> const &a, const_reverse_iterator<T> const &b)
+    {
+        return (a._current_node == b._current_node);
+    }
+    template <class T>
+    bool operator!=(const_reverse_iterator<T> const &a, const_reverse_iterator<T> const &b)
     {
         return (a._current_node != b._current_node);
     }
