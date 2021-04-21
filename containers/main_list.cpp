@@ -252,6 +252,203 @@ int main()
     // b_iter_my_const_list_int = my_const_list_int.rbegin();
     
     // std::cout << (b_iter_my_const_rev_list_int == b_iter_my_const_list_int) << std::endl;
-    
+
+    std::cout << "____________________________" << std::endl;
+    std::cout << "|                          |" << std::endl;
+    std::cout << "|     Copy constructor     |" << std::endl;
+    std::cout << "|__________________________|" << std::endl << std::endl;
+
+    ft::List<int> copy_my_const_list_int(my_const_list_int);
+    ft::List<int>::iterator b_copy = copy_my_const_list_int.begin();
+    ft::List<int>::iterator e_copy = copy_my_const_list_int.end();
+
+    std::cout << "My list: ";
+    while (b_copy != e_copy)
+    {
+        std::cout << *b_copy << " ";
+        ++b_copy;
+    }
+    std::cout << std::endl;
+    copy_my_const_list_int.push_back(7);
+    std::cout << "Size of list: " << *b_copy << std::endl;
+    b_copy++;
+    std::cout << "My list: ";
+    while (b_copy != e_copy)
+    {
+        std::cout << *b_copy << " ";
+        ++b_copy;
+    }
+    std::cout << std::endl;
+    copy_my_const_list_int.pop_front();
+    std::cout << "Size of list: " << *b_copy << std::endl;
+    ++b_copy;
+    std::cout << "My list: ";
+    while (b_copy != e_copy)
+    {
+        std::cout << *b_copy << " ";
+        ++b_copy;
+    }
+    std::cout << std::endl;
+
+    copy_my_const_list_int.pop_back();
+    std::cout << "Size of list: " << *b_copy << std::endl;
+    ++b_copy;
+    std::cout << "My list: ";
+    while (b_copy != e_copy)
+    {
+        std::cout << *b_copy << " ";
+        ++b_copy;
+    }
+    std::cout << std::endl;
+
+    copy_my_const_list_int.pop_back();
+    std::cout << "Size of list: " << *b_copy << std::endl;
+    ++b_copy;
+    std::cout << "My list: ";
+    while (b_copy != e_copy)
+    {
+        std::cout << *b_copy << " ";
+        ++b_copy;
+    }
+    std::cout << std::endl;
+
+    copy_my_const_list_int.pop_back();
+    std::cout << "Size of list: " << *b_copy << std::endl;
+    ++b_copy;
+    std::cout << "My list: ";
+    while (b_copy != e_copy)
+    {
+        std::cout << *b_copy << " ";
+        ++b_copy;
+    }
+    std::cout << std::endl;
+    copy_my_const_list_int.pop_back();
+    copy_my_const_list_int.pop_back();
+
+
+    // std::list<int> l;
+    // std::list<int>::iterator b_i = l.begin();
+    // std::list<int>::iterator e_i = l.end();
+    // std::cout << "Standart list: ";
+    // while (b_i != e_i)
+    // {
+    //     std::cout << *b_i << " ";
+    //     ++b_i;
+    // }
+    // std::cout << std::endl;
+    // l.pop_back();
+    // copy_my_const_list_int.push_back(7);
+    // std::cout << "Size of list: " << *b_copy << std::endl;
+    // b_copy++;
+    // std::cout << "My list: ";
+    // while (b_copy != e_copy)
+    // {
+    //     std::cout << *b_copy << " ";
+    //     ++b_copy;
+    // }
+    // std::cout << std::endl;
+    // copy_my_const_list_int.pop_front();
+    // std::cout << "Size of list: " << *b_copy << std::endl;
+    // ++b_copy;
+    // std::cout << "My list: ";
+    // while (b_copy != e_copy)
+    // {
+    //     std::cout << *b_copy << " ";
+    //     ++b_copy;
+    // }
+    // std::cout << std::endl;
+
+    // copy_my_const_list_int.pop_back();
+    // std::cout << "Size of list: " << *b_copy << std::endl;
+    // ++b_copy;
+    // std::cout << "My list: ";
+    // while (b_copy != e_copy)
+    // {
+    //     std::cout << *b_copy << " ";
+    //     ++b_copy;
+    // }
+    // std::cout << std::endl;
+
+    // copy_my_const_list_int.pop_back();
+    // std::cout << "Size of list: " << *b_copy << std::endl;
+    // ++b_copy;
+    // std::cout << "My list: ";
+    // while (b_copy != e_copy)
+    // {
+    //     std::cout << *b_copy << " ";
+    //     ++b_copy;
+    // }
+    // std::cout << std::endl;
+
+    // copy_my_const_list_int.pop_back();
+    // std::cout << "Size of list: " << *b_copy << std::endl;
+    // ++b_copy;
+    // std::cout << "My list: ";
+    // while (b_copy != e_copy)
+    // {
+    //     std::cout << *b_copy << " ";
+    //     ++b_copy;
+    // }
+    // std::cout << std::endl;
+
+    std::cout << "_____________________" << std::endl;
+    std::cout << "|                   |" << std::endl;
+    std::cout << "|     Operator=     |" << std::endl;
+    std::cout << "|___________________|" << std::endl << std::endl;
+
+    ft::List<int> oper_my_const_list_int = copy_my_const_list_int;
+    ft::List<int>::iterator b_oper = oper_my_const_list_int.begin();
+    ft::List<int>::iterator e_oper = oper_my_const_list_int.end();
+
+    std::cout << "My list: ";
+    while (b_oper != e_oper)
+    {
+        std::cout << *b_oper << " ";
+        ++b_oper;
+    }
+    std::cout << std::endl;
+    std::cout << "Size of list: " << *b_oper << std::endl;
+
+    oper_my_const_list_int.push_back(7);
+    b_oper++;
+    std::cout << "My list: ";
+    while (b_oper != e_oper)
+    {
+        std::cout << *b_oper << " ";
+        ++b_oper;
+    }
+    std::cout << "Size of list: " << *b_oper << std::endl;
+
+    std::cout << "__________________" << std::endl;
+    std::cout << "|                |" << std::endl;
+    std::cout << "|     Assign     |" << std::endl;
+    std::cout << "|________________|" << std::endl << std::endl;
+
+    std::list<int> list_assign(5, 9);
+    list_assign.assign(3, 7);
+    std::list<int>::iterator b = list_assign.begin();
+    std::list<int>::iterator e = list_assign.end();
+    std::cout << "Standart list: ";
+    while (b != e)
+    {
+        std::cout << *b << " ";
+        ++b;
+    }
+    std::cout << std::endl;
+    std::cout << "Size of list: " << *b << std::endl;
+
+    ft::List<int> my_list_assign(5, 9);
+    my_list_assign.assign(3, 7);
+    ft::List<int>::iterator my_b = my_list_assign.begin();
+    ft::List<int>::iterator my_e = my_list_assign.end();
+    std::cout << "My list: ";
+    while (my_b != my_e)
+    {
+        std::cout << *my_b << " ";
+        ++my_b;
+    }
+    std::cout << std::endl;
+    std::cout << "Size of list: " << my_list_assign.size() << std::endl;
+
     return (0);
 }

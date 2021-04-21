@@ -17,6 +17,7 @@
 # include <cstddef>
 # include <memory>
 # include <new>
+# include <typeinfo>
 # include "List_iterator.hpp"
 
 namespace ft
@@ -82,37 +83,78 @@ namespace ft
                 _tail_of_node_list->prev = tmp_list_1;
             }
 
-            template <class InputIterator>
-            List(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
+            // template <class InputIterator> // тут нужно показать, что мы можем брать именно итераторы
+            // List(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
+            // {
+            //     _alloc = alloc;
+            //     _tail_of_node_list = create_node();
+            //     _tail_of_node_list->next = _tail_of_node_list;
+            //     _tail_of_node_list->prev = _tail_of_node_list;
+            //     ft::node<value_type> *tmp_list_1;
+            //     size_type i = 0;
+            //     while (first != last)
+            //     {
+            //         tmp_list_1->next = create_node(*first);
+            //         tmp_list_1->next->prev = tmp_list_1;
+            //         tmp_list_1 = tmp_list_1->next;
+            //         i++;
+            //     }
+            //     tmp_list_1->next = _tail_of_node_list;
+            //     _tail_of_node_list->prev = tmp_list_1;
+            //     _current_size = i;
+            //     _tail_of_node_list->content = _current_size;
+            // }
+
+            List(List const &copy)
             {
-                _alloc = alloc;
                 _tail_of_node_list = create_node();
                 _tail_of_node_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = _tail_of_node_list;
-                _tail_of_node_list->content = _current_size;
-                ft::node<value_type> *tmp_list_1;
-                ft::node<value_type> *tmp_list_2;
-                while (first != last)
+                ft::node<value_type> *tmp_list_1 = _tail_of_node_list;
+                ft::node<value_type> *tmp_copy_list = copy._tail_of_node_list->next;
+                while (tmp_copy_list != copy._tail_of_node_list)
                 {
-                    tmp_list_1->next = clone_node(*first); // написать эту функцию
-                    tmp_list_2 = tmp_list_1->next;
-                    tmp_list_2->prev = tmp_list_1;
-                    tmp_list_1 = tmp_list_2;
-                    
+                    tmp_list_1->next = create_node(tmp_copy_list->content);
+                    tmp_list_1->next->prev = tmp_list_1;
+                    tmp_list_1 = tmp_list_1->next;
+                    tmp_copy_list = tmp_copy_list->next;
                 }
+                tmp_list_1->next = _tail_of_node_list;
+                _tail_of_node_list->prev = tmp_list_1;
+                _tail_of_node_list->content = copy._current_size;
+                _current_size = copy._current_size;
             }
-            // List(List const &);
-            
+
             /***************************************************************************/
             /*** operator= --------------------------------------------------------- ***/
-            // List &operator=(List const &);
+            List &operator=(List const &b)
+            {
+                if (this != &b)
+                {
+                    clear();
+                    ft::node<value_type> *tmp_list_1 = _tail_of_node_list;
+                    ft::node<value_type> *tmp_b_list = b._tail_of_node_list->next;
+                    while (tmp_b_list != b._tail_of_node_list)
+                    {
+                        tmp_list_1->next = create_node(tmp_b_list->content);
+                        tmp_list_1->next->prev = tmp_list_1;
+                        tmp_list_1 = tmp_list_1->next;
+                        tmp_b_list = tmp_b_list->next;
+                    }
+                    tmp_list_1->next = _tail_of_node_list;
+                    _tail_of_node_list->prev = tmp_list_1;
+                    _tail_of_node_list->content = b._current_size;
+                    _current_size = b._current_size;
+                }
+                return (*this);
+            }
             
             /***************************************************************************/
             /*** destructor -------------------------------------------------------- ***/
             ~List()
             {
-                //clear
-
+                clear();
+                delete_node(_tail_of_node_list);
             }
 
             // /* Iterators */
@@ -137,9 +179,29 @@ namespace ft
             const_reference back() const { return (_tail_of_node_list->prev->content);}
 
             // /* Modifiers */
-            // template <class InputIterator>
-            // void assign (InputIterator first, InputIterator last);
-            // void assign (size_type n, const value_type& val);
+            // template <class InputIterator> // тут нужно показать, что мы можем брать именно итераторы
+            // void assign (InputIterator first, InputIterator last)
+            // {
+
+            // }
+            void assign (size_type n, const value_type& val)
+            {
+                clear();
+                _current_size = n;
+                _tail_of_node_list->content = _current_size;
+                ft::node<value_type> *tmp_list_1;
+                ft::node<value_type> *tmp_list_2;
+                tmp_list_1 = _tail_of_node_list;
+                for (size_type i = 0; i < n; i++)
+                {
+                    tmp_list_1->next = create_node(val);
+                    tmp_list_2 = tmp_list_1->next;
+                    tmp_list_2->prev = tmp_list_1;
+                    tmp_list_1 = tmp_list_2;
+                }
+                tmp_list_1->next = _tail_of_node_list;
+                _tail_of_node_list->prev = tmp_list_1;
+            }
             void push_front (const value_type& val)
             {
                 ft::node<value_type> *new_node = create_node(val);
@@ -147,10 +209,22 @@ namespace ft
                 new_node->prev = _tail_of_node_list;
                 _tail_of_node_list->next->prev = new_node;
                 _tail_of_node_list->next = new_node;
-                _current_size++;
-                _tail_of_node_list->content = _current_size;
+                _tail_of_node_list->content = ++_current_size;
             }
-            // void pop_front();
+            void pop_front()
+            {
+                if (_tail_of_node_list->next == _tail_of_node_list)
+                {
+                    std::cerr << "You try to delete empty list" << std::endl;
+                    return;
+                }
+                ft::node<value_type> *tmp;
+                tmp = _tail_of_node_list->next->next;
+                delete_node(_tail_of_node_list->next);
+                _tail_of_node_list->next = tmp;
+                tmp->prev = _tail_of_node_list;
+                _tail_of_node_list->content = --_current_size;
+            }
             void push_back (const value_type& val)
             {
                 ft::node<value_type> *new_node = create_node(val);
@@ -158,18 +232,45 @@ namespace ft
                 new_node->next = _tail_of_node_list;
                 _tail_of_node_list->prev->next = new_node;
                 _tail_of_node_list->prev = new_node;
-                _current_size++;
-                _tail_of_node_list->content = _current_size;
+                _tail_of_node_list->content = ++_current_size;
             }
-            // void pop_back();
+            void pop_back()
+            {
+                if (_tail_of_node_list->next == _tail_of_node_list)
+                {
+                    std::cerr << "You try to delete empty list" << std::endl;
+                    return;
+                }
+                ft::node<value_type> *tmp;
+                tmp = _tail_of_node_list->prev->prev;
+                delete_node(_tail_of_node_list->prev);
+                _tail_of_node_list->prev = tmp;
+                tmp->next = _tail_of_node_list;
+                _tail_of_node_list->content = --_current_size;
+            }
             // iterator insert (iterator position, const value_type& val);
             // void insert (iterator position, size_type n, const value_type& val);
+            // template <class InputIterator> // тут нужно показать, что мы можем брать именно итераторы
             // void insert (iterator position, InputIterator first, InputIterator last);
             // iterator erase (iterator position);
             // iterator erase (iterator first, iterator last);
-            // void swap (List& x);
+            void swap (List& x)
+            {
+                List<value_type> tmp(x);
+                
+            }
             // void resize (size_type n, value_type val = value_type());
-            // void clear();
+            void clear()
+            {
+                ft::node<value_type> *tmp = _tail_of_node_list->next->next;
+                while (tmp->prev != _tail_of_node_list)
+                {
+                    delete_node(_tail_of_node_list->next);
+                    _tail_of_node_list->next = tmp;
+                    tmp->prev = _tail_of_node_list;
+                    tmp = tmp->next;
+                }
+            }
 
             // /* Operations */
             // void splice (iterator position, list& x);	
@@ -188,6 +289,8 @@ namespace ft
             // void sort (Compare comp);
             void reverse()
             {
+                if (!_tail_of_node_list)
+                    return;
                 ft::node<value_type> *tmp;
                 ft::node<value_type> *tmp_buff;
                 tmp = _tail_of_node_list;
@@ -214,7 +317,7 @@ namespace ft
                 node_alloc              _alloc_for_node;
                 allocator_type          _alloc;
 
-                node<value_type> *create_node(value_type value = value_type())
+                node<value_type>    *create_node(value_type value = value_type())
                 {
                     try
                     {
@@ -231,13 +334,22 @@ namespace ft
                     {
                         std::cerr << "bad_alloc caught: " << ba.what() << '\n';
                     }
-                    return(0);
+                    return (0);
+                }
+
+                void                delete_node(node<value_type> *node_for_del)
+                {
+                    node_pointer n_pointer = _alloc_for_node.address(*node_for_del);
+                    _alloc_for_node.destroy(n_pointer);
+                    _alloc_for_node.deallocate(n_pointer, 1);//не очень понятно, остается ли указатель в нормальном состоянии.
                 }
     };
 
     /* --- Non-member function overloads --- */
     // template <class T, class Alloc>
-    // bool operator== (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs);
+    // bool operator== (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
+    // {
+    // }
     
     // template <class T, class Alloc>
     // bool operator!= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs);
