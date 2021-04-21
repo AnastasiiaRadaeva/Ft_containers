@@ -17,7 +17,6 @@
 # include <cstddef>
 # include <memory>
 # include <new>
-# include <typeinfo>
 # include "List_iterator.hpp"
 
 namespace ft
