@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 10:49:38 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/22 17:17:35 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/22 18:41:59 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,18 @@ struct is_near {
   bool operator() (double first, double second)
   { return (fabs(first-second)<5.0); }
 };
+
+bool compare_nocase (const std::string& first, const std::string& second)
+{
+  unsigned int i=0;
+  while ( (i<first.length()) && (i<second.length()) )
+  {
+    if (tolower(first[i])<tolower(second[i])) return true;
+    else if (tolower(first[i])>tolower(second[i])) return false;
+    ++i;
+  }
+  return ( first.length() < second.length() );
+}
 
 int main()
 {
@@ -985,6 +997,46 @@ int main()
     }
     std::cout << std::endl;
     std::cout << "Size: " << my_list_int.size() << std::endl;
+
+    std::cout << "_________________________" << std::endl;
+    std::cout << "|                       |" << std::endl;
+    std::cout << "|     Sort with comp    |" << std::endl;
+    std::cout << "|_______________________|" << std::endl << std::endl;
+
+    std::list<std::string> mylist_2;
+    std::list<std::string>::iterator it_2;
+    mylist_2.push_back("one");
+    mylist_2.push_back ("two");
+    mylist_2.push_back ("Three");
+    mylist_2.sort();
+    std::cout << "stlist after < sort contains:";
+    for (it_2 = mylist_2.begin(); it_2 != mylist_2.end(); ++it_2)
+        std::cout << ' ' << *it_2;
+    std::cout << '\n';
+    mylist_2.sort(compare_nocase);
+    std::cout << "stlist after comp sort contains:";
+    for (it_2 = mylist_2.begin(); it_2!=mylist_2.end(); ++it_2)
+        std::cout << ' ' << *it_2;
+    std::cout << '\n';
+
+    ft::List<std::string> mylist_3;
+    ft::List<std::string>::iterator it_3;
+    mylist_3.push_back("one");
+    mylist_3.push_back ("two");
+    mylist_3.push_back ("Three");
+    mylist_3.sort();
+
+    std::cout << "mylist after < sort contains:";
+    for (it_3 = mylist_3.begin(); it_3 != mylist_3.end(); ++it_3)
+        std::cout << ' ' << *it_3;
+    std::cout << '\n';
+
+    mylist_3.sort(compare_nocase);
+
+    std::cout << "mylist after comp sort contains:";
+    for (it_3 = mylist_3.begin(); it_3!=mylist_3.end(); ++it_3)
+        std::cout << ' ' << *it_3;
+    std::cout << '\n';
     
     return (0);
 }

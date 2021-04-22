@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/22 17:26:57 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/22 18:55:16 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,7 +410,14 @@ namespace ft
                 }
                 _tail_of_node_list->content = _current_size;
             }
-            // void merge (List& x);
+            void merge (List& x)
+            {
+                if (this != &x)
+                {
+                    
+
+                }
+            }
             // template <class Compare>
             // void merge (List& x, Compare comp);
             void sort()
@@ -418,17 +425,20 @@ namespace ft
                 node<value_type> *tmp_first;
                 node<value_type> *tmp_second;
                 node<value_type> *tmp_help;
-                for (size_type i = 0; i < _current_size; i++)
+                for (size_type i = 0; i < (_current_size - 1); i++)
                 {
                     tmp_first = _tail_of_node_list->next;
                     tmp_second = _tail_of_node_list->next->next;
-                    for (size_type j = 0; j < _current_size - i; j++)
+                    for (size_type j = 0; j < (_current_size - 1) - i; j++)
                     {
                         if (tmp_first->content > tmp_second->content)
                         {
                             tmp_help = tmp_first->prev;
+                            tmp_help->next = tmp_second;
+
                             tmp_first->prev = tmp_second;
                             tmp_first->next = tmp_second->next;
+                            
                             tmp_second->next = tmp_first;
                             tmp_second->prev = tmp_help;
 
@@ -436,11 +446,41 @@ namespace ft
                             tmp_second = tmp_first->next;
                         }
                         tmp_first = tmp_first->next;
-                        tmp_second = tmp_second;
+                        tmp_second = tmp_second->next;
                     }
                 }
             }
-            // void sort (Compare comp);
+            template <class Compare>
+            void sort (Compare comp)
+            {
+                node<value_type> *tmp_first;
+                node<value_type> *tmp_second;
+                node<value_type> *tmp_help;
+                for (size_type i = 0; i < (_current_size - 1); i++)
+                {
+                    tmp_first = _tail_of_node_list->next;
+                    tmp_second = _tail_of_node_list->next->next;
+                    for (size_type j = 0; j < (_current_size - 1) - i; j++)
+                    {
+                        if (comp(tmp_second->content, tmp_first->content))
+                        {
+                            tmp_help = tmp_first->prev;
+                            tmp_help->next = tmp_second;
+
+                            tmp_first->prev = tmp_second;
+                            tmp_first->next = tmp_second->next;
+                            
+                            tmp_second->next = tmp_first;
+                            tmp_second->prev = tmp_help;
+
+                            tmp_first = tmp_first->prev;
+                            tmp_second = tmp_first->next;
+                        }
+                        tmp_first = tmp_first->next;
+                        tmp_second = tmp_second->next;
+                    }
+                }      
+            }
             void reverse()
             {
                 if (!_tail_of_node_list)
