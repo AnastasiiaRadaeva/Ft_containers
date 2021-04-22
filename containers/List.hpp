@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/20 18:05:32 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/22 17:26:57 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,27 +82,29 @@ namespace ft
                 _tail_of_node_list->prev = tmp_list_1;
             }
 
-            // template <class InputIterator> // тут нужно показать, что мы можем брать именно итераторы
-            // List(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
-            // {
-            //     _alloc = alloc;
-            //     _tail_of_node_list = create_node();
-            //     _tail_of_node_list->next = _tail_of_node_list;
-            //     _tail_of_node_list->prev = _tail_of_node_list;
-            //     ft::node<value_type> *tmp_list_1;
-            //     size_type i = 0;
-            //     while (first != last)
-            //     {
-            //         tmp_list_1->next = create_node(*first);
-            //         tmp_list_1->next->prev = tmp_list_1;
-            //         tmp_list_1 = tmp_list_1->next;
-            //         i++;
-            //     }
-            //     tmp_list_1->next = _tail_of_node_list;
-            //     _tail_of_node_list->prev = tmp_list_1;
-            //     _current_size = i;
-            //     _tail_of_node_list->content = _current_size;
-            // }
+            template <class InputIterator>
+            List(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+                    typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0) //numeric_limits::is_specialized - true for all arithmetic types
+            {
+                _alloc = alloc;
+                _tail_of_node_list = create_node();
+                _tail_of_node_list->next = _tail_of_node_list;
+                _tail_of_node_list->prev = _tail_of_node_list;
+                ft::node<value_type> *tmp_list = _tail_of_node_list;
+                size_type i = 0;
+                while (first != last)
+                {
+                    tmp_list->next = create_node(*first);
+                    tmp_list->next->prev = tmp_list;
+                    tmp_list = tmp_list->next;
+                    first++;
+                    i++;
+                }
+                tmp_list->next = _tail_of_node_list;
+                _tail_of_node_list->prev = tmp_list;
+                _current_size = i;
+                _tail_of_node_list->content = _current_size;
+            }
 
             List(List const &copy)
             {
@@ -156,7 +158,7 @@ namespace ft
                 delete_node(_tail_of_node_list);
             }
 
-            // /* Iterators */
+            /* Iterators */
             iterator                begin() { return (iterator(_tail_of_node_list->next));}
             const_iterator          begin() const { return (const_iterator(_tail_of_node_list->next));}
             iterator                end() { return (iterator(_tail_of_node_list));}
@@ -177,12 +179,26 @@ namespace ft
             reference       back() { return (_tail_of_node_list->prev->content);}
             const_reference back() const { return (_tail_of_node_list->prev->content);}
 
-            // /* Modifiers */
-            // template <class InputIterator> // тут нужно показать, что мы можем брать именно итераторы
-            // void assign (InputIterator first, InputIterator last)
-            // {
-
-            // }
+            /* Modifiers */
+            template <class InputIterator>
+            void assign (InputIterator first, InputIterator last, typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
+            {
+                clear();
+                ft::node<value_type> *tmp_list = _tail_of_node_list;
+                size_type i = 0;
+                while (first != last)
+                {
+                    tmp_list->next = create_node(*first);
+                    tmp_list->next->prev = tmp_list;
+                    tmp_list = tmp_list->next;
+                    first++;
+                    i++;
+                }
+                tmp_list->next = _tail_of_node_list;
+                _tail_of_node_list->prev = tmp_list;
+                _current_size = i;
+                _tail_of_node_list->content = _current_size;
+            }
             void assign (size_type n, const value_type& val)
             {
                 clear();
@@ -256,9 +272,50 @@ namespace ft
             void swap (List& x)
             {
                 List<value_type> tmp(x);
-                
+                iterator i_begin = this->begin();
+                iterator i_end = this->end();
+                x.assign(i_begin, i_end);
+                x._current_size = _current_size;
+                x._tail_of_node_list->content = _current_size;
+                i_begin = tmp.begin();
+                i_end = tmp.end();
+                this->assign(i_begin, i_end);
+                _current_size = tmp._current_size;
+                _tail_of_node_list->content = _current_size;
             }
-            // void resize (size_type n, value_type val = value_type());
+            void resize (size_type n, value_type val = value_type())
+            {
+                if (_current_size < n)
+                {
+                    node<value_type>    *tmp = _tail_of_node_list->prev;
+                    while (_current_size < n)
+                    {
+                        tmp->next = create_node(val);
+                        tmp->next->prev = tmp;
+                        tmp = tmp->next;
+                        _current_size++;
+                    }
+                    tmp->next = _tail_of_node_list;
+                    _tail_of_node_list->prev = tmp;
+                    _tail_of_node_list->content = _current_size;
+                }
+                if (_current_size > n)
+                {
+                    node<value_type>    *tmp = _tail_of_node_list;
+                    _current_size = n;
+                    while (n-- > 0)
+                        tmp = tmp->next; // на выходе я стою на последнем элементе, который должен существовать
+                    node<value_type> *tmp_2 = tmp->next->next;
+                    while (tmp_2->prev != _tail_of_node_list)
+                    {
+                        delete_node(tmp->next);
+                        tmp->next = tmp_2;
+                        tmp_2->prev = tmp;
+                        tmp_2 = tmp_2->next;
+                    }
+                    _tail_of_node_list->content = _current_size;
+                }
+            }
             void clear()
             {
                 ft::node<value_type> *tmp = _tail_of_node_list->next->next;
@@ -275,16 +332,114 @@ namespace ft
             // void splice (iterator position, list& x);	
             // void splice (iterator position, list& x, iterator i);
             // void splice (iterator position, list& x, iterator first, iterator last);
-            // void remove (const value_type& val);
-            // template <class Predicate>
-            // void remove_if (Predicate pred);
-            // void unique();
-            // template <class BinaryPredicate>
-            // void unique (BinaryPredicate binary_pred);
+            void remove (const value_type& val)
+            {
+                node<value_type> *tmp = _tail_of_node_list->next;
+                node<value_type> *node_after_del;
+                while (tmp != _tail_of_node_list)
+                {
+                    if (tmp->content == val)
+                    {
+                        tmp = tmp->prev;
+                        node_after_del = tmp->next->next;
+                        delete_node(tmp->next);
+                        tmp->next = node_after_del;
+                        node_after_del->prev = tmp;
+                        _current_size--;
+                    }
+                    tmp = tmp->next;
+                }
+                _tail_of_node_list->content = _current_size;
+            }
+            template <class Predicate>
+            void remove_if (Predicate pred)
+            {
+                node<value_type> *tmp = _tail_of_node_list->next;
+                node<value_type> *node_after_del;
+                while (tmp != _tail_of_node_list)
+                {
+                    if (pred(tmp->content))
+                    {
+                        tmp = tmp->prev;
+                        node_after_del = tmp->next->next;
+                        delete_node(tmp->next);
+                        tmp->next = node_after_del;
+                        node_after_del->prev = tmp;
+                        _current_size--;
+                    }
+                    tmp = tmp->next;
+                }
+                _tail_of_node_list->content = _current_size;
+            }
+            void unique()
+            {
+                node<value_type> *tmp = _tail_of_node_list->next->next;
+                node<value_type> *node_after_del;
+                while (tmp != _tail_of_node_list)
+                {
+                    if (tmp->content == tmp->prev->content)
+                    {
+                        tmp = tmp->prev;
+                        node_after_del = tmp->next->next;
+                        delete_node(tmp->next);
+                        tmp->next = node_after_del;
+                        node_after_del->prev = tmp;
+                        _current_size--;
+                    }
+                    tmp = tmp->next;
+                }
+                _tail_of_node_list->content = _current_size;
+            }
+            template <class BinaryPredicate>
+            void unique (BinaryPredicate binary_pred)
+            {
+                node<value_type> *tmp = _tail_of_node_list->next->next;
+                node<value_type> *node_after_del;
+                while (tmp != _tail_of_node_list)
+                {
+                    if (binary_pred(tmp->prev->content, tmp->content))
+                    {
+                        tmp = tmp->prev;
+                        node_after_del = tmp->next->next;
+                        delete_node(tmp->next);
+                        tmp->next = node_after_del;
+                        node_after_del->prev = tmp;
+                        _current_size--;
+                    }
+                    tmp = tmp->next;
+                }
+                _tail_of_node_list->content = _current_size;
+            }
             // void merge (List& x);
             // template <class Compare>
             // void merge (List& x, Compare comp);
-            // void sort();
+            void sort()
+            {
+                node<value_type> *tmp_first;
+                node<value_type> *tmp_second;
+                node<value_type> *tmp_help;
+                for (size_type i = 0; i < _current_size; i++)
+                {
+                    tmp_first = _tail_of_node_list->next;
+                    tmp_second = _tail_of_node_list->next->next;
+                    for (size_type j = 0; j < _current_size - i; j++)
+                    {
+                        if (tmp_first->content > tmp_second->content)
+                        {
+                            tmp_help = tmp_first->prev;
+                            tmp_first->prev = tmp_second;
+                            tmp_first->next = tmp_second->next;
+                            tmp_second->next = tmp_first;
+                            tmp_second->prev = tmp_help;
+
+                            tmp_first = tmp_first->prev;
+                            tmp_second = tmp_first->next;
+                        }
+                        tmp_first = tmp_first->next;
+                        tmp_second = tmp_second;
+                    }
+                }
+            }
             // void sort (Compare comp);
             void reverse()
             {
