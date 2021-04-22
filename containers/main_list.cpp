@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 10:49:38 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/22 18:41:59 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/22 21:04:41 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1037,6 +1037,65 @@ int main()
     for (it_3 = mylist_3.begin(); it_3!=mylist_3.end(); ++it_3)
         std::cout << ' ' << *it_3;
     std::cout << '\n';
+
+    std::cout << "________________" << std::endl;
+    std::cout << "|              |" << std::endl;
+    std::cout << "|     Merge    |" << std::endl;
+    std::cout << "|______________|" << std::endl << std::endl;
+
+    std::list<double> first, second;
+    first.push_back (3.1);
+    first.push_back (2.2);
+    first.push_back (2.9);
+    second.push_back (3.7);
+    second.push_back (7.1);
+    second.push_back (1.4);
+    first.sort();
+    std::cout << "first contains after sort:";
+    for (std::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    second.sort();
+    std::cout << "second contains after sort:";
+    for (std::list<double>::iterator it=second.begin(); it!=second.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    first.merge(second);
+//     second.push_back (2.1);
+//   first.merge(second,mycomparison);
+    std::cout << "first contains:";
+    for (std::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size after merge: " << first.size() << std::endl;
+
+    ft::List<double> my_first, my_second;
+    my_first.push_back (3.1);
+    my_first.push_back (2.2);
+    my_first.push_back (2.9);
+    my_second.push_back (3.7);
+    my_second.push_back (7.1);
+    my_second.push_back (1.4);
+    my_first.sort();
+    std::cout << "my_first contains after sort:";
+    for (ft::List<double>::iterator my_it = my_first.begin(); my_it != my_first.end(); ++my_it)
+        std::cout << ' ' << *my_it;
+    std::cout << '\n';
+    my_second.sort();
+    std::cout << "my_second contains after sort:";
+    for (ft::List<double>::iterator my_it = my_second.begin(); my_it != my_second.end(); ++my_it)
+        std::cout << ' ' << *my_it;
+    std::cout << '\n';
+    my_first.merge(my_second);
+//     my_second.push_back (2.1);
+
+//   my_first.merge(my_second,mycomparison);
+
+    std::cout << "my_first contains:";
+    for (ft::List<double>::iterator my_it = my_first.begin(); my_it != my_first.end(); ++my_it)
+        std::cout << ' ' << *my_it;
+    std::cout << '\n';
+    std::cout << "Size after merge: " << my_first.size() << std::endl;
     
     return (0);
 }

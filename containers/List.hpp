@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/22 18:55:16 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/22 21:15:14 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,8 +414,47 @@ namespace ft
             {
                 if (this != &x)
                 {
-                    
+                    node<value_type> *tmp_to_new_elem = _tail_of_node_list->next;
+                    node<value_type> *tmp_after_new_elem;
+                    node<value_type> *new_node = x._tail_of_node_list->next;
+                    x._tail_of_node_list->next = x._tail_of_node_list;
+                    while (tmp_to_new_elem != _tail_of_node_list)
+                    {
+                        while (tmp_to_new_elem->content <= new_node->content && tmp_to_new_elem != _tail_of_node_list) // выходим на элементе (*this), который должен стоять после новой вставки
+                            tmp_to_new_elem = tmp_to_new_elem->next;
+                        tmp_after_new_elem = tmp_to_new_elem;
+                        tmp_to_new_elem = tmp_to_new_elem->prev;
+                        
+                        tmp_to_new_elem->next = new_node;
+                        new_node->prev = tmp_to_new_elem;
+                        new_node = new_node->next;
+                        while (tmp_after_new_elem->content > new_node->content && new_node != x._tail_of_node_list && tmp_after_new_elem != _tail_of_node_list) // выходим на новом элементе (x), который является первым после перемещенного элемента
+                            new_node = new_node->next;
+                        if (tmp_after_new_elem != _tail_of_node_list)
+                        {
+                            tmp_after_new_elem->prev = new_node->prev;
+                            new_node->prev->next = tmp_after_new_elem; // вставили часть последовательности новой в текущую
 
+                            tmp_to_new_elem = tmp_after_new_elem;
+                            tmp_after_new_elem = tmp_after_new_elem->next; // перевели все на следующую позицию
+                        }
+                        else
+                        {
+                            tmp_after_new_elem->prev = x._tail_of_node_list->prev;
+                            x._tail_of_node_list->prev->next = tmp_after_new_elem;
+                            tmp_to_new_elem = tmp_after_new_elem;
+                        }
+                    }
+                    // if (new_node != x._tail_of_node_list)
+                    // {
+                    //     tmp_after_new_elem = tmp_to_new_elem->prev;
+                    //     tmp_after_new_elem->next = new_node;
+                    //     new_node->prev = tmp_after_new_elem;
+                    //     tmp_to_new_elem->prev = x._tail_of_node_list->prev;
+                    // } 
+                    x._tail_of_node_list->prev = x._tail_of_node_list;
+                    _current_size += x._current_size;
+                    x._current_size = 0;    
                 }
             }
             // template <class Compare>
