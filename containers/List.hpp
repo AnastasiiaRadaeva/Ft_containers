@@ -17,6 +17,7 @@
 # include <cstddef>
 # include <memory>
 # include <new>
+# include <limits>
 # include "List_iterator.hpp"
 
 namespace ft
@@ -263,23 +264,60 @@ namespace ft
                 tmp->next = _tail_of_node_list;
                 _tail_of_node_list->content = --_current_size;
             }
-            // iterator insert (iterator position, const value_type& val);
-            // void insert (iterator position, size_type n, const value_type& val);
-            // template <class InputIterator> // тут нужно показать, что мы можем брать именно итераторы
-            // void insert (iterator position, InputIterator first, InputIterator last);
+            iterator insert (iterator position, const value_type& val)
+            {
+                node<value_type> *tmp_next = position.get_node();
+                node<value_type> *tmp_prev = tmp_next->prev;
+                tmp_prev->next = create_node(val);
+                tmp_prev->next->prev = tmp_prev;
+                tmp_next->prev = tmp_prev->next;
+                tmp_prev->next->next = tmp_next;
+                ++_current_size;
+                _tail_of_node_list->content++;
+                return (tmp_prev->next);
+            }
+            void insert (iterator position, size_type n, const value_type& val)
+            {
+                node<value_type> *tmp_next = position.get_node();
+                node<value_type> *tmp_prev = tmp_next->prev;
+                for (size_type i = 0; i < n; i++)
+                {
+                    tmp_prev->next = create_node(val);
+                    tmp_prev->next->prev = tmp_prev;
+                    tmp_next->prev = tmp_prev->next;
+                    tmp_prev->next->next = tmp_next;
+                    _tail_of_node_list->content++;
+                    tmp_next = tmp_prev->next;
+                }
+                _current_size += n;
+            }
+            template <class InputIterator>
+            void insert (iterator position, InputIterator first, InputIterator last,
+                        typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
+            {
+                node<value_type> *tmp_next = position.get_node();
+                node<value_type> *tmp_prev = tmp_next->prev;
+                for (; first != last; first++)
+                {
+                    tmp_prev->next = create_node(*first);
+                    tmp_prev->next->prev = tmp_prev;
+                    tmp_next->prev = tmp_prev->next;
+                    tmp_prev->next->next = tmp_next;
+                    _tail_of_node_list->content++;
+                    _current_size++;
+                    tmp_prev = tmp_prev->next;
+                    tmp_next = tmp_prev->next;
+                }
+            }
             // iterator erase (iterator position);
             // iterator erase (iterator first, iterator last);
             void swap (List& x)
             {
                 List<value_type> tmp(x);
-                iterator i_begin = this->begin();
-                iterator i_end = this->end();
-                x.assign(i_begin, i_end);
+                x.assign(this->begin(), this->end());
                 x._current_size = _current_size;
                 x._tail_of_node_list->content = _current_size;
-                i_begin = tmp.begin();
-                i_end = tmp.end();
-                this->assign(i_begin, i_end);
+                this->assign(tmp.begin(), tmp.end());
                 _current_size = tmp._current_size;
                 _tail_of_node_list->content = _current_size;
             }
@@ -410,53 +448,53 @@ namespace ft
                 }
                 _tail_of_node_list->content = _current_size;
             }
-            void merge (List& x)
-            {
-                if (this != &x)
-                {
-                    node<value_type> *tmp_to_new_elem = _tail_of_node_list->next;
-                    node<value_type> *tmp_after_new_elem;
-                    node<value_type> *new_node = x._tail_of_node_list->next;
-                    x._tail_of_node_list->next = x._tail_of_node_list;
-                    while (tmp_to_new_elem != _tail_of_node_list)
-                    {
-                        while (tmp_to_new_elem->content <= new_node->content && tmp_to_new_elem != _tail_of_node_list) // выходим на элементе (*this), который должен стоять после новой вставки
-                            tmp_to_new_elem = tmp_to_new_elem->next;
-                        tmp_after_new_elem = tmp_to_new_elem;
-                        tmp_to_new_elem = tmp_to_new_elem->prev;
+            // void merge (List& x)
+            // {
+            //     if (this != &x)
+            //     {
+            //         node<value_type> *tmp_to_new_elem = _tail_of_node_list->next;
+            //         node<value_type> *tmp_after_new_elem;
+            //         node<value_type> *new_node = x._tail_of_node_list->next;
+            //         x._tail_of_node_list->next = x._tail_of_node_list;
+            //         while (tmp_to_new_elem != _tail_of_node_list && new_node != x._tail_of_node_list)
+            //         {
+            //             while (tmp_to_new_elem->content <= new_node->content && tmp_to_new_elem != _tail_of_node_list) // выходим на элементе (*this), который должен стоять после новой вставки
+            //                 tmp_to_new_elem = tmp_to_new_elem->next;
+            //             tmp_after_new_elem = tmp_to_new_elem;
+            //             tmp_to_new_elem = tmp_to_new_elem->prev;
                         
-                        tmp_to_new_elem->next = new_node;
-                        new_node->prev = tmp_to_new_elem;
-                        new_node = new_node->next;
-                        while (tmp_after_new_elem->content > new_node->content && new_node != x._tail_of_node_list && tmp_after_new_elem != _tail_of_node_list) // выходим на новом элементе (x), который является первым после перемещенного элемента
-                            new_node = new_node->next;
-                        if (tmp_after_new_elem != _tail_of_node_list)
-                        {
-                            tmp_after_new_elem->prev = new_node->prev;
-                            new_node->prev->next = tmp_after_new_elem; // вставили часть последовательности новой в текущую
+            //             tmp_to_new_elem->next = new_node;
+            //             new_node->prev = tmp_to_new_elem;
+            //             new_node = new_node->next;
+            //             while (tmp_after_new_elem->content > new_node->content && new_node != x._tail_of_node_list && tmp_after_new_elem != _tail_of_node_list) // выходим на новом элементе (x), который является первым после перемещенного элемента
+            //                 new_node = new_node->next;
+            //             if (tmp_after_new_elem != _tail_of_node_list)
+            //             {
+            //                 tmp_after_new_elem->prev = new_node->prev;
+            //                 new_node->prev->next = tmp_after_new_elem; // вставили часть последовательности новой в текущую
 
-                            tmp_to_new_elem = tmp_after_new_elem;
-                            tmp_after_new_elem = tmp_after_new_elem->next; // перевели все на следующую позицию
-                        }
-                        else
-                        {
-                            tmp_after_new_elem->prev = x._tail_of_node_list->prev;
-                            x._tail_of_node_list->prev->next = tmp_after_new_elem;
-                            tmp_to_new_elem = tmp_after_new_elem;
-                        }
-                    }
-                    // if (new_node != x._tail_of_node_list)
-                    // {
-                    //     tmp_after_new_elem = tmp_to_new_elem->prev;
-                    //     tmp_after_new_elem->next = new_node;
-                    //     new_node->prev = tmp_after_new_elem;
-                    //     tmp_to_new_elem->prev = x._tail_of_node_list->prev;
-                    // } 
-                    x._tail_of_node_list->prev = x._tail_of_node_list;
-                    _current_size += x._current_size;
-                    x._current_size = 0;    
-                }
-            }
+            //                 tmp_to_new_elem = tmp_after_new_elem;
+            //                 tmp_after_new_elem = tmp_after_new_elem->next; // перевели все на следующую позицию
+            //             }
+            //             else
+            //             {
+            //                 tmp_after_new_elem->prev = x._tail_of_node_list->prev;
+            //                 x._tail_of_node_list->prev->next = tmp_after_new_elem;
+            //                 tmp_to_new_elem = tmp_after_new_elem;
+            //             }
+            //         }
+            //         // if (new_node != x._tail_of_node_list)
+            //         // {
+            //         //     tmp_after_new_elem = tmp_to_new_elem->prev;
+            //         //     tmp_after_new_elem->next = new_node;
+            //         //     new_node->prev = tmp_after_new_elem;
+            //         //     tmp_to_new_elem->prev = x._tail_of_node_list->prev;
+            //         // } 
+            //         x._tail_of_node_list->prev = x._tail_of_node_list;
+            //         _current_size += x._current_size;
+            //         x._current_size = 0;    
+            //     }
+            // }
             // template <class Compare>
             // void merge (List& x, Compare comp);
             void sort()

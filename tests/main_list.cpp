@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "List.hpp"
+#include "../containers/List.hpp"
 #include <list>
 #include <cmath>
 
@@ -1038,64 +1038,147 @@ int main()
         std::cout << ' ' << *it_3;
     std::cout << '\n';
 
-    std::cout << "________________" << std::endl;
-    std::cout << "|              |" << std::endl;
-    std::cout << "|     Merge    |" << std::endl;
-    std::cout << "|______________|" << std::endl << std::endl;
+//     std::cout << "________________" << std::endl;
+//     std::cout << "|              |" << std::endl;
+//     std::cout << "|     Merge    |" << std::endl;
+//     std::cout << "|______________|" << std::endl << std::endl;
 
-    std::list<double> first, second;
-    first.push_back (3.1);
-    first.push_back (2.2);
-    first.push_back (2.9);
-    second.push_back (3.7);
-    second.push_back (7.1);
-    second.push_back (1.4);
-    first.sort();
-    std::cout << "first contains after sort:";
-    for (std::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-    second.sort();
-    std::cout << "second contains after sort:";
-    for (std::list<double>::iterator it=second.begin(); it!=second.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-    first.merge(second);
-//     second.push_back (2.1);
-//   first.merge(second,mycomparison);
-    std::cout << "first contains:";
-    for (std::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-    std::cout << "Size after merge: " << first.size() << std::endl;
+//     std::list<double> first, second;
+//     first.push_back (3.1);
+//     first.push_back (2.2);
+//     first.push_back (2.9);
+//     second.push_back (3.7);
+//     second.push_back (7.1);
+//     second.push_back (1.4);
+//     first.sort();
+//     std::cout << "first contains after sort:";
+//     for (std::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
+//         std::cout << ' ' << *it;
+//     std::cout << '\n';
+//     second.sort();
+//     std::cout << "second contains after sort:";
+//     for (std::list<double>::iterator it=second.begin(); it!=second.end(); ++it)
+//         std::cout << ' ' << *it;
+//     std::cout << '\n';
+//     first.merge(second);
+// //     second.push_back (2.1);
+// //   first.merge(second,mycomparison);
+//     std::cout << "first contains:";
+//     for (std::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
+//         std::cout << ' ' << *it;
+//     std::cout << '\n';
+//     std::cout << "Size after merge: " << first.size() << std::endl;
 
-    ft::List<double> my_first, my_second;
-    my_first.push_back (3.1);
-    my_first.push_back (2.2);
-    my_first.push_back (2.9);
-    my_second.push_back (3.7);
-    my_second.push_back (7.1);
-    my_second.push_back (1.4);
-    my_first.sort();
-    std::cout << "my_first contains after sort:";
-    for (ft::List<double>::iterator my_it = my_first.begin(); my_it != my_first.end(); ++my_it)
-        std::cout << ' ' << *my_it;
-    std::cout << '\n';
-    my_second.sort();
-    std::cout << "my_second contains after sort:";
-    for (ft::List<double>::iterator my_it = my_second.begin(); my_it != my_second.end(); ++my_it)
-        std::cout << ' ' << *my_it;
-    std::cout << '\n';
-    my_first.merge(my_second);
-//     my_second.push_back (2.1);
+//     ft::List<double> my_first, my_second;
+//     my_first.push_back (3.1);
+//     my_first.push_back (2.2);
+//     my_first.push_back (2.9);
+//     my_second.push_back (3.7);
+//     my_second.push_back (7.1);
+//     my_second.push_back (1.4);
+//     my_first.sort();
+//     std::cout << "my_first contains after sort:";
+//     for (ft::List<double>::iterator my_it = my_first.begin(); my_it != my_first.end(); ++my_it)
+//         std::cout << ' ' << *my_it;
+//     std::cout << '\n';
+//     my_second.sort();
+//     std::cout << "my_second contains after sort:";
+//     for (ft::List<double>::iterator my_it = my_second.begin(); my_it != my_second.end(); ++my_it)
+//         std::cout << ' ' << *my_it;
+//     std::cout << '\n';
+//     my_first.merge(my_second);
+// //     my_second.push_back (2.1);
 
-//   my_first.merge(my_second,mycomparison);
+// //   my_first.merge(my_second,mycomparison);
 
-    std::cout << "my_first contains:";
-    for (ft::List<double>::iterator my_it = my_first.begin(); my_it != my_first.end(); ++my_it)
-        std::cout << ' ' << *my_it;
+//     std::cout << "my_first contains:";
+//     for (ft::List<double>::iterator my_it = my_first.begin(); my_it != my_first.end(); ++my_it)
+//         std::cout << ' ' << *my_it;
+//     std::cout << '\n';
+//     std::cout << "Size after merge: " << my_first.size() << std::endl;
+
+
+    std::cout << "__________________" << std::endl;
+    std::cout << "|                |" << std::endl;
+    std::cout << "|     Insert     |" << std::endl;
+    std::cout << "|________________|" << std::endl << std::endl;
+    
+    std::list<double>::iterator it_st;
+    
+    for (int i=1; i<=5; ++i) mylist.push_back(i);
+    std::cout << "stlist before insert: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
     std::cout << '\n';
-    std::cout << "Size after merge: " << my_first.size() << std::endl;
+    std::cout << "Size: " << mylist.size() << std::endl;
+    it_st = mylist.begin();
+    ++it_st;
+    mylist.insert(it_st,10);
+    std::cout << "stlist after insert: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    it_st = mylist.begin();
+    it_st++;
+    mylist.insert(it_st, 3, 7.5);
+    std::cout << "stlist after multiple insert: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+
+    std::list<double> st_add_lst;
+    st_add_lst.push_back(8.6);
+    st_add_lst.push_back(3.1);
+    st_add_lst.push_back(5.8);
+    mylist.insert(++(mylist.begin()), st_add_lst.begin(), st_add_lst.end());
+    std::cout << "stlist after insert from other list: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    std::cout << std::endl;
+
+
+    ft::List<double>::iterator it_my;
+    for (int i=1; i<=5; ++i) mylist_1.push_back(i);
+    std::cout << "My list before insert: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    it_my = mylist_1.begin();
+    ++it_my;
+    mylist_1.insert(it_my,10);
+    std::cout << "My list after insert: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    it_my = mylist_1.begin();
+    it_my++;
+    mylist_1.insert(it_my, 3, 7.5);
+    std::cout << "My list after multiple insert: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+
+    ft::List<double> my_add_list;
+    my_add_list.push_back(8.6);
+    my_add_list.push_back(3.1);
+    my_add_list.push_back(5.8);
+    mylist_1.insert(++(mylist_1.begin()), my_add_list.begin(), my_add_list.end());
+    std::cout << "My list after insert from other list: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    std::cout << std::endl;
+
+  std::cout << '\n';
+
     
     return (0);
 }
