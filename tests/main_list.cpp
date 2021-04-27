@@ -6,13 +6,18 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 10:49:38 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/22 21:04:41 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/27 16:55:26 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../containers/List.hpp"
 #include <list>
 #include <cmath>
+
+bool mycomparison (double first, double second)
+{
+    return (int(first)<int(second));
+}
 
 bool    is_it(std::string const &str)
 {
@@ -1038,66 +1043,6 @@ int main()
         std::cout << ' ' << *it_3;
     std::cout << '\n';
 
-//     std::cout << "________________" << std::endl;
-//     std::cout << "|              |" << std::endl;
-//     std::cout << "|     Merge    |" << std::endl;
-//     std::cout << "|______________|" << std::endl << std::endl;
-
-//     std::list<double> first, second;
-//     first.push_back (3.1);
-//     first.push_back (2.2);
-//     first.push_back (2.9);
-//     second.push_back (3.7);
-//     second.push_back (7.1);
-//     second.push_back (1.4);
-//     first.sort();
-//     std::cout << "first contains after sort:";
-//     for (std::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
-//         std::cout << ' ' << *it;
-//     std::cout << '\n';
-//     second.sort();
-//     std::cout << "second contains after sort:";
-//     for (std::list<double>::iterator it=second.begin(); it!=second.end(); ++it)
-//         std::cout << ' ' << *it;
-//     std::cout << '\n';
-//     first.merge(second);
-// //     second.push_back (2.1);
-// //   first.merge(second,mycomparison);
-//     std::cout << "first contains:";
-//     for (std::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
-//         std::cout << ' ' << *it;
-//     std::cout << '\n';
-//     std::cout << "Size after merge: " << first.size() << std::endl;
-
-//     ft::List<double> my_first, my_second;
-//     my_first.push_back (3.1);
-//     my_first.push_back (2.2);
-//     my_first.push_back (2.9);
-//     my_second.push_back (3.7);
-//     my_second.push_back (7.1);
-//     my_second.push_back (1.4);
-//     my_first.sort();
-//     std::cout << "my_first contains after sort:";
-//     for (ft::List<double>::iterator my_it = my_first.begin(); my_it != my_first.end(); ++my_it)
-//         std::cout << ' ' << *my_it;
-//     std::cout << '\n';
-//     my_second.sort();
-//     std::cout << "my_second contains after sort:";
-//     for (ft::List<double>::iterator my_it = my_second.begin(); my_it != my_second.end(); ++my_it)
-//         std::cout << ' ' << *my_it;
-//     std::cout << '\n';
-//     my_first.merge(my_second);
-// //     my_second.push_back (2.1);
-
-// //   my_first.merge(my_second,mycomparison);
-
-//     std::cout << "my_first contains:";
-//     for (ft::List<double>::iterator my_it = my_first.begin(); my_it != my_first.end(); ++my_it)
-//         std::cout << ' ' << *my_it;
-//     std::cout << '\n';
-//     std::cout << "Size after merge: " << my_first.size() << std::endl;
-
-
     std::cout << "__________________" << std::endl;
     std::cout << "|                |" << std::endl;
     std::cout << "|     Insert     |" << std::endl;
@@ -1177,8 +1122,450 @@ int main()
     std::cout << "Size: " << mylist_1.size() << std::endl;
     std::cout << std::endl;
 
-  std::cout << '\n';
+    std::cout << "______________________________" << std::endl;
+    std::cout << "|                            |" << std::endl;
+    std::cout << "|     Erase | one element    |" << std::endl;
+    std::cout << "|____________________________|" << std::endl << std::endl;
 
-    
+    std::cout << "St list before erase: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    it_st = mylist.erase(++(mylist.begin()));
+    std::cout << "Elem in erase position: " << *it_st << std::endl;
+    std::cout << "St list after erase: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    it_st = mylist.erase(--(mylist.end()));
+    std::cout << "Elem in erase position: " << *it_st << std::endl;
+    std::cout << "St list after erase end of list: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl << std::endl;
+
+    std::cout << "My list before erase: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    it_my = mylist_1.erase(++(mylist_1.begin()));
+    std::cout << "Elem in erase position: " << *it_my << std::endl;
+    std::cout << "My list after erase: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    it_my = mylist_1.erase(--(mylist_1.end()));
+    std::cout << "Elem in erase position: " << *it_my << std::endl;
+    std::cout << "My list after erase end of list: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+   
+    std::cout << "_______________________" << std::endl;
+    std::cout << "|                     |" << std::endl;
+    std::cout << "|     Erase | list    |" << std::endl;
+    std::cout << "|_____________________|" << std::endl << std::endl;
+
+    std::cout << "St list before erase: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    it_st = mylist.erase(++(mylist.begin()), --(mylist.end()));
+    std::cout << "Elem in erase position: " << *it_st << std::endl;
+    std::cout << "St list after erase: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    it_st = mylist.erase(++(mylist.begin()), mylist.end());
+    std::cout << "Elem in erase position: " << *it_st << std::endl;
+    std::cout << "St list after erase end of list: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl << std::endl;
+
+    std::cout << "My list before erase: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    it_my = mylist_1.erase(++(mylist_1.begin()), --(mylist_1.end()));
+    std::cout << "Elem in erase position: " << *it_my << std::endl;
+    std::cout << "My list after erase: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    it_my = mylist_1.erase(++(mylist_1.begin()), mylist_1.end());
+    std::cout << "Elem in erase position: " << *it_my << std::endl;
+    std::cout << "My list after erase end of list: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+   
+    std::cout << "______________________________" << std::endl;
+    std::cout << "|                            |" << std::endl;
+    std::cout << "|     Splice | full list     |" << std::endl;
+    std::cout << "|____________________________|" << std::endl << std::endl;
+
+    std::list<double> mylist_add;
+    mylist_add.push_back(7.1);
+    mylist_add.push_back(7.3);
+    mylist_add.push_back(7.5);
+    mylist.push_back(7.9);
+    std::cout << "St list 1 before splice: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    std::cout << "St list 2 before splice: ";
+    for (it_st = mylist_add.begin(); it_st != mylist_add.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_add.size() << std::endl;
+    mylist.splice(++(mylist.begin()), mylist_add);
+    std::cout << "St list 1 after splice: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    std::cout << "St list 2 after splice: ";
+    for (it_st = mylist_add.begin(); it_st != mylist_add.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_add.size() << std::endl << std::endl;
+
+    ft::List<double> mylist_1_add;
+    mylist_1_add.push_back(7.1);
+    mylist_1_add.push_back(7.3);
+    mylist_1_add.push_back(7.5);
+    mylist_1.push_back(7.9);
+    std::cout << "My list 1 before splice: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    std::cout << "My list 2 before splice: ";
+    for (it_my = mylist_1_add.begin(); it_my != mylist_1_add.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1_add.size() << std::endl;
+    mylist_1.splice(++(mylist_1.begin()), mylist_1_add);
+    std::cout << "My list 1 after splice: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    std::cout << "My list 2 after splice: ";
+    for (it_my = mylist_1_add.begin(); it_my != mylist_1_add.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1_add.size() << std::endl << std::endl;
+
+
+    std::cout << "___________________________________" << std::endl;
+    std::cout << "|                                 |" << std::endl;
+    std::cout << "|     Splice | single element     |" << std::endl;
+    std::cout << "|_________________________________|" << std::endl << std::endl;
+
+    mylist_add.push_back(8.1);
+    mylist_add.push_back(8.3);
+    mylist_add.push_back(8.5);
+    std::cout << "St list 1 before splice: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    std::cout << "St list 2 before splice: ";
+    for (it_st = mylist_add.begin(); it_st != mylist_add.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_add.size() << std::endl;
+    mylist.splice(++(mylist.begin()), mylist_add, ++(mylist_add.begin()));
+    std::cout << "St list 1 after splice: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    std::cout << "St list 2 after splice: ";
+    for (it_st = mylist_add.begin(); it_st != mylist_add.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_add.size() << std::endl << std::endl;
+
+    mylist_1_add.push_back(8.1);
+    mylist_1_add.push_back(8.3);
+    mylist_1_add.push_back(8.5);
+    std::cout << "My list 1 before splice: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    std::cout << "My list 2 before splice: ";
+    for (it_my = mylist_1_add.begin(); it_my != mylist_1_add.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1_add.size() << std::endl;
+    mylist_1.splice(++(mylist_1.begin()), mylist_1_add, ++(mylist_1_add.begin()));
+    std::cout << "My list 1 after splice: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    std::cout << "My list 2 after splice: ";
+    for (it_my = mylist_1_add.begin(); it_my != mylist_1_add.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1_add.size() << std::endl << std::endl;
+       
+    std::cout << "__________________________________" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "|     Splice | element range     |" << std::endl;
+    std::cout << "|________________________________|" << std::endl << std::endl;
+
+    mylist_add.push_back(9.1);
+    mylist_add.push_back(9.3);
+    mylist_add.push_back(9.5);
+    std::cout << "St list 1 before splice: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    std::cout << "St list 2 before splice: ";
+    for (it_st = mylist_add.begin(); it_st != mylist_add.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_add.size() << std::endl;
+    mylist.splice(mylist.end(), mylist_add, ++(mylist_add.begin()), --(mylist_add.end()));
+    std::cout << "St list 1 after splice: ";
+    for (it_st = mylist.begin(); it_st != mylist.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist.size() << std::endl;
+    std::cout << "St list 2 after splice: ";
+    for (it_st = mylist_add.begin(); it_st != mylist_add.end(); ++it_st)
+        std::cout << ' ' << *it_st;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_add.size() << std::endl << std::endl;
+
+    mylist_1_add.push_back(9.1);
+    mylist_1_add.push_back(9.3);
+    mylist_1_add.push_back(9.5);
+    std::cout << "My list 1 before splice: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    std::cout << "My list 2 before splice: ";
+    for (it_my = mylist_1_add.begin(); it_my != mylist_1_add.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1_add.size() << std::endl;
+    mylist_1.splice(mylist_1.end(), mylist_1_add, ++(mylist_1_add.begin()), --(mylist_1_add.end()));
+    std::cout << "My list 1 after splice: ";
+    for (it_my = mylist_1.begin(); it_my != mylist_1.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1.size() << std::endl;
+    std::cout << "My list 2 after splice: ";
+    for (it_my = mylist_1_add.begin(); it_my != mylist_1_add.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << mylist_1_add.size() << std::endl << std::endl;
+
+    std::cout << "_____________________" << std::endl;
+    std::cout << "|                   |" << std::endl;
+    std::cout << "|     Merge | 1     |" << std::endl;
+    std::cout << "|___________________|" << std::endl << std::endl;
+
+    std::list<double> first, second;
+    first.push_back (3.1);
+    first.push_back (2.2);
+    first.push_back (2.9);
+    second.push_back (3.7);
+    second.push_back (7.1);
+    second.push_back (1.4);
+    first.sort();
+    std::cout << "St first before merge:";
+    for (std::list<double>::iterator it = first.begin(); it != first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << first.size() << std::endl;
+    second.sort();
+    std::cout << "St second before merge:";
+    for (std::list<double>::iterator it = second.begin(); it != second.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << second.size() << std::endl;
+    first.merge(second);
+    std::cout << "St first after merge:";
+    for (std::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << first.size() << std::endl;
+    std::cout << "St second after merge:";
+    for (std::list<double>::iterator it = second.begin(); it != second.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << second.size() << std::endl << std::endl;
+
+    ft::List<double> first_my, second_my;
+    first_my.push_back (3.1);
+    first_my.push_back (2.2);
+    first_my.push_back (2.9);
+    second_my.push_back (3.7);
+    second_my.push_back (7.1);
+    second_my.push_back (1.4);
+    first_my.sort();
+    std::cout << "My first before merge:";
+    for (it_my = first_my.begin(); it_my != first_my.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << first_my.size() << std::endl;
+    second_my.sort();
+    std::cout << "My second before merge:";
+    for (it_my = second_my.begin(); it_my != second_my.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << second_my.size() << std::endl;
+    first_my.merge(second_my);
+    std::cout << "My first after merge:";
+    for (it_my=first_my.begin(); it_my!=first_my.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << first_my.size() << std::endl;
+    std::cout << "My second after merge:";
+    for (it_my = second_my.begin(); it_my != second_my.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << second_my.size() << std::endl;
+
+    std::cout << "_____________________" << std::endl;
+    std::cout << "|                   |" << std::endl;
+    std::cout << "|     Merge | 2     |" << std::endl;
+    std::cout << "|___________________|" << std::endl << std::endl;
+
+    second.push_back(2.1);
+    std::cout << "St first before merge:";
+    for (std::list<double>::iterator it = first.begin(); it != first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << first.size() << std::endl;
+    std::cout << "St second before merge:";
+    for (std::list<double>::iterator it = second.begin(); it != second.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << second.size() << std::endl;
+    first.merge(second, mycomparison);
+    std::cout << "St first after merge:";
+    for (std::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << first.size() << std::endl;
+    std::cout << "St second after merge:";
+    for (std::list<double>::iterator it = second.begin(); it != second.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << second.size() << std::endl << std::endl;
+
+    second_my.push_back(2.1);
+    std::cout << "My first before merge:";
+    for (it_my = first_my.begin(); it_my != first_my.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << first_my.size() << std::endl;
+    std::cout << "My second before merge:";
+    for (it_my = second_my.begin(); it_my != second_my.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << second_my.size() << std::endl;
+    first_my.merge(second_my, mycomparison);
+    std::cout << "My first after merge:";
+    for (it_my=first_my.begin(); it_my!=first_my.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << first_my.size() << std::endl;
+    std::cout << "My second after merge:";
+    for (it_my = second_my.begin(); it_my != second_my.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << second_my.size() << std::endl;
+
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                    |" << std::endl;
+    std::cout << "|     Operator==     |" << std::endl;
+    std::cout << "|____________________|" << std::endl << std::endl;
+
+    std::cout << "Standart not equivalent: " << (first == second) << std::endl;
+    std::list<double> first_copy(first);
+    std::cout << "Standart equivalent: " << (first == first_copy) << std::endl << std::endl;
+
+    std::cout << "My not equivalent: " << (first_my == second_my) << std::endl;
+    ft::List<double> first_my_copy(first_my);
+    std::cout << "My equivalent: " << (first_my == first_my_copy) << std::endl << std::endl;
+
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                    |" << std::endl;
+    std::cout << "|     Operator!=     |" << std::endl;
+    std::cout << "|____________________|" << std::endl << std::endl;
+
+    std::cout << "Standart not equivalent: " << (first != second) << std::endl;
+    std::cout << "Standart equivalent: " << (first != first_copy) << std::endl << std::endl;
+
+    std::cout << "My not equivalent: " << (first_my != second_my) << std::endl;
+    std::cout << "My equivalent: " << (first_my != first_my_copy) << std::endl << std::endl;
+
+
+    std::cout << "_____________________" << std::endl;
+    std::cout << "|                   |" << std::endl;
+    std::cout << "|     Operator<     |" << std::endl;
+    std::cout << "|___________________|" << std::endl << std::endl;
+
+    std::list<int> st_less;
+    st_less.push_back(1);
+    st_less.push_back(2);
+    st_less.push_back(3);
+    st_less.push_back(4);
+    st_less.push_back(5);
+    std::list<int> st_greater;
+    st_greater.push_back(2);
+    st_greater.push_back(3);
+    st_greater.push_back(4);
+    std::cout << "Standart <: " << (st_less < st_greater) << std::endl;
+    // st_greater.push_back(5);
+    // st_greater.push_back(6);
+    // st_greater.push_back(7);
+    std::cout << "Standart <: " << (st_less < st_greater) << std::endl;
+    std::cout << "Standart ==: " << (first < first_copy) << std::endl;
+    st_greater.push_front(5);
+    std::cout << "Standart <: " << (st_less < st_greater) << std::endl << std::endl;
+
+    ft::List<int> my_less;
+    my_less.push_back(1);
+    my_less.push_back(2);
+    my_less.push_back(3);
+    my_less.push_back(4);
+    my_less.push_back(5);
+    ft::List<int> my_greater;
+    my_greater.push_back(2);
+    my_greater.push_back(3);
+    my_greater.push_back(4);
+    std::cout << "My <: " << (my_less < my_greater) << std::endl;
+    my_greater.push_back(5);
+    my_greater.push_back(6);
+    my_greater.push_back(7);
+    std::cout << "My <: " << (my_less < my_greater) << std::endl;
+    std::cout << "My ==: " << (first_my < first_my_copy) << std::endl;
+    my_greater.push_front(5);
+    std::cout << "My <: " << (my_less < my_greater) << std::endl << std::endl;
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/22 21:15:14 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/27 16:53:47 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,8 +309,40 @@ namespace ft
                     tmp_next = tmp_prev->next;
                 }
             }
-            // iterator erase (iterator position);
-            // iterator erase (iterator first, iterator last);
+            iterator erase (iterator position)
+            {
+                if (position.get_node() != _tail_of_node_list)
+                {
+                    node<value_type> *to_del = position.get_node();
+                    node<value_type> *prev_lst = to_del->prev;
+                    prev_lst->next = to_del->next;
+                    to_del->next->prev = prev_lst;
+                    delete_node(to_del);
+                    _current_size--;
+                    (_tail_of_node_list->content)--;
+                    return (prev_lst->next);
+                }
+                return (0);
+            }
+            iterator erase (iterator first, iterator last)
+            {
+                node<value_type> *to_del = first.get_node();
+                node<value_type> *prev_lst = to_del->prev;
+                node<value_type> *pos;
+                while (first != last && to_del != _tail_of_node_list)
+                {
+                    prev_lst->next = to_del->next;
+                    to_del->next->prev = prev_lst;
+                    delete_node(to_del);
+                    pos = prev_lst->next;
+                    _current_size--;
+                    (_tail_of_node_list->content)--;
+                    first++;
+                    to_del = first.get_node();
+                    prev_lst = to_del->prev;
+                }
+                return (pos);
+            }
             void swap (List& x)
             {
                 List<value_type> tmp(x);
@@ -366,10 +398,60 @@ namespace ft
                 }
             }
 
-            // /* Operations */
-            // void splice (iterator position, list& x);	
-            // void splice (iterator position, list& x, iterator i);
-            // void splice (iterator position, list& x, iterator first, iterator last);
+            /* Operations */
+            void splice (iterator position, List& x)
+            {
+                node<value_type> *next_lst = position.get_node();
+                node<value_type> *prev_lst = next_lst->prev;
+                prev_lst->next = x._tail_of_node_list->next;
+                x._tail_of_node_list->next->prev = prev_lst;
+                next_lst->prev = x._tail_of_node_list->prev;
+                x._tail_of_node_list->prev->next = next_lst;
+                _current_size += x._current_size;
+                _tail_of_node_list->content = static_cast<value_type>(_current_size);
+
+                x._tail_of_node_list->next = x._tail_of_node_list;
+                x._tail_of_node_list->prev = x._tail_of_node_list;
+                x._current_size = 0;
+                x._tail_of_node_list->content = 0;
+            }	
+            void splice (iterator position, List& x, iterator i)
+            {
+                node<value_type> *next_lst = position.get_node();
+                node<value_type> *prev_lst = next_lst->prev;
+                node<value_type> *new_lst = i.get_node();
+                new_lst->prev->next = new_lst->next;
+                new_lst->next->prev = new_lst->prev;
+                prev_lst->next = new_lst;
+                new_lst->prev = prev_lst;
+                next_lst->prev = new_lst;
+                new_lst->next = next_lst;
+                _current_size++;
+                (_tail_of_node_list->content)++;
+                x._current_size--;
+                (x._tail_of_node_list->content)--;
+            }
+            void splice (iterator position, List& x, iterator first, iterator last)
+            {
+                node<value_type> *next_lst = position.get_node();
+                node<value_type> *prev_lst = next_lst->prev;
+                node<value_type> *new_lst = first.get_node();
+                while (first++ != last)
+                {
+                    new_lst->prev->next = new_lst->next;
+                    new_lst->next->prev = new_lst->prev;
+                    prev_lst->next = new_lst;
+                    new_lst->prev = prev_lst;
+                    next_lst->prev = new_lst;
+                    new_lst->next = next_lst;
+                    _current_size++;
+                    (_tail_of_node_list->content)++;
+                    x._current_size--;
+                    (x._tail_of_node_list->content)--;
+                    prev_lst = prev_lst->next;
+                    new_lst = first.get_node();
+                }
+            }
             void remove (const value_type& val)
             {
                 node<value_type> *tmp = _tail_of_node_list->next;
@@ -448,55 +530,47 @@ namespace ft
                 }
                 _tail_of_node_list->content = _current_size;
             }
-            // void merge (List& x)
-            // {
-            //     if (this != &x)
-            //     {
-            //         node<value_type> *tmp_to_new_elem = _tail_of_node_list->next;
-            //         node<value_type> *tmp_after_new_elem;
-            //         node<value_type> *new_node = x._tail_of_node_list->next;
-            //         x._tail_of_node_list->next = x._tail_of_node_list;
-            //         while (tmp_to_new_elem != _tail_of_node_list && new_node != x._tail_of_node_list)
-            //         {
-            //             while (tmp_to_new_elem->content <= new_node->content && tmp_to_new_elem != _tail_of_node_list) // выходим на элементе (*this), который должен стоять после новой вставки
-            //                 tmp_to_new_elem = tmp_to_new_elem->next;
-            //             tmp_after_new_elem = tmp_to_new_elem;
-            //             tmp_to_new_elem = tmp_to_new_elem->prev;
-                        
-            //             tmp_to_new_elem->next = new_node;
-            //             new_node->prev = tmp_to_new_elem;
-            //             new_node = new_node->next;
-            //             while (tmp_after_new_elem->content > new_node->content && new_node != x._tail_of_node_list && tmp_after_new_elem != _tail_of_node_list) // выходим на новом элементе (x), который является первым после перемещенного элемента
-            //                 new_node = new_node->next;
-            //             if (tmp_after_new_elem != _tail_of_node_list)
-            //             {
-            //                 tmp_after_new_elem->prev = new_node->prev;
-            //                 new_node->prev->next = tmp_after_new_elem; // вставили часть последовательности новой в текущую
-
-            //                 tmp_to_new_elem = tmp_after_new_elem;
-            //                 tmp_after_new_elem = tmp_after_new_elem->next; // перевели все на следующую позицию
-            //             }
-            //             else
-            //             {
-            //                 tmp_after_new_elem->prev = x._tail_of_node_list->prev;
-            //                 x._tail_of_node_list->prev->next = tmp_after_new_elem;
-            //                 tmp_to_new_elem = tmp_after_new_elem;
-            //             }
-            //         }
-            //         // if (new_node != x._tail_of_node_list)
-            //         // {
-            //         //     tmp_after_new_elem = tmp_to_new_elem->prev;
-            //         //     tmp_after_new_elem->next = new_node;
-            //         //     new_node->prev = tmp_after_new_elem;
-            //         //     tmp_to_new_elem->prev = x._tail_of_node_list->prev;
-            //         // } 
-            //         x._tail_of_node_list->prev = x._tail_of_node_list;
-            //         _current_size += x._current_size;
-            //         x._current_size = 0;    
-            //     }
-            // }
-            // template <class Compare>
-            // void merge (List& x, Compare comp);
+            void merge (List& x)
+            {
+                if (this != &x)
+                {
+                    iterator pos_in_my_list, pos_in_x;
+                    pos_in_my_list = begin();
+                    pos_in_x = x.begin();
+                    while (pos_in_my_list != end())
+                    {
+                        while (pos_in_x != x.end() && *pos_in_x < *pos_in_my_list)
+                        {
+                            splice(pos_in_my_list, x, pos_in_x);
+                            pos_in_x = x.begin();
+                        }
+                        pos_in_my_list++;
+                    }
+                    if (pos_in_x != x.end())
+                        splice (pos_in_my_list, x, pos_in_x, x.end());
+                }
+            }
+            template <class Compare>
+            void merge (List& x, Compare comp)
+            {
+                if (this != &x)
+                {
+                    iterator pos_in_my_list, pos_in_x;
+                    pos_in_my_list = begin();
+                    pos_in_x = x.begin();
+                    while (pos_in_my_list != end())
+                    {
+                        while (pos_in_x != x.end() && comp(*pos_in_x, *pos_in_my_list))
+                        {
+                            splice(pos_in_my_list, x, pos_in_x);
+                            pos_in_x = x.begin();
+                        }
+                        pos_in_my_list++;
+                    }
+                    if (pos_in_x != x.end())
+                        splice (pos_in_my_list, x, pos_in_x, x.end());
+                }
+            }
             void sort()
             {
                 node<value_type> *tmp_first;
@@ -526,6 +600,7 @@ namespace ft
                         tmp_second = tmp_second->next;
                     }
                 }
+                _tail_of_node_list->prev = tmp_second;
             }
             template <class Compare>
             void sort (Compare comp)
@@ -617,16 +692,44 @@ namespace ft
     };
 
     /* --- Non-member function overloads --- */
-    // template <class T, class Alloc>
-    // bool operator== (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    // }
+    template <class T, class Alloc>
+    bool operator== (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
+    {
+        const_iterator<T> lhs_it = lhs.begin();
+        const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        return (lhs_it == lhs.end() && rhs_it == rhs.end());
+    }
     
-    // template <class T, class Alloc>
-    // bool operator!= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs);
+    template <class T, class Alloc>
+    bool operator!= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
+    {
+        const_iterator<T> lhs_it = lhs.begin();
+        const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        return (lhs_it != lhs.end() || rhs_it != rhs.end());
+    }
     
-    // template <class T, class Alloc>
-    // bool operator<  (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs);
+    template <class T, class Alloc>
+    bool operator<  (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
+    {
+        const_iterator<T> lhs_it = lhs.begin();
+        const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it < *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        return (lhs_it == lhs.end() || rhs_it == rhs.end() || (*lhs_it < *rhs_it));
+    }
 
     // template <class T, class Alloc>
     // bool operator<= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs);
