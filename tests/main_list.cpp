@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 10:49:38 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/27 16:55:26 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/29 16:36:58 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,29 @@ bool    uniqueness(int a, int b)
     return (a == b/2);
 }
 
-    // a binary predicate implemented as a function:
 bool same_integral_part (double first, double second)
-{ return ( int(first)==int(second) ); }
+{
+    return ( int(first)==int(second) );
+}
 
-// a binary predicate implemented as a class:
-struct is_near {
-  bool operator() (double first, double second)
-  { return (fabs(first-second)<5.0); }
+struct is_near
+{
+    bool operator() (double first, double second)
+    {
+        return (fabs(first-second)<5.0);
+    }
 };
 
 bool compare_nocase (const std::string& first, const std::string& second)
 {
-  unsigned int i=0;
-  while ( (i<first.length()) && (i<second.length()) )
-  {
-    if (tolower(first[i])<tolower(second[i])) return true;
-    else if (tolower(first[i])>tolower(second[i])) return false;
-    ++i;
-  }
-  return ( first.length() < second.length() );
+    unsigned int i=0;
+    while ( (i<first.length()) && (i<second.length()) )
+    {
+        if (tolower(first[i])<tolower(second[i])) return true;
+        else if (tolower(first[i])>tolower(second[i])) return false;
+        ++i;
+    }
+    return ( first.length() < second.length() );
 }
 
 int main()
@@ -1531,41 +1534,371 @@ int main()
     std::cout << "|___________________|" << std::endl << std::endl;
 
     std::list<int> st_less;
-    st_less.push_back(1);
     st_less.push_back(2);
     st_less.push_back(3);
     st_less.push_back(4);
     st_less.push_back(5);
+    st_less.push_back(6);
     std::list<int> st_greater;
     st_greater.push_back(2);
     st_greater.push_back(3);
     st_greater.push_back(4);
-    std::cout << "Standart <: " << (st_less < st_greater) << std::endl;
-    // st_greater.push_back(5);
-    // st_greater.push_back(6);
-    // st_greater.push_back(7);
-    std::cout << "Standart <: " << (st_less < st_greater) << std::endl;
-    std::cout << "Standart ==: " << (first < first_copy) << std::endl;
-    st_greater.push_front(5);
-    std::cout << "Standart <: " << (st_less < st_greater) << std::endl << std::endl;
 
     ft::List<int> my_less;
-    my_less.push_back(1);
     my_less.push_back(2);
     my_less.push_back(3);
     my_less.push_back(4);
     my_less.push_back(5);
+    my_less.push_back(6);
     ft::List<int> my_greater;
     my_greater.push_back(2);
     my_greater.push_back(3);
     my_greater.push_back(4);
-    std::cout << "My <: " << (my_less < my_greater) << std::endl;
+
+    std::cout << "|   1 - 5 elem, 2 - 3 elem (numbers are equivalent)   |" << std::endl;
+    std::cout << "Standart: " << (st_less < st_greater) << std::endl;
+    std::cout << "My list : " << (my_less < my_greater) << std::endl << std::endl;
+    st_greater.push_back(5);
+    st_greater.push_back(6);
+    st_greater.push_back(7);
+
     my_greater.push_back(5);
     my_greater.push_back(6);
     my_greater.push_back(7);
-    std::cout << "My <: " << (my_less < my_greater) << std::endl;
-    std::cout << "My ==: " << (first_my < first_my_copy) << std::endl;
+    std::cout << "|   1 - 5 elem, 2 - 6 elem (numbers are equivalent)   |" << std::endl;
+    std::cout << "Standart: " << (st_less < st_greater) << std::endl;
+    std::cout << "My list : " << (my_less < my_greater) << std::endl << std::endl;
+    std::cout << "|   Lists are equivalent   |" << std::endl;
+    std::cout << "Standart: " << (first < first_copy) << std::endl;
+    std::cout << "My list : " << (first_my < first_my_copy) << std::endl << std::endl;
+    st_greater.push_front(5);
     my_greater.push_front(5);
-    std::cout << "My <: " << (my_less < my_greater) << std::endl << std::endl;
+    std::cout << "|   1 - 5 elem, 2 - 7 elem. First number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less < st_greater) << std::endl;
+    std::cout << "My list : " << (my_less < my_greater) << std::endl << std::endl;
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+
+    std::cout << "|   1 - 5 elem, 2 - 3 elem. First number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less < st_greater) << std::endl;
+    std::cout << "My list : " << (my_less < my_greater) << std::endl << std::endl;
+    
+    st_greater = st_less;
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.push_back(7);
+
+    my_greater = my_less;
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.push_back(7);
+    std::cout << "|   1 - 5 elem, 2 - 4 elem. Last number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less < st_greater) << std::endl;
+    std::cout << "My list : " << (my_less < my_greater) << std::endl << std::endl;
+
+    st_greater.erase(--(st_greater.end()));
+    st_less.erase(st_less.begin());
+    st_less.push_front(9);
+
+    my_greater.erase(--(my_greater.end()));
+    my_less.erase(my_less.begin());
+    my_less.push_front(9);
+    std::cout << "|   1 - 5 elem, 2 - 3 elem. First number in 1 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less < st_greater) << std::endl;
+    std::cout << "My list : " << (my_less < my_greater) << std::endl << std::endl;
+
+    std::cout << "_______________________" << std::endl;
+    std::cout << "|                     |" << std::endl;
+    std::cout << "|     Operator <=     |" << std::endl;
+    std::cout << "|_____________________|" << std::endl << std::endl;
+
+    std::list<int> less;
+    less.push_back(2);
+    less.push_back(3);
+    less.push_back(4);
+    less.push_back(5);
+    less.push_back(6);
+    st_less = less;
+    std::list<int> greater;
+    greater.push_back(2);
+    greater.push_back(3);
+    greater.push_back(4);
+    st_greater = greater;
+
+    ft::List<int> my_l;
+    my_l.push_back(2);
+    my_l.push_back(3);
+    my_l.push_back(4);
+    my_l.push_back(5);
+    my_l.push_back(6);
+    my_less = my_l;
+    ft::List<int> my_g;
+    my_g.push_back(2);
+    my_g.push_back(3);
+    my_g.push_back(4);
+    my_greater = my_g;  
+
+    std::cout << "|   1 - 5 elem, 2 - 3 elem (numbers are equivalent)   |" << std::endl;
+    std::cout << "Standart: " << (st_less <= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less <= my_greater) << std::endl << std::endl;
+    st_greater.push_back(5);
+    st_greater.push_back(6);
+    st_greater.push_back(7);
+
+    my_greater.push_back(5);
+    my_greater.push_back(6);
+    my_greater.push_back(7);
+    std::cout << "|   1 - 5 elem, 2 - 6 elem (numbers are equivalent)   |" << std::endl;
+    std::cout << "Standart: " << (st_less <= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less <= my_greater) << std::endl << std::endl;
+    std::cout << "|   Lists are equivalent   |" << std::endl;
+    std::cout << "Standart: " << (first <= first_copy) << std::endl;
+    std::cout << "My list : " << (first_my <= first_my_copy) << std::endl << std::endl;
+    st_greater.push_front(5);
+    my_greater.push_front(5);
+    std::cout << "|   1 - 5 elem, 2 - 7 elem. First number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less <= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less <= my_greater) << std::endl << std::endl;
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+
+    std::cout << "|   1 - 5 elem, 2 - 3 elem. First number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less <= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less <= my_greater) << std::endl << std::endl;
+    
+    st_greater = st_less;
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.push_back(7);
+
+    my_greater = my_less;
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.push_back(7);
+    std::cout << "|   1 - 5 elem, 2 - 4 elem. Last number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less <= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less <= my_greater) << std::endl << std::endl;
+
+    st_greater.erase(--(st_greater.end()));
+    st_less.erase(st_less.begin());
+    st_less.push_front(9);
+
+    my_greater.erase(--(my_greater.end()));
+    my_less.erase(my_less.begin());
+    my_less.push_front(9);
+    std::cout << "|   1 - 5 elem, 2 - 3 elem. First number in 1 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less <= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less <= my_greater) << std::endl << std::endl;
+
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                    |" << std::endl;
+    std::cout << "|     Operator >     |" << std::endl;
+    std::cout << "|____________________|" << std::endl << std::endl;
+
+    st_less = less;
+    st_greater = greater;
+
+    my_less = my_l;
+    my_greater = my_g;  
+
+    std::cout << "|   1 - 5 elem, 2 - 3 elem (numbers are equivalent)   |" << std::endl;
+    std::cout << "Standart: " << (st_less > st_greater) << std::endl;
+    std::cout << "My list : " << (my_less > my_greater) << std::endl << std::endl;
+    st_greater.push_back(5);
+    st_greater.push_back(6);
+    st_greater.push_back(7);
+
+    my_greater.push_back(5);
+    my_greater.push_back(6);
+    my_greater.push_back(7);
+    std::cout << "|   1 - 5 elem, 2 - 6 elem (numbers are equivalent)   |" << std::endl;
+    std::cout << "Standart: " << (st_less > st_greater) << std::endl;
+    std::cout << "My list : " << (my_less > my_greater) << std::endl << std::endl;
+    std::cout << "|   Lists are equivalent   |" << std::endl;
+    std::cout << "Standart: " << (first > first_copy) << std::endl;
+    std::cout << "My list : " << (first_my > first_my_copy) << std::endl << std::endl;
+    st_greater.push_front(5);
+    my_greater.push_front(5);
+    std::cout << "|   1 - 5 elem, 2 - 7 elem. First number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less > st_greater) << std::endl;
+    std::cout << "My list : " << (my_less > my_greater) << std::endl << std::endl;
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+
+    std::cout << "|   1 - 5 elem, 2 - 3 elem. First number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less > st_greater) << std::endl;
+    std::cout << "My list : " << (my_less > my_greater) << std::endl << std::endl;
+    
+    st_greater = st_less;
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.push_back(7);
+
+    my_greater = my_less;
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.push_back(7);
+    std::cout << "|   1 - 5 elem, 2 - 4 elem. Last number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less > st_greater) << std::endl;
+    std::cout << "My list : " << (my_less > my_greater) << std::endl << std::endl;
+
+    st_greater.erase(--(st_greater.end()));
+    st_less.erase(st_less.begin());
+    st_less.push_front(9);
+
+    my_greater.erase(--(my_greater.end()));
+    my_less.erase(my_less.begin());
+    my_less.push_front(9);
+    std::cout << "|   1 - 5 elem, 2 - 3 elem. First number in 1 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less > st_greater) << std::endl;
+    std::cout << "My list : " << (my_less > my_greater) << std::endl << std::endl;
+
+    std::cout << "_______________________" << std::endl;
+    std::cout << "|                     |" << std::endl;
+    std::cout << "|     Operator >=     |" << std::endl;
+    std::cout << "|_____________________|" << std::endl << std::endl;
+
+    st_less = less;
+    st_greater = greater;
+
+    my_less = my_l;
+    my_greater = my_g;  
+
+    std::cout << "|   1 - 5 elem, 2 - 3 elem (numbers are equivalent)   |" << std::endl;
+    std::cout << "Standart: " << (st_less >= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less >= my_greater) << std::endl << std::endl;
+    st_greater.push_back(5);
+    st_greater.push_back(6);
+    st_greater.push_back(7);
+
+    my_greater.push_back(5);
+    my_greater.push_back(6);
+    my_greater.push_back(7);
+    std::cout << "|   1 - 5 elem, 2 - 6 elem (numbers are equivalent)   |" << std::endl;
+    std::cout << "Standart: " << (st_less >= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less >= my_greater) << std::endl << std::endl;
+    std::cout << "|   Lists are equivalent   |" << std::endl;
+    std::cout << "Standart: " << (first >= first_copy) << std::endl;
+    std::cout << "My list : " << (first_my >= first_my_copy) << std::endl << std::endl;
+    st_greater.push_front(5);
+    my_greater.push_front(5);
+    std::cout << "|   1 - 5 elem, 2 - 7 elem. First number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less >= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less >= my_greater) << std::endl << std::endl;
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+
+    std::cout << "|   1 - 5 elem, 2 - 3 elem. First number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less >= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less >= my_greater) << std::endl << std::endl;
+    
+    st_greater = st_less;
+    st_greater.erase(--(st_greater.end()));
+    st_greater.erase(--(st_greater.end()));
+    st_greater.push_back(7);
+
+    my_greater = my_less;
+    my_greater.erase(--(my_greater.end()));
+    my_greater.erase(--(my_greater.end()));
+    my_greater.push_back(7);
+    std::cout << "|   1 - 5 elem, 2 - 4 elem. Last number in 2 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less >= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less >= my_greater) << std::endl << std::endl;
+
+    st_greater.erase(--(st_greater.end()));
+    st_less.erase(st_less.begin());
+    st_less.push_front(9);
+
+    my_greater.erase(--(my_greater.end()));
+    my_less.erase(my_less.begin());
+    my_less.push_front(9);
+    std::cout << "|   1 - 5 elem, 2 - 3 elem. First number in 1 is greater   |" << std::endl;
+    std::cout << "Standart: " << (st_less >= st_greater) << std::endl;
+    std::cout << "My list : " << (my_less >= my_greater) << std::endl << std::endl;
+
+    std::cout << "____________________" << std::endl;
+    std::cout << "|                  |" << std::endl;
+    std::cout << "|     ft::swap     |" << std::endl;
+    std::cout << "|__________________|" << std::endl << std::endl;
+    std::list<int> foo (3,100);
+    ft::List<int> my_foo(3, 100);
+    std::list<int> bar (5,200);
+    ft::List<int> my_bar (5,200);
+
+    std::cout << "St foo contains:";
+    for (std::list<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << foo.size() << std::endl;
+    std::cout << "My foo contains:";
+    for (ft::List<int>::iterator it_my = my_foo.begin(); it_my != my_foo.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << my_foo.size() << std::endl;
+    std::cout << "St bar contains:";
+    for (std::list<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << bar.size() << std::endl;
+    std::cout << "My bar contains:";
+    for (ft::List<int>::iterator it_my = my_bar.begin(); it_my!=my_bar.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << my_bar.size() << std::endl;
+    
+    std::cout << "|   After swap   |" << std::endl;
+    std::swap(foo, bar);
+    ft::swap(my_foo, my_bar);
+
+    std::cout << "St foo contains:";
+    for (std::list<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << foo.size() << std::endl;
+    std::cout << "My foo contains:";
+    for (ft::List<int>::iterator it_my = my_foo.begin(); it_my != my_foo.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << my_foo.size() << std::endl;
+    std::cout << "St bar contains:";
+    for (std::list<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "Size: " << bar.size() << std::endl;
+    std::cout << "My bar contains:";
+    for (ft::List<int>::iterator it_my = my_bar.begin(); it_my!=my_bar.end(); ++it_my)
+        std::cout << ' ' << *it_my;
+    std::cout << '\n';
+    std::cout << "Size: " << my_bar.size() << std::endl << std::endl;
+    
+
     return (0);
 }

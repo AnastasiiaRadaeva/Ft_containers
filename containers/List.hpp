@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/27 16:53:47 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/29 16:40:52 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,17 @@ namespace ft
             /************************/
             /*     Member types     */
             /************************/
-            typedef T                                               value_type;
-            typedef Alloc                                           allocator_type;
-            typedef typename allocator_type::reference              reference;
-            typedef typename allocator_type::const_reference        const_reference;
-            typedef typename allocator_type::pointer                pointer;
-            typedef typename allocator_type::const_pointer          const_pointer;
-            typedef typename ft::iterator<value_type>               iterator;
-            typedef typename ft::const_iterator<value_type>         const_iterator;
-            typedef typename ft::reverse_iterator<value_type>       reverse_iterator;
-            typedef typename ft::const_reverse_iterator<value_type> const_reverse_iterator;
-            // typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
-            typedef size_t                                          size_type;
+            typedef T                                                   value_type;
+            typedef Alloc                                               allocator_type;
+            typedef typename allocator_type::reference                  reference;
+            typedef typename allocator_type::const_reference            const_reference;
+            typedef typename allocator_type::pointer                    pointer;
+            typedef typename allocator_type::const_pointer              const_pointer;
+            typedef typename list::iterator<value_type>                 iterator;
+            typedef typename list::const_iterator<value_type>           const_iterator;
+            typedef typename list::reverse_iterator<value_type>         reverse_iterator;
+            typedef typename list::const_reverse_iterator<value_type>   const_reverse_iterator;
+            typedef size_t                                              size_type;
             
             /****************************/
             /*     Member functions     */
@@ -59,7 +58,7 @@ namespace ft
                 _tail_of_node_list = create_node();
                 _tail_of_node_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = _tail_of_node_list;
-                _tail_of_node_list->content = _current_size;
+                // _tail_of_node_list->content = _current_size;
             }
 
             explicit List(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _current_size(n)
@@ -68,9 +67,9 @@ namespace ft
                 _tail_of_node_list = create_node();
                 _tail_of_node_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = _tail_of_node_list;
-                _tail_of_node_list->content = _current_size;
-                ft::node<value_type> *tmp_list_1;
-                ft::node<value_type> *tmp_list_2;
+                // _tail_of_node_list->content = _current_size;
+                node<value_type> *tmp_list_1;
+                node<value_type> *tmp_list_2;
                 tmp_list_1 = _tail_of_node_list;
                 for (size_type i = 0; i < n; i++)
                 {
@@ -91,7 +90,7 @@ namespace ft
                 _tail_of_node_list = create_node();
                 _tail_of_node_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = _tail_of_node_list;
-                ft::node<value_type> *tmp_list = _tail_of_node_list;
+                node<value_type> *tmp_list = _tail_of_node_list;
                 size_type i = 0;
                 while (first != last)
                 {
@@ -104,7 +103,7 @@ namespace ft
                 tmp_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = tmp_list;
                 _current_size = i;
-                _tail_of_node_list->content = _current_size;
+                // _tail_of_node_list->content = _current_size;
             }
 
             List(List const &copy)
@@ -112,8 +111,8 @@ namespace ft
                 _tail_of_node_list = create_node();
                 _tail_of_node_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = _tail_of_node_list;
-                ft::node<value_type> *tmp_list_1 = _tail_of_node_list;
-                ft::node<value_type> *tmp_copy_list = copy._tail_of_node_list->next;
+                node<value_type> *tmp_list_1 = _tail_of_node_list;
+                node<value_type> *tmp_copy_list = copy._tail_of_node_list->next;
                 while (tmp_copy_list != copy._tail_of_node_list)
                 {
                     tmp_list_1->next = create_node(tmp_copy_list->content);
@@ -123,7 +122,7 @@ namespace ft
                 }
                 tmp_list_1->next = _tail_of_node_list;
                 _tail_of_node_list->prev = tmp_list_1;
-                _tail_of_node_list->content = copy._current_size;
+                //_tail_of_node_list->content = copy._current_size;
                 _current_size = copy._current_size;
             }
 
@@ -134,8 +133,8 @@ namespace ft
                 if (this != &b)
                 {
                     clear();
-                    ft::node<value_type> *tmp_list_1 = _tail_of_node_list;
-                    ft::node<value_type> *tmp_b_list = b._tail_of_node_list->next;
+                    node<value_type> *tmp_list_1 = _tail_of_node_list;
+                    node<value_type> *tmp_b_list = b._tail_of_node_list->next;
                     while (tmp_b_list != b._tail_of_node_list)
                     {
                         tmp_list_1->next = create_node(tmp_b_list->content);
@@ -145,7 +144,7 @@ namespace ft
                     }
                     tmp_list_1->next = _tail_of_node_list;
                     _tail_of_node_list->prev = tmp_list_1;
-                    _tail_of_node_list->content = b._current_size;
+                    //_tail_of_node_list->content = b._current_size;
                     _current_size = b._current_size;
                 }
                 return (*this);
@@ -159,7 +158,8 @@ namespace ft
                 delete_node(_tail_of_node_list);
             }
 
-            /* Iterators */
+            /***************************************************************************/
+            /*** iterators --------------------------------------------------------- ***/
             iterator                begin() { return (iterator(_tail_of_node_list->next));}
             const_iterator          begin() const { return (const_iterator(_tail_of_node_list->next));}
             iterator                end() { return (iterator(_tail_of_node_list));}
@@ -169,23 +169,26 @@ namespace ft
             reverse_iterator        rend() { return (reverse_iterator(_tail_of_node_list->next));}
             const_reverse_iterator  rend() const { return (const_reverse_iterator(_tail_of_node_list->next));}
 
-            /* --- Capacity --- */
+            /***************************************************************************/
+            /*** Capacity ---------------------------------------------------------- ***/
             bool        empty() const {return (_current_size == 0 ? true : false);}
             size_type   size() const {return (_current_size);}
             size_type   max_size() const {node_alloc node; return(node.max_size());}
 
-            /* --- Element access --- */
+            /***************************************************************************/
+            /*** Element access ---------------------------------------------------- ***/
             reference       front() { return (_tail_of_node_list->next->content);}
             const_reference front() const { return (_tail_of_node_list->next->content);}
             reference       back() { return (_tail_of_node_list->prev->content);}
             const_reference back() const { return (_tail_of_node_list->prev->content);}
 
-            /* Modifiers */
+            /***************************************************************************/
+            /*** Modifiers --------------------------------------------------------- ***/
             template <class InputIterator>
             void assign (InputIterator first, InputIterator last, typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
             {
                 clear();
-                ft::node<value_type> *tmp_list = _tail_of_node_list;
+                node<value_type> *tmp_list = _tail_of_node_list;
                 size_type i = 0;
                 while (first != last)
                 {
@@ -198,15 +201,15 @@ namespace ft
                 tmp_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = tmp_list;
                 _current_size = i;
-                _tail_of_node_list->content = _current_size;
+                //_tail_of_node_list->content = _current_size;
             }
             void assign (size_type n, const value_type& val)
             {
                 clear();
                 _current_size = n;
-                _tail_of_node_list->content = _current_size;
-                ft::node<value_type> *tmp_list_1;
-                ft::node<value_type> *tmp_list_2;
+                //_tail_of_node_list->content = _current_size;
+                node<value_type> *tmp_list_1;
+                node<value_type> *tmp_list_2;
                 tmp_list_1 = _tail_of_node_list;
                 for (size_type i = 0; i < n; i++)
                 {
@@ -220,12 +223,13 @@ namespace ft
             }
             void push_front (const value_type& val)
             {
-                ft::node<value_type> *new_node = create_node(val);
+                node<value_type> *new_node = create_node(val);
                 new_node->next = _tail_of_node_list->next;
                 new_node->prev = _tail_of_node_list;
                 _tail_of_node_list->next->prev = new_node;
                 _tail_of_node_list->next = new_node;
-                _tail_of_node_list->content = ++_current_size;
+                ++_current_size;
+                //_tail_of_node_list->content = _current_size;
             }
             void pop_front()
             {
@@ -234,21 +238,23 @@ namespace ft
                     std::cerr << "You try to delete empty list" << std::endl;
                     return;
                 }
-                ft::node<value_type> *tmp;
+                node<value_type> *tmp;
                 tmp = _tail_of_node_list->next->next;
                 delete_node(_tail_of_node_list->next);
                 _tail_of_node_list->next = tmp;
                 tmp->prev = _tail_of_node_list;
-                _tail_of_node_list->content = --_current_size;
+                --_current_size;
+                //_tail_of_node_list->content = _current_size;
             }
             void push_back (const value_type& val)
             {
-                ft::node<value_type> *new_node = create_node(val);
+                node<value_type> *new_node = create_node(val);
                 new_node->prev = _tail_of_node_list->prev;
                 new_node->next = _tail_of_node_list;
                 _tail_of_node_list->prev->next = new_node;
                 _tail_of_node_list->prev = new_node;
-                _tail_of_node_list->content = ++_current_size;
+                ++_current_size;
+                //_tail_of_node_list->content = _current_size;
             }
             void pop_back()
             {
@@ -257,12 +263,13 @@ namespace ft
                     std::cerr << "You try to delete empty list" << std::endl;
                     return;
                 }
-                ft::node<value_type> *tmp;
+                node<value_type> *tmp;
                 tmp = _tail_of_node_list->prev->prev;
                 delete_node(_tail_of_node_list->prev);
                 _tail_of_node_list->prev = tmp;
                 tmp->next = _tail_of_node_list;
-                _tail_of_node_list->content = --_current_size;
+                --_current_size;
+                //_tail_of_node_list->content = _current_size;
             }
             iterator insert (iterator position, const value_type& val)
             {
@@ -273,7 +280,7 @@ namespace ft
                 tmp_next->prev = tmp_prev->next;
                 tmp_prev->next->next = tmp_next;
                 ++_current_size;
-                _tail_of_node_list->content++;
+                //_tail_of_node_list->content++;
                 return (tmp_prev->next);
             }
             void insert (iterator position, size_type n, const value_type& val)
@@ -286,7 +293,7 @@ namespace ft
                     tmp_prev->next->prev = tmp_prev;
                     tmp_next->prev = tmp_prev->next;
                     tmp_prev->next->next = tmp_next;
-                    _tail_of_node_list->content++;
+                    //_tail_of_node_list->content++;
                     tmp_next = tmp_prev->next;
                 }
                 _current_size += n;
@@ -303,7 +310,7 @@ namespace ft
                     tmp_prev->next->prev = tmp_prev;
                     tmp_next->prev = tmp_prev->next;
                     tmp_prev->next->next = tmp_next;
-                    _tail_of_node_list->content++;
+                    //_tail_of_node_list->content++;
                     _current_size++;
                     tmp_prev = tmp_prev->next;
                     tmp_next = tmp_prev->next;
@@ -319,7 +326,7 @@ namespace ft
                     to_del->next->prev = prev_lst;
                     delete_node(to_del);
                     _current_size--;
-                    (_tail_of_node_list->content)--;
+                    // (_tail_of_node_list->content)--;
                     return (prev_lst->next);
                 }
                 return (0);
@@ -336,7 +343,7 @@ namespace ft
                     delete_node(to_del);
                     pos = prev_lst->next;
                     _current_size--;
-                    (_tail_of_node_list->content)--;
+                    // (_tail_of_node_list->content)--;
                     first++;
                     to_del = first.get_node();
                     prev_lst = to_del->prev;
@@ -348,10 +355,10 @@ namespace ft
                 List<value_type> tmp(x);
                 x.assign(this->begin(), this->end());
                 x._current_size = _current_size;
-                x._tail_of_node_list->content = _current_size;
+                // x._tail_of_node_list->content = _current_size;
                 this->assign(tmp.begin(), tmp.end());
                 _current_size = tmp._current_size;
-                _tail_of_node_list->content = _current_size;
+                //_tail_of_node_list->content = _current_size;
             }
             void resize (size_type n, value_type val = value_type())
             {
@@ -367,7 +374,7 @@ namespace ft
                     }
                     tmp->next = _tail_of_node_list;
                     _tail_of_node_list->prev = tmp;
-                    _tail_of_node_list->content = _current_size;
+                    //_tail_of_node_list->content = _current_size;
                 }
                 if (_current_size > n)
                 {
@@ -383,12 +390,12 @@ namespace ft
                         tmp_2->prev = tmp;
                         tmp_2 = tmp_2->next;
                     }
-                    _tail_of_node_list->content = _current_size;
+                    //_tail_of_node_list->content = _current_size;
                 }
             }
             void clear()
             {
-                ft::node<value_type> *tmp = _tail_of_node_list->next->next;
+                node<value_type> *tmp = _tail_of_node_list->next->next;
                 while (tmp->prev != _tail_of_node_list)
                 {
                     delete_node(_tail_of_node_list->next);
@@ -398,7 +405,8 @@ namespace ft
                 }
             }
 
-            /* Operations */
+            /***************************************************************************/
+            /*** Operations -------------------------------------------------------- ***/
             void splice (iterator position, List& x)
             {
                 node<value_type> *next_lst = position.get_node();
@@ -408,12 +416,12 @@ namespace ft
                 next_lst->prev = x._tail_of_node_list->prev;
                 x._tail_of_node_list->prev->next = next_lst;
                 _current_size += x._current_size;
-                _tail_of_node_list->content = static_cast<value_type>(_current_size);
+                //_tail_of_node_list->content = static_cast<value_type>(_current_size);
 
                 x._tail_of_node_list->next = x._tail_of_node_list;
                 x._tail_of_node_list->prev = x._tail_of_node_list;
                 x._current_size = 0;
-                x._tail_of_node_list->content = 0;
+                //x._tail_of_node_list->content = 0;
             }	
             void splice (iterator position, List& x, iterator i)
             {
@@ -427,9 +435,9 @@ namespace ft
                 next_lst->prev = new_lst;
                 new_lst->next = next_lst;
                 _current_size++;
-                (_tail_of_node_list->content)++;
+                // (_tail_of_node_list->content)++;
                 x._current_size--;
-                (x._tail_of_node_list->content)--;
+                // (x._tail_of_node_list->content)--;
             }
             void splice (iterator position, List& x, iterator first, iterator last)
             {
@@ -445,9 +453,9 @@ namespace ft
                     next_lst->prev = new_lst;
                     new_lst->next = next_lst;
                     _current_size++;
-                    (_tail_of_node_list->content)++;
+                    // (_tail_of_node_list->content)++;
                     x._current_size--;
-                    (x._tail_of_node_list->content)--;
+                    // (x._tail_of_node_list->content)--;
                     prev_lst = prev_lst->next;
                     new_lst = first.get_node();
                 }
@@ -469,7 +477,7 @@ namespace ft
                     }
                     tmp = tmp->next;
                 }
-                _tail_of_node_list->content = _current_size;
+                //_tail_of_node_list->content = _current_size;
             }
             template <class Predicate>
             void remove_if (Predicate pred)
@@ -489,7 +497,7 @@ namespace ft
                     }
                     tmp = tmp->next;
                 }
-                _tail_of_node_list->content = _current_size;
+                //_tail_of_node_list->content = _current_size;
             }
             void unique()
             {
@@ -508,7 +516,7 @@ namespace ft
                     }
                     tmp = tmp->next;
                 }
-                _tail_of_node_list->content = _current_size;
+                //_tail_of_node_list->content = _current_size;
             }
             template <class BinaryPredicate>
             void unique (BinaryPredicate binary_pred)
@@ -528,7 +536,7 @@ namespace ft
                     }
                     tmp = tmp->next;
                 }
-                _tail_of_node_list->content = _current_size;
+                //_tail_of_node_list->content = _current_size;
             }
             void merge (List& x)
             {
@@ -637,8 +645,8 @@ namespace ft
             {
                 if (!_tail_of_node_list)
                     return;
-                ft::node<value_type> *tmp;
-                ft::node<value_type> *tmp_buff;
+                node<value_type> *tmp;
+                node<value_type> *tmp_buff;
                 tmp = _tail_of_node_list;
                 tmp_buff = _tail_of_node_list->next;
                 while (tmp_buff != _tail_of_node_list)
@@ -652,23 +660,30 @@ namespace ft
 
             private:
                 
-                //types
-                typedef typename allocator_type::template rebind<ft::node<value_type> >::other  node_alloc; //equivalent allocator fot type node
-                typedef typename node_alloc::pointer                                            node_pointer;
-                typedef typename node_alloc::const_reference                                    node_const_reference;
+                /*********************************/
+                /*     Member types | private    */
+                /*********************************/
+                typedef typename allocator_type::template rebind<node<value_type> >::other  node_alloc; //equivalent allocator fot type node
+                typedef typename node_alloc::pointer                                        node_pointer;
+                typedef typename node_alloc::const_reference                                node_const_reference;
                 
-                //for node
-                ft::node<value_type>    *_tail_of_node_list;
-                size_type               _current_size;
-                node_alloc              _alloc_for_node;
-                allocator_type          _alloc;
+                /*************************************/
+                /*     Members for node | private    */
+                /*************************************/
+                node<value_type>    *_tail_of_node_list;
+                size_type           _current_size;
+                node_alloc          _alloc_for_node;
+                allocator_type      _alloc;
 
+                /*************************************/
+                /*     Member functions | private    */
+                /*************************************/
                 node<value_type>    *create_node(value_type value = value_type())
                 {
                     try
                     {
                         node_pointer n_pointer = _alloc_for_node.allocate(1);
-                        typename ft::node<value_type> new_node;
+                        node<value_type> new_node;
                         new_node.content = value;
                         new_node.next = 0;
                         new_node.prev = 0;
@@ -687,16 +702,20 @@ namespace ft
                 {
                     node_pointer n_pointer = _alloc_for_node.address(*node_for_del);
                     _alloc_for_node.destroy(n_pointer);
-                    _alloc_for_node.deallocate(n_pointer, 1);//не очень понятно, остается ли указатель в нормальном состоянии.
+                    _alloc_for_node.deallocate(n_pointer, 1);
                 }
     };
 
-    /* --- Non-member function overloads --- */
+    /*****************************************/
+    /*                                       */
+    /*     Non-member function overloads     */
+    /*                                       */
+    /*****************************************/
     template <class T, class Alloc>
     bool operator== (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
     {
-        const_iterator<T> lhs_it = lhs.begin();
-        const_iterator<T> rhs_it = rhs.begin();
+        list::const_iterator<T> lhs_it = lhs.begin();
+        list::const_iterator<T> rhs_it = rhs.begin();
         while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
         {
             lhs_it++;
@@ -708,8 +727,8 @@ namespace ft
     template <class T, class Alloc>
     bool operator!= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
     {
-        const_iterator<T> lhs_it = lhs.begin();
-        const_iterator<T> rhs_it = rhs.begin();
+        list::const_iterator<T> lhs_it = lhs.begin();
+        list::const_iterator<T> rhs_it = rhs.begin();
         while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
         {
             lhs_it++;
@@ -720,28 +739,77 @@ namespace ft
     
     template <class T, class Alloc>
     bool operator<  (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
+    // Если значения одинаковы, то сравнивается длина списка
+    // Если значения отличаются, то сравниваются значения
+    // Сравнивает до первого не равного числа
     {
-        const_iterator<T> lhs_it = lhs.begin();
-        const_iterator<T> rhs_it = rhs.begin();
-        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it < *rhs_it)
+        list::const_iterator<T> lhs_it = lhs.begin();
+        list::const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
         {
             lhs_it++;
             rhs_it++;
         }
-        return (lhs_it == lhs.end() || rhs_it == rhs.end() || (*lhs_it < *rhs_it));
+        if (rhs_it == rhs.end() || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
+            return (false);
+        // if (lhs_it == lhs.end() || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
+        //     return (true);
+        return (true);
     }
 
-    // template <class T, class Alloc>
-    // bool operator<= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs);
+    template <class T, class Alloc>
+    bool operator<= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
+    {
+        list::const_iterator<T> lhs_it = lhs.begin();
+        list::const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if ((rhs_it == rhs.end() && lhs_it != lhs.end()) || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
+            return (false);
+        return (true);
+    }
     
-    // template <class T, class Alloc>
-    // bool operator>  (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs);
+    template <class T, class Alloc>
+    bool operator>  (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
+    {
+        list::const_iterator<T> lhs_it = lhs.begin();
+        list::const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if (lhs_it == lhs.end() || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
+            return (false);
+        // if (rhs_it == rhs.end() || (*lhs_it < *rhs_it && lhs_it != lhs.end()))
+        //     return (true);
+        return (true);
+    }
 
-    // template <class T, class Alloc>
-    // bool operator>= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs);
+    template <class T, class Alloc>
+    bool operator>= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
+    {
+        list::const_iterator<T> lhs_it = lhs.begin();
+        list::const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if ((lhs_it == lhs.end() && rhs_it != rhs.end()) || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
+            return (false);
+        return (true);
 
-    // template <class T, class Alloc>
-    // void swap (List<T,Alloc>& x, List<T,Alloc>& y);
+    }
+
+    template <class T, class Alloc>
+    void swap (List<T,Alloc>& x, List<T,Alloc>& y)
+    {
+        x.swap(y);
+    }
 }
 
 #endif
