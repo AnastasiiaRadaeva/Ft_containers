@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 10:49:38 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/29 18:56:07 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/29 20:57:33 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int main()
     std::cout << "Standart list - size: " << standart_list_str.size() << std::endl;
     std::cout << "Standart list - empty: " << standart_list_str.empty() << std::endl;
     std::cout << std::endl;
+
 
     // std::cout << "max size: " << my_list.max_size() << std::endl;
     // std::cout << "content front: " << my_list.front() << std::endl;
@@ -145,7 +146,6 @@ int main()
     // std::cout << *iter_list_int << std::endl;
 
     // // (&iter_list_int);
-
 
 
     std::cout << "________________________" << std::endl;
