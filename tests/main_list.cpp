@@ -6,13 +6,14 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 10:49:38 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/29 16:36:58 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/04/29 18:56:07 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../containers/List.hpp"
 #include <list>
 #include <cmath>
+#include <unistd.h>
 
 bool mycomparison (double first, double second)
 {
@@ -1899,6 +1900,6 @@ int main()
     std::cout << '\n';
     std::cout << "Size: " << my_bar.size() << std::endl << std::endl;
     
-
+    // sleep(1000);
     return (0);
 }
