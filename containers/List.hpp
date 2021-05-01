@@ -166,8 +166,8 @@ namespace ft
             const_iterator          end() const { return (const_iterator(_tail_of_node_list));}
             reverse_iterator        rbegin() { return (reverse_iterator(_tail_of_node_list->prev));}
             const_reverse_iterator  rbegin() const { return (const_reverse_iterator(_tail_of_node_list->prev));}
-            reverse_iterator        rend() { return (reverse_iterator(_tail_of_node_list->next));}
-            const_reverse_iterator  rend() const { return (const_reverse_iterator(_tail_of_node_list->next));}
+            reverse_iterator        rend() { return (reverse_iterator(_tail_of_node_list));}
+            const_reverse_iterator  rend() const { return (const_reverse_iterator(_tail_of_node_list));}
 
             /***************************************************************************/
             /*** Capacity ---------------------------------------------------------- ***/

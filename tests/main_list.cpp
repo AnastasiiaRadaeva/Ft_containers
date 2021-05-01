@@ -15,6 +15,9 @@
 #include <cmath>
 #include <unistd.h>
 
+#define flag 0
+
+
 bool mycomparison (double first, double second)
 {
     return (int(first)<int(second));
@@ -57,250 +60,279 @@ bool compare_nocase (const std::string& first, const std::string& second)
 
 int main()
 {
-    std::cout << "_______________________________" << std::endl;
-    std::cout << "|                             |" << std::endl;
-    std::cout << "|     Default constructor     |" << std::endl;
-    std::cout << "|_____________________________|" << std::endl << std::endl;
-
-    ft::List<std::string> my_list_str;
-    std::cout << "My list - size: " << my_list_str.size() << std::endl;
-    std::cout << "My list - empty: " << my_list_str.empty() << std::endl;
-    std::cout << std::endl;
+    std::cout << "_________________________________" << std::endl;
+    std::cout << "|                               |" << std::endl;
+    std::cout << "|     Constructor | Default     |" << std::endl;
+    std::cout << "|_______________________________|" << std::endl << std::endl;
 
     std::list<std::string> standart_list_str;
     std::cout << "Standart list - size: " << standart_list_str.size() << std::endl;
     std::cout << "Standart list - empty: " << standart_list_str.empty() << std::endl;
     std::cout << std::endl;
 
-
-    // std::cout << "max size: " << my_list.max_size() << std::endl;
-    // std::cout << "content front: " << my_list.front() << std::endl;
-    // std::cout << "content back: " << my_list.back() << std::endl;
-    
-
-    // ft::List<std::string> list(3, "Hello");
-    // std::cout << list.getList() << std::endl;
-    // std::cout << "size: " << list.size() << std::endl;
-    // std::cout << "empty: " << list.empty() << std::endl;
-    // std::cout << "max size: " << list.max_size() << std::endl;
-    // std::cout << "content front: " << list.front() << std::endl;
-    // std::cout << "content back: " << list.back() << std::endl;
-    // std::cout << std::endl;
-
-    // ft::List<std::string> list_1;
-    // std::cout << list_1.getList() << std::endl;
-    // std::cout << "size: " << list_1.size() << std::endl;
-    // std::cout << "empty: " << list_1.empty() << std::endl;
-    // std::cout << "max size: " << list_1.max_size() << std::endl;
-    // std::cout << "content front: " << list_1.front() << std::endl;
-    // std::cout << "content back: " << list_1.back() << std::endl;
-    // list_1.push_back("went");
-    // list_1.push_back("gone");
-    // list_1.push_front("go");
-    // list_1.reverse();
-    // std::cout << std::endl;
-    // std::cout << list_1.getList() << std::endl;
-    // std::cout << "size: " << list_1.size() << std::endl;
-    // std::cout << "empty: " << list_1.empty() << std::endl;
-    // std::cout << "max size: " << list_1.max_size() << std::endl;
-    // std::cout << "content front: " << list_1.front() << std::endl;
-    // std::cout << "content back: " << list_1.back() << std::endl;
-
-    // std::list<std::string> l1(3, "Hello");
-    // std::list<std::string>::iterator iter_l1 = l1.begin();
-    // std::cout << *iter_l1 << std::endl;
-
-    // // std::list<int> l2(3, 7);
-    // // std::list<int>::iterator iter_l2 = l2.begin();
-
-    // // std::cout << (iter_l1 == iter_l2) << std::endl;
-    // // (&iter_l1)->
-    // // iter_l1++;
-    // // std::cout << *iter_l1 << std::endl;
-    // // iter_l1++;
-    // // std::cout << *iter_l1 << std::endl;
-    // // iter_l1++;
-    // // std::cout << *iter_l1 << std::endl;
-    // // iter_l1++;
-    // // std::cout << *iter_l1 << std::endl;
-    // // iter_l1++;
-    // // std::cout << *iter_l1 << std::endl;
-    
+    ft::List<std::string> my_list_str;
+    std::cout << "My list - size: " << my_list_str.size() << std::endl;
+    std::cout << "My list - empty: " << my_list_str.empty() << std::endl;
+    std::cout << std::endl;
 
 
-    
-    // /* operator== */
-    // ft::List<int> list_int;
-    // list_int.push_back(5);
-    // list_int.push_back(7);
-    // list_int.push_back(9);
-    // ft::List<int>::iterator iter_list_int = list_int.begin();
+    std::cout << "______________________________" << std::endl;
+    std::cout << "|                            |" << std::endl;
+    std::cout << "|     Constructor | Fill     |" << std::endl;
+    std::cout << "|____________________________|" << std::endl << std::endl;
 
-    // ft::List<int> list_int_2(3, 5);
-    // ft::List<int>::iterator iter_list_int_2 = list_int_2.begin();
+    std::list<std::string>::iterator it_str_st;
+    std::list<std::string> standart_list_str_1(5, "Hello");
+    std::cout << "St list: ";
+    for (it_str_st = standart_list_str_1.begin(); it_str_st != standart_list_str_1.end(); ++it_str_st)
+        std::cout << ' ' << *it_str_st;
+    std::cout << std::endl;
+    std::cout << "Standart list - size: " << standart_list_str_1.size() << std::endl;
+    std::cout << "Standart list - empty: " << standart_list_str_1.empty() << std::endl;
+    std::cout << std::endl;
 
-    // std::cout << (iter_list_int == iter_list_int_2) << std::endl;
-    // std::cout << (iter_list_int == iter_list_int) << std::endl;
-    // std::cout << (iter_list_int != iter_list_int_2) << std::endl;
-    // std::cout << (iter_list_int != iter_list_int) << std::endl;
-    // std::cout << *iter_list_int << std::endl;
-
-    // // (&iter_list_int);
-
-
-    std::cout << "________________________" << std::endl;
-    std::cout << "|                      |" << std::endl;
-    std::cout << "|     Operator++()     |" << std::endl;
-    std::cout << "|______________________|" << std::endl << std::endl;
-
-    ft::List<int>   my_list_int;
-    my_list_int.push_back(2);
-    my_list_int.push_back(4);
-    my_list_int.push_back(16);
-    ft::List<int>::iterator b_iter_my_list_int = my_list_int.begin();
-    ft::List<int>::iterator e_iter_my_list_int = my_list_int.end();
-
+    ft::List<std::string>::iterator it_str_my;
+    ft::List<std::string> my_list_str_1(5, "Hello");
     std::cout << "My list: ";
-    while (b_iter_my_list_int != e_iter_my_list_int)
-    {
-        std::cout << *b_iter_my_list_int << " ";
-        ++b_iter_my_list_int;
-    }
+    for (it_str_my = my_list_str_1.begin(); it_str_my != my_list_str_1.end(); ++it_str_my)
+        std::cout << ' ' << *it_str_my;
     std::cout << std::endl;
-    std::cout << "Tail: " << *b_iter_my_list_int << std::endl;
-    std::cout << "First element: " << *(++b_iter_my_list_int) << " " << std::endl << std::endl;
-
-    std::list<int>   standart_list_int;
-    standart_list_int.push_back(2);
-    standart_list_int.push_back(4);
-    standart_list_int.push_back(16);
-    std::list<int>::iterator b_iter_st_list_int = standart_list_int.begin();
-    std::list<int>::iterator e_iter_st_list_int = standart_list_int.end();
-    
-    std::cout << "Standart list: ";
-    while (b_iter_st_list_int != e_iter_st_list_int)
-    {
-        std::cout << *b_iter_st_list_int << " ";
-        ++b_iter_st_list_int;
-    }
+    std::cout << "My list - size: " << my_list_str_1.size() << std::endl;
+    std::cout << "My list - empty: " << my_list_str_1.empty() << std::endl;
     std::cout << std::endl;
-    std::cout << "Tail: " << *b_iter_st_list_int << std::endl;
-    std::cout << "First element: " << *(++b_iter_st_list_int) << " " << std::endl << std::endl;
-    
 
 
-    std::cout << "________________________" << std::endl;
-    std::cout << "|                      |" << std::endl;
-    std::cout << "|     Operator--()     |" << std::endl;
-    std::cout << "|______________________|" << std::endl << std::endl;
-
-    std::cout << "My list: ";
-    while (e_iter_my_list_int != b_iter_my_list_int)
-        std::cout << *(--e_iter_my_list_int) << " ";
+    std::cout << "____________________________" << std::endl;
+    std::cout << "|                          |" << std::endl;
+    std::cout << "|     Constructor Iter     |" << std::endl;
+    std::cout << "|__________________________|" << std::endl << std::endl;
+    std::cout << "List for copy from 2 to 4: ";
+    for (it_str_my = my_list_str_1.begin(); it_str_my != my_list_str_1.end(); ++it_str_my)
+        std::cout << ' ' << *it_str_my;
     std::cout << std::endl;
-    std::cout << "Tail: " << *(--e_iter_my_list_int) << std::endl;
-    std::cout << "Final element: " << *(--e_iter_my_list_int) << " " << std::endl << std::endl;
-    ++e_iter_my_list_int;
-
-    std::cout << "Standart list: ";
-    while (e_iter_st_list_int != b_iter_st_list_int)
-        std::cout << *(--e_iter_st_list_int) << " ";
+    std::cout << "Size: " << my_list_str_1.size() << std::endl;
+    ft::List<std::string>::iterator b_iter = ++(my_list_str_1.begin());
+    ft::List<std::string>::iterator e_iter = --(my_list_str_1.end());
+    
+    ft::List<std::string> new_my_list(b_iter, e_iter);
+    std::cout << "New list: ";
+    for (it_str_my = new_my_list.begin(); it_str_my != new_my_list.end(); ++it_str_my)
+        std::cout << ' ' << *it_str_my;
     std::cout << std::endl;
-    std::cout << "Tail: " << *(--e_iter_st_list_int) << std::endl;
-    std::cout << "Final element: " << *(--e_iter_st_list_int) << " " << std::endl << std::endl;
-    ++e_iter_st_list_int;
-
-
-
-    std::cout << "___________________________" << std::endl;
-    std::cout << "|                         |" << std::endl;
-    std::cout << "|     Operator++(int)     |" << std::endl;
-    std::cout << "|_________________________|" << std::endl << std::endl;
-
-    std::cout << "My list: ";
-    while (b_iter_my_list_int != e_iter_my_list_int)
-        std::cout << *(b_iter_my_list_int++) << " ";
+    std::cout << "Size: " << new_my_list.size() << std::endl;
     std::cout << std::endl;
-    std::cout << "Tail: " << *(b_iter_my_list_int++) << std::endl;
-    std::cout << "First element: " << *b_iter_my_list_int << " " << std::endl << std::endl;
 
-    std::cout << "Standart list: ";
-    while (b_iter_st_list_int != e_iter_st_list_int)
-        std::cout << *(b_iter_st_list_int++) << " ";
+    ft::List<std::string> my_str_list;
+    my_str_list.push_back("Hello");
+    my_str_list.push_back("I'm");
+    my_str_list.push_back("glad");
+    my_str_list.push_back("to");
+    my_str_list.push_back("see");
+    my_str_list.push_back("you");
+    std::cout << "List for copy from 2 to 5: ";
+    for (it_str_my = my_str_list.begin(); it_str_my != my_str_list.end(); ++it_str_my)
+        std::cout << ' ' << *it_str_my;
     std::cout << std::endl;
-    std::cout << "Tail: " << *(b_iter_st_list_int++) << std::endl;
-    std::cout << "First element: " << *b_iter_st_list_int << " " << std::endl << std::endl;
-    
+    std::cout << "Size: " << my_str_list.size() << std::endl;
+    b_iter = ++(my_str_list.begin());
+    e_iter = --(my_str_list.end());
 
-
-    std::cout << "___________________________" << std::endl;
-    std::cout << "|                         |" << std::endl;
-    std::cout << "|     Operator--(int)     |" << std::endl;
-    std::cout << "|_________________________|" << std::endl << std::endl;
-
-    std::cout << "My list: ";
-    while (e_iter_my_list_int != b_iter_my_list_int)
-    {
-        e_iter_my_list_int--;
-        std::cout << *e_iter_my_list_int << " ";
-    }
+    ft::List<std::string> new_my_list_1(b_iter, e_iter);
+    std::cout << "New list: ";
+    for (it_str_my = new_my_list_1.begin(); it_str_my != new_my_list_1.end(); ++it_str_my)
+        std::cout << ' ' << *it_str_my;
     std::cout << std::endl;
-    e_iter_my_list_int--;
-    std::cout << "Tail: " << *(e_iter_my_list_int--) << std::endl;
-    std::cout << "Final element: " << *e_iter_my_list_int << " " << std::endl << std::endl;
-
-    std::cout << "Standart list: ";
-    while (e_iter_st_list_int != b_iter_st_list_int)
-    {
-        e_iter_st_list_int--;
-        std::cout << *e_iter_st_list_int << " ";
-    }
+    std::cout << "Size: " << new_my_list_1.size() << std::endl;
     std::cout << std::endl;
-    e_iter_st_list_int--;
-    std::cout << "Tail: " << *(e_iter_st_list_int--) << std::endl;
-    std::cout << "Final element: " << *e_iter_st_list_int << " " << std::endl << std::endl;
-    
-    
 
-    std::cout << "Const_iterator" << std::endl;
-    
-    const std::list<int> standart_const_list_int(3, 8);
-    std::list<int>::const_iterator b_iter_st_const_list_int = standart_const_list_int.begin();
-    std::cout << (b_iter_st_list_int == b_iter_st_const_list_int) << std::endl;
-
-    const ft::List<int>   my_const_list_int(3, 5);
-    ft::List<int>::const_iterator b_iter_my_const_list_int = my_const_list_int.begin();
-    std::cout << (b_iter_my_list_int == b_iter_my_const_list_int) << std::endl;
-
-    std::cout << "_____________________________________________________" << std::endl;
-    std::cout << "|                                                   |" << std::endl;
-    std::cout << "|     Reverse_iterator / Const_reverse_iterator     |" << std::endl;
-    std::cout << "|___________________________________________________|" << std::endl << std::endl;
-    
-    std::list<int>::const_reverse_iterator b_st_const_rev_list_int = standart_const_list_int.rend();
-    // *b_st_const_rev_list_int = 5;
-    std::cout << *b_st_const_rev_list_int << "\n";
-    // std::cout << *b_st_const_rev_list_int << "\n";
-    // std::cout << (b_iter_st_list_int == b_st_const_rev_list_int) << std::endl;
-
-    ft::List<int>::const_reverse_iterator it_c = my_const_list_int.rbegin();
-    ft::List<int>::const_reverse_iterator it = my_const_list_int.rend();
-    std::cout << (it_c == it) << std::endl;
-    
-    // *it_c = 4;
-    std::cout << *it_c;
-
-    // ft::List<int>::reverse_iterator b_iter_my_const_rev_list_int;
-    // b_iter_my_const_list_int = my_const_list_int.rbegin();
-    
-    // std::cout << (b_iter_my_const_rev_list_int == b_iter_my_const_list_int) << std::endl;
 
     std::cout << "____________________________" << std::endl;
     std::cout << "|                          |" << std::endl;
     std::cout << "|     Copy constructor     |" << std::endl;
     std::cout << "|__________________________|" << std::endl << std::endl;
 
-    ft::List<int> copy_my_const_list_int(my_const_list_int);
+    std::cout << "List for copy: ";
+    for (it_str_my = my_str_list.begin(); it_str_my != my_str_list.end(); ++it_str_my)
+        std::cout << ' ' << *it_str_my;
+    std::cout << std::endl;
+    std::cout << "Size: " << my_str_list.size() << std::endl;
+    
+    ft::List<std::string> copy_my_str_list(my_str_list);
+    std::cout << "New list: ";
+    for (it_str_my = copy_my_str_list.begin(); it_str_my != copy_my_str_list.end(); ++it_str_my)
+        std::cout << ' ' << *it_str_my;
+    std::cout << std::endl;
+    std::cout << "Size: " << copy_my_str_list.size() << std::endl;
+    std::cout << std::endl;
+
+
+    std::cout << "_____________________" << std::endl;
+    std::cout << "|                   |" << std::endl;
+    std::cout << "|     Operator=     |" << std::endl;
+    std::cout << "|___________________|" << std::endl << std::endl;
+
+    std::cout << "My list 1: ";
+    for (it_str_my = my_list_str_1.begin(); it_str_my != my_list_str_1.end(); ++it_str_my)
+        std::cout << ' ' << *it_str_my;
+    std::cout << std::endl;
+    std::cout << "Size: " << my_list_str_1.size() << std::endl;
+
+    std::cout << "My list 2: ";
+    for (it_str_my = my_str_list.begin(); it_str_my != my_str_list.end(); ++it_str_my)
+        std::cout << ' ' << *it_str_my;
+    std::cout << std::endl;
+    std::cout << "Size: " << my_str_list.size() << std::endl;
+
+    my_list_str_1 = my_str_list;
+    std::cout << "My list 1 after operator=: ";
+    for (it_str_my = my_list_str_1.begin(); it_str_my != my_list_str_1.end(); ++it_str_my)
+        std::cout << ' ' << *it_str_my;
+    std::cout << std::endl;
+    std::cout << "Size: " << my_list_str_1.size() << std::endl;
+    std::cout << std::endl;
+
+
+    std::cout << "_______________________________________" << std::endl;
+    std::cout << "|                                     |" << std::endl;
+    std::cout << "|     Begin | Rbegin | End | Rend     |" << std::endl;
+    std::cout << "|_____________________________________|" << std::endl << std::endl;
+
+    int myints[] = {1, 2, 3, 4, 5, 6, 15};
+    std::list<int>::iterator it_int;
+    std::list<int> list_int(myints, myints + sizeof(myints) / sizeof(int));
+    std::cout << "St list: ";
+    for (it_int = list_int.begin(); it_int != list_int.end(); ++it_int)
+        std::cout << ' ' << *it_int;
+    std::cout << std::endl;
+    std::cout << "Size: " << list_int.size() << std::endl;
+
+    ft::List<int> my_list_int(myints, myints + sizeof(myints) / sizeof(int));
+    ft::List<int>::iterator it_int_my;
+    std::cout << "My list: ";
+    for (it_int_my = my_list_int.begin(); it_int_my != my_list_int.end(); ++it_int_my)
+        std::cout << ' ' << *it_int_my;
+    std::cout << std::endl;
+    std::cout << "Size: " << my_list_int.size() << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "St begin of list: " << *(list_int.begin()) << std::endl;
+    std::cout << "My begin of list: " << *(my_list_int.begin()) << std::endl;
+    std::cout << std::endl;
+    std::cout << "St rbegin of list: " << *(list_int.rbegin()) << std::endl;
+    std::cout << "My rbegin of list: " << *(list_int.rbegin()) << std::endl;
+    std::cout << std::endl;
+    std::cout << "St end->next of list: " << *(++(list_int.end())) << std::endl;
+    std::cout << "My end->next of list: " << *(++(my_list_int.end())) << std::endl;
+    std::cout << std::endl;
+    std::cout << "St rend->next of list: " << *(++(list_int.rend())) << std::endl;
+    std::cout << "My rend->next of list: " << *(++(my_list_int.rend())) << std::endl;
+    std::cout << std::endl;
+
+
+    std::cout << "___________________________________" << std::endl;
+    std::cout << "|                                 |" << std::endl;
+    std::cout << "|     Empty | Size | Max_size     |" << std::endl;
+    std::cout << "|_________________________________|" << std::endl << std::endl;
+
+    std::list<int> empty_l;
+    std::cout << "St empty list: " << empty_l.empty() << " | Size: " << empty_l.size() << std::endl;
+    std::cout << "Max size: " << empty_l.max_size() << std::endl;
+    ft::List<int> empty_l_my;
+    std::cout << "My empty list: " << empty_l_my.empty() << " | Size: " << empty_l_my.size() << std::endl;
+    std::cout << "Max size: " << empty_l_my.max_size() << std::endl;
+
+    std::cout << "St full list: ";
+    for (it_int = list_int.begin(); it_int != list_int.end(); ++it_int)
+        std::cout << ' ' << *it_int;
+    std::cout << std::endl << "Empty: " << list_int.empty() << " | Size: " << list_int.size() << std::endl;
+    std::cout << "My full list: ";
+    for (it_int_my = my_list_int.begin(); it_int_my != my_list_int.end(); ++it_int_my)
+        std::cout << ' ' << *it_int_my;
+    std::cout << std::endl << "Empty: " << my_list_int.empty() << " | Size: " << my_list_int.size() << std::endl;
+    std::cout << std::endl;
+
+
+    std::cout << "________________________" << std::endl;
+    std::cout << "|                      |" << std::endl;
+    std::cout << "|     Front | Back     |" << std::endl;
+    std::cout << "|______________________|" << std::endl << std::endl;
+    std::cout << "Front of last st list: " << list_int.front() << std::endl;
+    std::cout << "Front of last my list: " << my_list_int.front() << std::endl;
+    std::cout << "Back of last st list: " << list_int.back() << std::endl;
+    std::cout << "Back of last my list: " << my_list_int.back() << std::endl << std::endl;
+
+
+   std::cout << "__________________" << std::endl;
+    std::cout << "|                |" << std::endl;
+    std::cout << "|     Assign     |" << std::endl;
+    std::cout << "|________________|" << std::endl << std::endl;
+
+    std::list<int> list_assign(5, 9);
+    std::list<int>::iterator b = list_assign.begin();
+    std::cout << "St list before assign: ";
+    for (; b != list_assign.end(); ++b)
+        std::cout << ' ' << *b;
+    std::cout << std::endl;
+    std::cout << "Size: " << list_assign.size() << std::endl;
+    list_assign.assign(3, 7);
+    std::cout << "St list after assign: ";
+    for (b = list_assign.begin(); b != list_assign.end(); ++b)
+        std::cout << ' ' << *b;
+    std::cout << std::endl;
+    std::cout << "Size: " << list_assign.size() << std::endl;
+
+    ft::List<int> my_list_assign(5, 9);
+    ft::List<int>::iterator b_my = my_list_assign.begin();
+    std::cout << "My list before assign: ";
+    for (; b_my != my_list_assign.end(); ++b_my)
+        std::cout << ' ' << *b_my;
+    std::cout << std::endl;
+    std::cout << "Size: " << my_list_assign.size() << std::endl;
+    my_list_assign.assign(3, 7);
+    std::cout << "My list after assign: ";
+    for (b_my = my_list_assign.begin(); b_my != my_list_assign.end(); ++b_my)
+        std::cout << ' ' << *b_my;
+    std::cout << std::endl;
+    std::cout << "Size: " << my_list_assign.size() << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                     |" << std::endl;
+    std::cout << "|     Assign iter     |" << std::endl;
+    std::cout << "|_____________________|" << std::endl << std::endl;
+
+    std::cout << "St list before assign: ";
+    for (b = list_assign.begin(); b != list_assign.end(); ++b)
+        std::cout << ' ' << *b;
+    std::cout << std::endl;
+    std::cout << "Size: " << list_assign.size() << std::endl;
+    list_assign.assign(list_int.begin(), list_int.end());
+    std::cout << "St list after assign: ";
+    for (b = list_assign.begin(); b != list_assign.end(); ++b)
+        std::cout << ' ' << *b;
+    std::cout << std::endl;
+    std::cout << "Size: " << list_assign.size() << std::endl;
+
+    std::cout << "My list before assign: ";
+    for (b_my = my_list_assign.begin(); b_my != my_list_assign.end(); ++b_my)
+        std::cout << ' ' << *b_my;
+    std::cout << std::endl;
+    std::cout << "Size: " << my_list_assign.size() << std::endl;
+    my_list_assign.assign(my_list_int.begin(), my_list_int.end());
+    std::cout << "My list after assign: ";
+    for (b_my = my_list_assign.begin(); b_my != my_list_assign.end(); ++b_my)
+        std::cout << ' ' << *b_my;
+    std::cout << std::endl;
+    std::cout << "Size: " << my_list_assign.size() << std::endl;
+    std::cout << std::endl;
+
+
+# if flag > 0
+
+
+
+
+
     ft::List<int>::iterator b_copy = copy_my_const_list_int.begin();
     ft::List<int>::iterator e_copy = copy_my_const_list_int.end();
 
@@ -433,10 +465,7 @@ int main()
     // }
     // std::cout << std::endl;
 
-    std::cout << "_____________________" << std::endl;
-    std::cout << "|                   |" << std::endl;
-    std::cout << "|     Operator=     |" << std::endl;
-    std::cout << "|___________________|" << std::endl << std::endl;
+
 
     ft::List<int> oper_my_const_list_int = copy_my_const_list_int;
     ft::List<int>::iterator b_oper = oper_my_const_list_int.begin();
@@ -461,119 +490,7 @@ int main()
     }
     std::cout << "Size of list: " << *b_oper << std::endl;
 
-    std::cout << "__________________" << std::endl;
-    std::cout << "|                |" << std::endl;
-    std::cout << "|     Assign     |" << std::endl;
-    std::cout << "|________________|" << std::endl << std::endl;
-
-    std::list<int> list_assign(5, 9);
-    list_assign.assign(3, 7);
-    std::list<int>::iterator b = list_assign.begin();
-    std::list<int>::iterator e = list_assign.end();
-    std::cout << "Standart list: ";
-    while (b != e)
-    {
-        std::cout << *b << " ";
-        ++b;
-    }
-    std::cout << std::endl;
-    std::cout << "Size of list: " << *b << std::endl;
-
-    ft::List<int> my_list_assign(5, 9);
-    my_list_assign.assign(3, 7);
-    ft::List<int>::iterator my_b = my_list_assign.begin();
-    ft::List<int>::iterator my_e = my_list_assign.end();
-    std::cout << "My list: ";
-    while (my_b != my_e)
-    {
-        std::cout << *my_b << " ";
-        ++my_b;
-    }
-    std::cout << std::endl;
-    std::cout << "Size of list: " << my_list_assign.size() << std::endl;
-
-    std::cout << "____________________________" << std::endl;
-    std::cout << "|                          |" << std::endl;
-    std::cout << "|     Constructor Iter     |" << std::endl;
-    std::cout << "|__________________________|" << std::endl << std::endl;
-
-    ft::List<int>::const_iterator b_iter = my_const_list_int.begin();
-    ft::List<int>::const_iterator e_iter = my_const_list_int.end();
-    ft::List<int> iter_my_const_list_int(b_iter, e_iter);
-    ft::List<int>::iterator b_my_it = iter_my_const_list_int.begin();
-    ft::List<int>::iterator e_my_it = iter_my_const_list_int.end();
-
-    std::cout << "My list: ";
-    while (b_iter != e_iter)
-    {
-        std::cout << *b_iter << " ";
-        ++b_iter;
-    }
-    std::cout << std::endl;
-    std::cout << "My construct iter: ";
-    while (b_my_it != e_my_it)
-    {
-        std::cout << *b_my_it << " ";
-        ++b_my_it;
-    }
-    std::cout << std::endl;
-
-    ft::List<std::string> my_str_list;
-    my_str_list.push_back("Hello");
-    my_str_list.push_back("I'm");
-    my_str_list.push_back("glad");
-    my_str_list.push_back("to");
-    my_str_list.push_back("see");
-    my_str_list.push_back("you");
-    ft::List<std::string>::iterator begin = my_str_list.begin();
-    ft::List<std::string>::iterator end = my_str_list.end();
-    ft::List<std::string> iter_my_list_str(begin, end);
-    ft::List<std::string>::iterator c_begin = iter_my_list_str.begin();
-    ft::List<std::string>::iterator c_end = iter_my_list_str.end();
-
-    std::cout << "My string list: ";
-    while (begin != end)
-    {
-        std::cout << *begin << " ";
-        ++begin;
-    }
-    ++begin;
-    std::cout << std::endl;
-    std::cout << "My construct string iter: ";
-    while (c_begin != c_end)
-    {
-        std::cout << *c_begin << " ";
-        ++c_begin;
-    }
-    std::cout << std::endl;
-
-    std::cout << "______________________" << std::endl;
-    std::cout << "|                     |" << std::endl;
-    std::cout << "|     Assign iter     |" << std::endl;
-    std::cout << "|_____________________|" << std::endl << std::endl;
-
-    ft::List<std::string> assign_list_iter(4, "We");
-    ft::List<std::string>::iterator a_begin = assign_list_iter.begin();
-    ft::List<std::string>::iterator a_end = assign_list_iter.end();
-
-    std::cout << "My string list: ";
-    while (a_begin != a_end)
-    {
-        std::cout << *a_begin << " ";
-        ++a_begin;
-    }
-    std::cout << std::endl;
-    assign_list_iter.assign(begin, end);
-    std::cout << "My assign string iter: ";
-    a_begin = assign_list_iter.begin();
-    a_end = assign_list_iter.end();
-    while (a_begin != a_end)
-    {
-        std::cout << *a_begin << " ";
-        ++a_begin;
-    }
-    std::cout << std::endl;
-
+ 
     std::cout << "__________________" << std::endl;
     std::cout << "|                |" << std::endl;
     std::cout << "|     Resize     |" << std::endl;
@@ -1901,5 +1818,8 @@ int main()
     std::cout << "Size: " << my_bar.size() << std::endl << std::endl;
     
     // sleep(1000);
+#endif
+
+    
     return (0);
 }
