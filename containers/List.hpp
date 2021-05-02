@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/29 16:40:52 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/02 16:33:19 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -403,6 +403,7 @@ namespace ft
                     tmp->prev = _tail_of_node_list;
                     tmp = tmp->next;
                 }
+                _current_size = 0;
             }
 
             /***************************************************************************/
@@ -603,12 +604,13 @@ namespace ft
 
                             tmp_first = tmp_first->prev;
                             tmp_second = tmp_first->next;
+
+                            tmp_second->next->prev = tmp_second;
                         }
                         tmp_first = tmp_first->next;
                         tmp_second = tmp_second->next;
                     }
                 }
-                _tail_of_node_list->prev = tmp_second;
             }
             template <class Compare>
             void sort (Compare comp)
@@ -635,6 +637,8 @@ namespace ft
 
                             tmp_first = tmp_first->prev;
                             tmp_second = tmp_first->next;
+
+                            tmp_second->next->prev = tmp_second;
                         }
                         tmp_first = tmp_first->next;
                         tmp_second = tmp_second->next;
@@ -645,10 +649,8 @@ namespace ft
             {
                 if (!_tail_of_node_list)
                     return;
-                node<value_type> *tmp;
-                node<value_type> *tmp_buff;
-                tmp = _tail_of_node_list;
-                tmp_buff = _tail_of_node_list->next;
+                node<value_type> *tmp = _tail_of_node_list;
+                node<value_type> *tmp_buff = _tail_of_node_list->next;
                 while (tmp_buff != _tail_of_node_list)
                 {
                     tmp_buff = tmp->next;
