@@ -4,14 +4,14 @@ case "$1" in
     clang++ -Wall -Wextra -Werror tests/list_test.cpp;;
 "vector")
     clang++ -Wall -Wextra -Werror tests/vector_test.cpp;;
-"queu")
+"queue")
     echo "Vector is not exist";;
 "stack")
     echo "Vector is not exist";;
 "map")
     echo "Vector is not exist";;
 "valgrind")
-    valgrind ./a.out;;
+    valgrind --leak-check=full ./a.out;;
 *)
     clang++ -Wall -Wextra -Werror tests/*.cpp;;
 esac

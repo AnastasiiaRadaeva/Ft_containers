@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 16:27:06 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/02 16:30:44 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/04 12:10:40 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ namespace ft
 {
     namespace vector
     {
-        # if flag < 0
+        // # if flag < 0
         /**************************/
         /*                        */
         /*     Const_iterator     */
@@ -47,15 +47,15 @@ namespace ft
                 /***************************************************************************/
                 /*** constructors ------------------------------------------------------ ***/
                 const_iterator() {};
-                const_iterator(node<value_type> *current_node) : _current_node(current_node) {}
-                const_iterator(const_iterator const &copy) : _current_node(copy._current_node) {}
+                const_iterator(value_type *current_elem) : _current_elem(current_elem) {}
+                const_iterator(const_iterator const &copy) : _current_elem(copy._current_elem) {}
 
                 /***************************************************************************/
                 /*** operator= --------------------------------------------------------- ***/
                 const_iterator &operator=(const_iterator const &b) const
                 {
                     if (this != &b)
-                        _current_node = b._current_node;
+                        _current_elem = b._current_elem;
                     return (*this);
                 }
 
@@ -65,12 +65,12 @@ namespace ft
 
                 /***************************************************************************/
                 /*** overloads --------------------------------------------------------- ***/
-                value_type const    &operator*() { return (_current_node->content);}
-                value_type const    *operator->() { return (&(this->_current_node->content));}
+                value_type const    &operator*() { return (*_current_elem);}
+                // value_type const    *operator->() { return (&(this->_current_elem));}
                 const_iterator      &operator++() //++i
                 {
-                    if (_current_node && _current_node->next)
-                        _current_node = _current_node->next;
+                    if (_current_elem && _current_elem + 1)
+                        _current_elem = ++_current_elem;
                     return (*this);
                 }
                 const_iterator      operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
@@ -81,8 +81,8 @@ namespace ft
                 }
                 const_iterator      &operator--()
                 {
-                    if (_current_node && _current_node->prev)
-                        _current_node = _current_node->prev;
+                    if (_current_elem && _current_elem - 1)
+                        _current_elem = --_current_elem;
                     return (*this);
                 }
                 const_iterator      operator--(int)
@@ -92,9 +92,9 @@ namespace ft
                     return (tmp);
                 }
 
-                /***************************************************************************/
-                /*** getters ----------------------------------------------------------- ***/
-                node<value_type>    *get_node() { return (_current_node);}
+                // /***************************************************************************/
+                // /*** getters ----------------------------------------------------------- ***/
+                // elem<value_type>    *get_elem() { return (_current_elem);}
 
                 /****************************/
                 /*     Friend functions     */
@@ -105,7 +105,7 @@ namespace ft
                     friend bool operator!=(const_iterator<A> const &a, const_iterator<A> const &b);
 
                 protected:
-                    node<value_type>    *_current_node;
+                    value_type  *_current_elem;
         };
 
         /********************/
@@ -132,7 +132,7 @@ namespace ft
                 /***************************************************************************/
                 /*** constructors ------------------------------------------------------ ***/
                 iterator(){};
-                iterator(node<value_type> *current_node) : const_iterator<value_type>(current_node) {}
+                iterator(value_type *current_elem) : const_iterator<value_type>(current_elem) {}
                 iterator(iterator const &copy) : const_iterator<value_type>(copy) {}
 
                 /***************************************************************************/
@@ -140,7 +140,7 @@ namespace ft
                 iterator &operator=(iterator const &b)
                 {
                     if (this != &b)
-                        this->_current_node = b._current_node;
+                        this->_current_elem = b._current_elem;
                     return (*this);
                 }
 
@@ -150,12 +150,12 @@ namespace ft
 
                 /***************************************************************************/
                 /*** overloads --------------------------------------------------------- ***/
-                reference   operator*() { return (this->_current_node->content);}
-                pointer     operator->() { return (&(this->_current_node->content));}
+                reference   operator*() { return (*(this->_current_elem));}
+                // pointer     operator->() { return (&(this->_current_elem->content));}
                 iterator    &operator++() //++i
                 {
-                    if (this->_current_node && this->_current_node->next)
-                        this->_current_node = this->_current_node->next;
+                    if (this->_current_elem && this->_current_elem + 1)
+                        this->_current_elem = ++(this->_current_elem);
                     return (*this);
                 }
                 iterator    operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
@@ -166,8 +166,8 @@ namespace ft
                 }
                 iterator    &operator--()
                 {
-                    if (this->_current_node && this->_current_node->prev)
-                        this->_current_node = this->_current_node->prev;
+                    if (this->_current_elem && this->_current_elem - 1)
+                        this->_current_elem = --(this->_current_elem);
                     return (*this);
                 }
                 iterator    operator--(int)
@@ -210,15 +210,15 @@ namespace ft
                 /***************************************************************************/
                 /*** constructors ------------------------------------------------------ ***/
                 const_reverse_iterator() {};
-                const_reverse_iterator(node<value_type> *current_node) : _current_node(current_node) {} //возможно, нужно будет убрать в приватную зону, чтобы к нему не было доступа
-                const_reverse_iterator(const_reverse_iterator const &copy) : _current_node(copy._current_node) {}
+                const_reverse_iterator(value_type *current_elem) : _current_elem(current_elem) {}
+                const_reverse_iterator(const_reverse_iterator const &copy) : _current_elem(copy._current_elem) {}
 
                 /***************************************************************************/
                 /*** operator= --------------------------------------------------------- ***/
                 const_reverse_iterator &operator=(const_reverse_iterator const &b) const
                 {
                     if (this != &b)
-                        _current_node = b._current_node;
+                        _current_elem = b._current_elem;
                     return (*this);
                 }
 
@@ -228,12 +228,12 @@ namespace ft
 
                 /***************************************************************************/
                 /*** overloads --------------------------------------------------------- ***/
-                value_type const        &operator*() { return (this->_current_node->content);}
-                value_type const        *operator->() { return (&(this->_current_node->content));}
+                value_type const        &operator*() { return (*(this->_current_elem));}
+                // value_type const        *operator->() { return (&(this->_current_elem->content));}
                 const_reverse_iterator  &operator++() //++i
                 {
-                    if (_current_node && _current_node->prev)
-                        _current_node = _current_node->prev;
+                    if (_current_elem && _current_elem - 1)
+                        _current_elem = --_current_elem;
                     return (*this);
                 }
                 const_reverse_iterator  operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
@@ -244,8 +244,8 @@ namespace ft
                 }
                 const_reverse_iterator  &operator--()
                 {
-                    if (_current_node && _current_node->next)
-                        _current_node = _current_node->next;
+                    if (_current_elem && _current_elem + 1)
+                        _current_elem = ++_current_elem;
                     return (*this);
                 }
                 const_reverse_iterator  operator--(int)
@@ -264,7 +264,7 @@ namespace ft
                     friend bool operator!=(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
 
                 protected:
-                    node<value_type>    *_current_node;
+                    value_type    *_current_elem;
         };
 
         /****************************/
@@ -291,7 +291,7 @@ namespace ft
                 /***************************************************************************/
                 /*** constructors ------------------------------------------------------ ***/
                 reverse_iterator(){};
-                reverse_iterator(node<value_type> *current_node) : const_reverse_iterator<value_type>(current_node) {}
+                reverse_iterator(value_type *current_elem) : const_reverse_iterator<value_type>(current_elem) {}
                 reverse_iterator(reverse_iterator const &copy) : const_reverse_iterator<value_type>(copy) {}
 
                 /***************************************************************************/
@@ -299,7 +299,7 @@ namespace ft
                 reverse_iterator &operator=(reverse_iterator const &b)
                 {
                     if (this != &b)
-                        this->_current_node = b._current_node;
+                        this->_current_elem = b._current_elem;
                     return (*this);
                 }
 
@@ -309,12 +309,12 @@ namespace ft
 
                 /***************************************************************************/
                 /*** overloads --------------------------------------------------------- ***/
-                reference           operator*() { return (this->_current_node->content);}
-                pointer             operator->() { return (&(this->_current_node->content));}
+                reference           operator*() { return (*(this->_current_elem));}
+                // pointer             operator->() { return (&(this->_current_elem->content));}
                 reverse_iterator    &operator++() //++i
                 {
-                    if (this->_current_node && this->_current_node->prev)
-                        this->_current_node = this->_current_node->prev;
+                    if (this->_current_elem && this->_current_elem - 1)
+                        this->_current_elem = --(this->_current_elem);
                     return (*this);
                 }
                 reverse_iterator    operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
@@ -325,8 +325,8 @@ namespace ft
                 }
                 reverse_iterator    &operator--()
                 {
-                    if (this->_current_node && this->_current_node->next)
-                        this->_current_node = this->_current_node->next;
+                    if (this->_current_elem && this->_current_elem + 1)
+                        this->_current_elem = ++(this->_current_elem);
                     return (*this);
                 }
                 reverse_iterator    operator--(int)
@@ -353,25 +353,25 @@ namespace ft
         template <class T>
         bool operator==(const_iterator<T> const &a, const_iterator<T> const &b)
         {
-            return (a._current_node == b._current_node);
+            return (a._current_elem == b._current_elem);
         }
         template <class T>
         bool operator!=(const_iterator<T> const &a, const_iterator<T> const &b)
         {
-            return (a._current_node != b._current_node);
+            return (a._current_elem != b._current_elem);
         }
         template <class T>
         bool operator==(const_reverse_iterator<T> const &a, const_reverse_iterator<T> const &b)
         {
-            return (a._current_node == b._current_node);
+            return (a._current_elem == b._current_elem);
         }
         template <class T>
         bool operator!=(const_reverse_iterator<T> const &a, const_reverse_iterator<T> const &b)
         {
-            return (a._current_node != b._current_node);
+            return (a._current_elem != b._current_elem);
         }
 
-        #endif
+        // #endif
     }
 }
 
