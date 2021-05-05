@@ -21,6 +21,8 @@
 # include <stdexcept> //for out_of_range
 # include "Vector_iterator.hpp"
 
+# define TAKE_NUMBER 1
+
 namespace ft
 {
     // # if flag < 0
@@ -164,7 +166,7 @@ namespace ft
             void        reserve (size_type n)
             {
                 if (n > _capacity)
-                    resize_array(n, 1);
+                    resize_array(n, TAKE_NUMBER);
             }
 
             /***************************************************************************/
@@ -202,155 +204,189 @@ namespace ft
 
             /***************************************************************************/
             /*** Modifiers --------------------------------------------------------- ***/
-            // template <class InputIterator>
-            // void assign (InputIterator first, InputIterator last, typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
-            // {
-            //     clear();
-            //     node<value_type> *tmp_list = _tail_of_node_list;
-            //     size_type i = 0;
-            //     while (first != last)
-            //     {
-            //         tmp_list->next = create_node(*first);
-            //         tmp_list->next->prev = tmp_list;
-            //         tmp_list = tmp_list->next;
-            //         first++;
-            //         i++;
-            //     }
-            //     tmp_list->next = _tail_of_node_list;
-            //     _tail_of_node_list->prev = tmp_list;
-            //     _current_size = i;
-            //     //_tail_of_node_list->content = _current_size;
-            // }
-            // void assign (size_type n, const value_type& val)
-            // {
-            //     clear();
-            //     _current_size = n;
-            //     //_tail_of_node_list->content = _current_size;
-            //     node<value_type> *tmp_list_1;
-            //     node<value_type> *tmp_list_2;
-            //     tmp_list_1 = _tail_of_node_list;
-            //     for (size_type i = 0; i < n; i++)
-            //     {
-            //         tmp_list_1->next = create_node(val);
-            //         tmp_list_2 = tmp_list_1->next;
-            //         tmp_list_2->prev = tmp_list_1;
-            //         tmp_list_1 = tmp_list_2;
-            //     }
-            //     tmp_list_1->next = _tail_of_node_list;
-            //     _tail_of_node_list->prev = tmp_list_1;
-            // }
-            void push_back (const value_type& val)
+            template <class InputIterator>
+            void        assign (InputIterator first, InputIterator last, typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
+            {
+                clear();
+                InputIterator tmp = first;
+                size_type n = 0;
+                while (tmp++ != last)
+                    n++;
+                if (n > _capacity)
+                    resize_array(n, TAKE_NUMBER);
+                _size = n;
+                while (first != last)
+                {
+                    _alloc.construct(_array_finish, *first);
+                    _array_finish++;
+                    first++;
+                }
+            }
+            void        assign (size_type n, const value_type& val)
+            {
+                clear();
+                if (n > _capacity)
+                    resize_array(n, TAKE_NUMBER);
+                _size = n;
+                for (; n > 0; n--)
+                {
+                    _alloc.construct(_array_finish, val);
+                    _array_finish++;
+                }
+            }
+            void        push_back (const value_type& val)
             {
                 if (_capacity - _size == 0)
-                    resize_array(_capacity * 2);
+                    resize_array(_size + 1);
                 _alloc.construct(_array_finish++, val);
-                _size++;
+                ++_size;
             }
-            // void pop_back()
-            // {
-            //     if (_tail_of_node_list->next == _tail_of_node_list)
-            //     {
-            //         std::cerr << "You try to delete empty list" << std::endl;
-            //         return;
-            //     }
-            //     node<value_type> *tmp;
-            //     tmp = _tail_of_node_list->prev->prev;
-            //     delete_node(_tail_of_node_list->prev);
-            //     _tail_of_node_list->prev = tmp;
-            //     tmp->next = _tail_of_node_list;
-            //     --_current_size;
-            //     //_tail_of_node_list->content = _current_size;
-            // }
-            // iterator insert (iterator position, const value_type& val)
-            // {
-            //     node<value_type> *tmp_next = position.get_node();
-            //     node<value_type> *tmp_prev = tmp_next->prev;
-            //     tmp_prev->next = create_node(val);
-            //     tmp_prev->next->prev = tmp_prev;
-            //     tmp_next->prev = tmp_prev->next;
-            //     tmp_prev->next->next = tmp_next;
-            //     ++_current_size;
-            //     //_tail_of_node_list->content++;
-            //     return (tmp_prev->next);
-            // }
-            // void insert (iterator position, size_type n, const value_type& val)
-            // {
-            //     node<value_type> *tmp_next = position.get_node();
-            //     node<value_type> *tmp_prev = tmp_next->prev;
-            //     for (size_type i = 0; i < n; i++)
-            //     {
-            //         tmp_prev->next = create_node(val);
-            //         tmp_prev->next->prev = tmp_prev;
-            //         tmp_next->prev = tmp_prev->next;
-            //         tmp_prev->next->next = tmp_next;
-            //         //_tail_of_node_list->content++;
-            //         tmp_next = tmp_prev->next;
-            //     }
-            //     _current_size += n;
-            // }
-            // template <class InputIterator>
-            // void insert (iterator position, InputIterator first, InputIterator last,
-            //             typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
-            // {
-            //     node<value_type> *tmp_next = position.get_node();
-            //     node<value_type> *tmp_prev = tmp_next->prev;
-            //     for (; first != last; first++)
-            //     {
-            //         tmp_prev->next = create_node(*first);
-            //         tmp_prev->next->prev = tmp_prev;
-            //         tmp_next->prev = tmp_prev->next;
-            //         tmp_prev->next->next = tmp_next;
-            //         //_tail_of_node_list->content++;
-            //         _current_size++;
-            //         tmp_prev = tmp_prev->next;
-            //         tmp_next = tmp_prev->next;
-            //     }
-            // }
-            // iterator erase (iterator position)
-            // {
-            //     if (position.get_node() != _tail_of_node_list)
-            //     {
-            //         node<value_type> *to_del = position.get_node();
-            //         node<value_type> *prev_lst = to_del->prev;
-            //         prev_lst->next = to_del->next;
-            //         to_del->next->prev = prev_lst;
-            //         delete_node(to_del);
-            //         _current_size--;
-            //         // (_tail_of_node_list->content)--;
-            //         return (prev_lst->next);
-            //     }
-            //     return (0);
-            // }
-            // iterator erase (iterator first, iterator last)
-            // {
-            //     node<value_type> *to_del = first.get_node();
-            //     node<value_type> *prev_lst = to_del->prev;
-            //     node<value_type> *pos;
-            //     while (first != last && to_del != _tail_of_node_list)
-            //     {
-            //         prev_lst->next = to_del->next;
-            //         to_del->next->prev = prev_lst;
-            //         delete_node(to_del);
-            //         pos = prev_lst->next;
-            //         _current_size--;
-            //         // (_tail_of_node_list->content)--;
-            //         first++;
-            //         to_del = first.get_node();
-            //         prev_lst = to_del->prev;
-            //     }
-            //     return (pos);
-            // }
-            // void swap (List& x)
-            // {
-            //     List<value_type> tmp(x);
-            //     x.assign(this->begin(), this->end());
-            //     x._current_size = _current_size;
-            //     // x._tail_of_node_list->content = _current_size;
-            //     this->assign(tmp.begin(), tmp.end());
-            //     _current_size = tmp._current_size;
-            //     //_tail_of_node_list->content = _current_size;
-            // }
-            void clear()
+            void        pop_back()
+            {
+                _alloc.destroy(--_array_finish);
+                --_size;
+            }
+            iterator    insert (iterator position, const value_type& val)
+            {
+                if (_capacity - _size == 0)
+                {
+                    size_type i = 0;
+                    for (iterator it = begin(); it != position; it++)
+                        i++;
+                    resize_array(_size + 1);
+                    position = iterator(&(_start[i]));
+                }
+                Vector<value_type> tmp;
+                iterator add_pos = position;
+                for (; add_pos != end(); add_pos++)
+                    tmp.push_back(*add_pos);
+                add_pos = position;
+                while (add_pos != end())
+                {
+                    _alloc.destroy(--_array_finish);
+                    --_size;
+                }
+                _alloc.construct(_array_finish++, val);
+                ++_size;
+                add_values(++position, tmp);
+                return (--position);
+            }
+            void        insert (iterator position, size_type n, const value_type& val)
+            {
+                if (_size + n > _capacity)
+                {
+                    size_type i = 0;
+                    for (iterator it = begin(); it != position; it++)
+                        i++;
+                    resize_array(_size + n, TAKE_NUMBER);
+                    position = iterator(&(_start[i]));
+                }
+                Vector<value_type> tmp;
+                iterator add_pos = position;
+                for (; add_pos != end(); add_pos++)
+                    tmp.push_back(*add_pos);
+                add_pos = position;
+                while (add_pos != end())
+                {
+                    _alloc.destroy(--_array_finish);
+                    --_size;
+                }
+                for (size_type i = 0; i < n; i++)
+                {
+                    _alloc.construct(_array_finish++, val);
+                    ++_size;
+                    ++position;
+                }
+                add_values(position, tmp);
+            }
+            template <class InputIterator>
+            void        insert (iterator position, InputIterator first, InputIterator last, typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
+            {
+                size_type n = 0;
+                InputIterator tmp_pos = first;
+                while (tmp_pos++ != last)
+                    n++;
+                if (_size + n > _capacity)
+                {
+                    size_type i = 0;
+                    for (iterator it = begin(); it != position; it++)
+                        i++;
+                    resize_array(_size + n, TAKE_NUMBER);
+                    position = iterator(&(_start[i]));
+                }
+                Vector<value_type> tmp;
+                iterator add_pos = position;
+                for (; add_pos != end(); add_pos++)
+                    tmp.push_back(*add_pos);
+                add_pos = position;
+                while (add_pos != end())
+                {
+                    _alloc.destroy(--_array_finish);
+                    --_size;
+                }
+                for (; first != last; first++)
+                {
+                    _alloc.construct(_array_finish++, *first);
+                    ++_size;
+                    ++position;
+                }
+                add_values(position, tmp);
+            }
+            iterator    erase (iterator position)
+            {
+                Vector<value_type> tmp;
+                iterator add_pos = ++position;
+                for (; add_pos != end(); add_pos++)
+                    tmp.push_back(*add_pos);
+                add_pos = --position;
+                while (add_pos != end())
+                {
+                    _alloc.destroy(--_array_finish);
+                    --_size;
+                }
+                add_values(position, tmp);
+                return (position);
+            }
+            iterator    erase (iterator first, iterator last)
+            {
+                Vector<value_type> tmp;
+                iterator add_pos = last;
+                for (; add_pos != end(); add_pos++)
+                    tmp.push_back(*add_pos);
+                add_pos = first;
+                while (add_pos != end())
+                {
+                    _alloc.destroy(--_array_finish);
+                    --_size;
+                }
+                add_values(first, tmp);
+                return (first);
+            }
+            void        swap (Vector& x)
+            {
+                value_type *tmp;
+                tmp = _start;
+                _start = x._start;
+                x._start = tmp;
+
+                tmp = _array_finish;
+                _array_finish = x._array_finish;
+                x._array_finish = tmp;
+
+                tmp = _storage_finish;
+                _storage_finish = x._storage_finish;
+                x._storage_finish = tmp;
+
+                size_type tmp_size;
+                tmp_size = _size;
+                _size = x._size;
+                x._size = tmp_size;
+
+                tmp_size = _capacity;
+                _capacity = x._capacity;
+                x._capacity = tmp_size;
+            }
+            void        clear()
             {
                 for (size_t i = _size; i > 0; i--)
                     _alloc.destroy(--_array_finish);
@@ -389,12 +425,17 @@ namespace ft
             void    resize_array(size_type n, int take_number = 0)
             {
                 Vector<value_type> tmp(*this);
+                size_type size = _size;
                 clear();
-                if (take_number == 1)
+                _alloc.deallocate(_start, _capacity);
+                if (take_number == TAKE_NUMBER || _capacity == 0)
                     _capacity = n;
                 else
                     while (n > _capacity)
-                        _capacity *= 2;
+                    {
+                        _size = (size == 0) ? 1 : size * 2;
+                        _capacity = _size;
+                    }
                 _size = tmp._size;
                 create_array(_capacity);
                 for (size_type i = 0; i < _size; i++)
@@ -403,112 +444,116 @@ namespace ft
                     _array_finish++;
                 }
             }
+
+            void    add_values(iterator position, Vector &add)
+            {
+                for (iterator it = add.begin(); it != add.end(); it++)
+                {
+                    _alloc.construct(&(*position), *it);
+                    position++;
+                    _array_finish++;
+                    _size++;
+                }
+            }
     };
 
-    // /*****************************************/
-    // /*                                       */
-    // /*     Non-member function overloads     */
-    // /*                                       */
-    // /*****************************************/
-    // template <class T, class Alloc>
-    // bool operator== (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     return (lhs_it == lhs.end() && rhs_it == rhs.end());
-    // }
-    
-    // template <class T, class Alloc>
-    // bool operator!= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     return (lhs_it != lhs.end() || rhs_it != rhs.end());
-    // }
-    
-    // template <class T, class Alloc>
-    // bool operator<  (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // // Если значения одинаковы, то сравнивается длина списка
-    // // Если значения отличаются, то сравниваются значения
-    // // Сравнивает до первого не равного числа
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     if (rhs_it == rhs.end() || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
-    //         return (false);
-    //     // if (lhs_it == lhs.end() || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
-    //     //     return (true);
-    //     return (true);
-    // }
+    /*****************************************/
+    /*                                       */
+    /*     Non-member function overloads     */
+    /*                                       */
+    /*****************************************/
+    template <class T, class Alloc>
+    bool operator== (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs)
+    {
+        vector::const_iterator<T> lhs_it = lhs.begin();
+        vector::const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        return (lhs_it == lhs.end() && rhs_it == rhs.end());
+    }
 
-    // template <class T, class Alloc>
-    // bool operator<= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     if ((rhs_it == rhs.end() && lhs_it != lhs.end()) || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
-    //         return (false);
-    //     return (true);
-    // }
-    
-    // template <class T, class Alloc>
-    // bool operator>  (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     if (lhs_it == lhs.end() || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
-    //         return (false);
-    //     // if (rhs_it == rhs.end() || (*lhs_it < *rhs_it && lhs_it != lhs.end()))
-    //     //     return (true);
-    //     return (true);
-    // }
+    template <class T, class Alloc>
+    bool operator!= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs)
+    {
+        vector::const_iterator<T> lhs_it = lhs.begin();
+        vector::const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        return (lhs_it != lhs.end() || rhs_it != rhs.end());
+    }
 
-    // template <class T, class Alloc>
-    // bool operator>= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     if ((lhs_it == lhs.end() && rhs_it != rhs.end()) || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
-    //         return (false);
-    //     return (true);
+    template <class T, class Alloc>
+    bool operator<  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs)
+    {
+        vector::const_iterator<T> lhs_it = lhs.begin();
+        vector::const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if (rhs_it == rhs.end() || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
+            return (false);
+        return (true);
+    }
 
-    // }
+    template <class T, class Alloc>
+    bool operator<= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs)
+    {
 
-    // template <class T, class Alloc>
-    // void swap (List<T,Alloc>& x, List<T,Alloc>& y)
-    // {
-    //     x.swap(y);
-    // }
+        vector::const_iterator<T> lhs_it = lhs.begin();
+        vector::const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if ((rhs_it == rhs.end() && lhs_it != lhs.end()) || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
+            return (false);
+        return (true);
+    }
+
+    template <class T, class Alloc>
+    bool operator> (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs)
+    {
+        vector::const_iterator<T> lhs_it = lhs.begin();
+        vector::const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if (lhs_it == lhs.end() || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
+            return (false);
+        return (true);
+    }
+
+    template <class T, class Alloc>
+    bool operator>= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs)
+    {
+        vector::const_iterator<T> lhs_it = lhs.begin();
+        vector::const_iterator<T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if ((lhs_it == lhs.end() && rhs_it != rhs.end()) || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
+            return (false);
+        return (true);
+    }
+
+    template <class T, class Alloc>
+    void swap (Vector<T,Alloc>& x, Vector<T,Alloc>& y)
+    {
+        x.swap(y);
+    }
 
     //template <class Alloc>
     // class Vector<bool,Alloc>;

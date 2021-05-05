@@ -15,5 +15,4 @@ case "$1" in
 *)
     clang++ -Wall -Wextra -Werror tests/*.cpp;;
 esac
-./a.out > test.txt
 ./a.out
