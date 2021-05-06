@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 16:27:21 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/04 17:49:10 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/06 16:26:15 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,17 @@ namespace ft
             /************************/
             /*     Member types     */
             /************************/
-            typedef T                                                   value_type;
-            typedef Alloc                                               allocator_type;
-            typedef typename allocator_type::reference                  reference;
-            typedef typename allocator_type::const_reference            const_reference;
-            typedef typename allocator_type::pointer                    pointer;
-            typedef typename allocator_type::const_pointer              const_pointer;
-            typedef typename vector::iterator<value_type>                 iterator;
-            typedef typename vector::const_iterator<value_type>           const_iterator;
-            typedef typename vector::reverse_iterator<value_type>         reverse_iterator;
-            typedef typename vector::const_reverse_iterator<value_type>   const_reverse_iterator;
-            // typedef ptrdiff_t                                           difference_type;
-            typedef size_t                                              size_type;
+            typedef T                                                       value_type;
+            typedef Alloc                                                   allocator_type;
+            typedef typename allocator_type::reference                      reference;
+            typedef typename allocator_type::const_reference                const_reference;
+            typedef typename allocator_type::pointer                        pointer;
+            typedef typename allocator_type::const_pointer                  const_pointer;
+            typedef typename vector::iterator<value_type>                   iterator;
+            typedef typename vector::const_iterator<value_type>             const_iterator;
+            typedef typename vector::reverse_iterator<value_type>           reverse_iterator;
+            typedef typename vector::const_reverse_iterator<value_type>     const_reverse_iterator;
+            typedef size_t                                                  size_type;
             
             /****************************/
             /*     Member functions     */
@@ -59,7 +58,6 @@ namespace ft
             /*** constructors ------------------------------------------------------ ***/
             explicit Vector(const allocator_type& alloc = allocator_type()) : _start(0), _array_finish(0), _storage_finish(0), _capacity(0), _size(0), _alloc(alloc)
             {
-
             }
             explicit Vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _capacity(n), _size(n), _alloc(alloc)
             {
@@ -129,8 +127,8 @@ namespace ft
                 }
             }
 
-            // /***************************************************************************/
-            // /*** iterators --------------------------------------------------------- ***/
+            /***************************************************************************/
+            /*** iterators --------------------------------------------------------- ***/
             iterator                begin() { return (iterator(_start));}
             const_iterator          begin() const { return (const_iterator(_start));}
             iterator                end() { return (iterator(_array_finish));}
@@ -393,6 +391,10 @@ namespace ft
                 _size = 0;
             }
 
+            /***************************************************************************/
+            /*** Allocator --------------------------------------------------------- ***/
+            allocator_type get_allocator() const { return (_alloc); }
+
         private:
                 
             /*************************************/
@@ -555,8 +557,11 @@ namespace ft
         x.swap(y);
     }
 
-    //template <class Alloc>
-    // class Vector<bool,Alloc>;
+    // template <class Alloc>
+    // class Vector<bool, Alloc>
+    // {
+
+    // };
 }
 
 #endif

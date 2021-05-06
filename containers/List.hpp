@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/30 15:31:59 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/04 17:42:45 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/06 15:26:41 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,22 +52,18 @@ namespace ft
 
             /***************************************************************************/
             /*** constructors ------------------------------------------------------ ***/
-            explicit List(const allocator_type& alloc = allocator_type()) : _current_size(0)
+            explicit List(const allocator_type& alloc = allocator_type()) : _current_size(0), _alloc(alloc)
             {
-                _alloc = alloc;
                 _tail_of_node_list = create_node();
                 _tail_of_node_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = _tail_of_node_list;
-                // _tail_of_node_list->content = _current_size;
             }
 
-            explicit List(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _current_size(n)
+            explicit List(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _current_size(n), _alloc(alloc)
             {
-                _alloc = alloc;
                 _tail_of_node_list = create_node();
                 _tail_of_node_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = _tail_of_node_list;
-                // _tail_of_node_list->content = _current_size;
                 node<value_type> *tmp_list_1;
                 node<value_type> *tmp_list_2;
                 tmp_list_1 = _tail_of_node_list;
@@ -84,9 +80,8 @@ namespace ft
 
             template <class InputIterator>
             List(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
-                    typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0) //numeric_limits::is_specialized - true for all arithmetic types
+                    typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0) : _alloc(alloc) //numeric_limits::is_specialized - true for all arithmetic types
             {
-                _alloc = alloc;
                 _tail_of_node_list = create_node();
                 _tail_of_node_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = _tail_of_node_list;
@@ -103,7 +98,6 @@ namespace ft
                 tmp_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = tmp_list;
                 _current_size = i;
-                // _tail_of_node_list->content = _current_size;
             }
 
             List(List const &copy)
@@ -122,7 +116,6 @@ namespace ft
                 }
                 tmp_list_1->next = _tail_of_node_list;
                 _tail_of_node_list->prev = tmp_list_1;
-                //_tail_of_node_list->content = copy._current_size;
                 _current_size = copy._current_size;
             }
 
@@ -144,7 +137,6 @@ namespace ft
                     }
                     tmp_list_1->next = _tail_of_node_list;
                     _tail_of_node_list->prev = tmp_list_1;
-                    //_tail_of_node_list->content = b._current_size;
                     _current_size = b._current_size;
                 }
                 return (*this);
@@ -201,13 +193,11 @@ namespace ft
                 tmp_list->next = _tail_of_node_list;
                 _tail_of_node_list->prev = tmp_list;
                 _current_size = i;
-                //_tail_of_node_list->content = _current_size;
             }
             void assign (size_type n, const value_type& val)
             {
                 clear();
                 _current_size = n;
-                //_tail_of_node_list->content = _current_size;
                 node<value_type> *tmp_list_1;
                 node<value_type> *tmp_list_2;
                 tmp_list_1 = _tail_of_node_list;
@@ -229,7 +219,6 @@ namespace ft
                 _tail_of_node_list->next->prev = new_node;
                 _tail_of_node_list->next = new_node;
                 ++_current_size;
-                //_tail_of_node_list->content = _current_size;
             }
             void pop_front()
             {
@@ -244,7 +233,6 @@ namespace ft
                 _tail_of_node_list->next = tmp;
                 tmp->prev = _tail_of_node_list;
                 --_current_size;
-                //_tail_of_node_list->content = _current_size;
             }
             void push_back (const value_type& val)
             {
@@ -254,7 +242,6 @@ namespace ft
                 _tail_of_node_list->prev->next = new_node;
                 _tail_of_node_list->prev = new_node;
                 ++_current_size;
-                //_tail_of_node_list->content = _current_size;
             }
             void pop_back()
             {
@@ -269,7 +256,6 @@ namespace ft
                 _tail_of_node_list->prev = tmp;
                 tmp->next = _tail_of_node_list;
                 --_current_size;
-                //_tail_of_node_list->content = _current_size;
             }
             iterator insert (iterator position, const value_type& val)
             {
@@ -280,7 +266,6 @@ namespace ft
                 tmp_next->prev = tmp_prev->next;
                 tmp_prev->next->next = tmp_next;
                 ++_current_size;
-                //_tail_of_node_list->content++;
                 return (tmp_prev->next);
             }
             void insert (iterator position, size_type n, const value_type& val)
@@ -293,7 +278,6 @@ namespace ft
                     tmp_prev->next->prev = tmp_prev;
                     tmp_next->prev = tmp_prev->next;
                     tmp_prev->next->next = tmp_next;
-                    //_tail_of_node_list->content++;
                     tmp_next = tmp_prev->next;
                 }
                 _current_size += n;
@@ -310,7 +294,6 @@ namespace ft
                     tmp_prev->next->prev = tmp_prev;
                     tmp_next->prev = tmp_prev->next;
                     tmp_prev->next->next = tmp_next;
-                    //_tail_of_node_list->content++;
                     _current_size++;
                     tmp_prev = tmp_prev->next;
                     tmp_next = tmp_prev->next;
@@ -326,7 +309,6 @@ namespace ft
                     to_del->next->prev = prev_lst;
                     delete_node(to_del);
                     _current_size--;
-                    // (_tail_of_node_list->content)--;
                     return (prev_lst->next);
                 }
                 return (0);
@@ -343,7 +325,6 @@ namespace ft
                     delete_node(to_del);
                     pos = prev_lst->next;
                     _current_size--;
-                    // (_tail_of_node_list->content)--;
                     first++;
                     to_del = first.get_node();
                     prev_lst = to_del->prev;
@@ -355,10 +336,8 @@ namespace ft
                 List<value_type> tmp(x);
                 x.assign(this->begin(), this->end());
                 x._current_size = _current_size;
-                // x._tail_of_node_list->content = _current_size;
                 this->assign(tmp.begin(), tmp.end());
                 _current_size = tmp._current_size;
-                //_tail_of_node_list->content = _current_size;
             }
             void resize (size_type n, value_type val = value_type())
             {
@@ -374,7 +353,6 @@ namespace ft
                     }
                     tmp->next = _tail_of_node_list;
                     _tail_of_node_list->prev = tmp;
-                    //_tail_of_node_list->content = _current_size;
                 }
                 if (_current_size > n)
                 {
@@ -390,7 +368,6 @@ namespace ft
                         tmp_2->prev = tmp;
                         tmp_2 = tmp_2->next;
                     }
-                    //_tail_of_node_list->content = _current_size;
                 }
             }
             void clear()
@@ -417,12 +394,10 @@ namespace ft
                 next_lst->prev = x._tail_of_node_list->prev;
                 x._tail_of_node_list->prev->next = next_lst;
                 _current_size += x._current_size;
-                //_tail_of_node_list->content = static_cast<value_type>(_current_size);
 
                 x._tail_of_node_list->next = x._tail_of_node_list;
                 x._tail_of_node_list->prev = x._tail_of_node_list;
                 x._current_size = 0;
-                //x._tail_of_node_list->content = 0;
             }	
             void splice (iterator position, List& x, iterator i)
             {
@@ -436,9 +411,7 @@ namespace ft
                 next_lst->prev = new_lst;
                 new_lst->next = next_lst;
                 _current_size++;
-                // (_tail_of_node_list->content)++;
                 x._current_size--;
-                // (x._tail_of_node_list->content)--;
             }
             void splice (iterator position, List& x, iterator first, iterator last)
             {
@@ -454,9 +427,7 @@ namespace ft
                     next_lst->prev = new_lst;
                     new_lst->next = next_lst;
                     _current_size++;
-                    // (_tail_of_node_list->content)++;
                     x._current_size--;
-                    // (x._tail_of_node_list->content)--;
                     prev_lst = prev_lst->next;
                     new_lst = first.get_node();
                 }
@@ -478,7 +449,6 @@ namespace ft
                     }
                     tmp = tmp->next;
                 }
-                //_tail_of_node_list->content = _current_size;
             }
             template <class Predicate>
             void remove_if (Predicate pred)
@@ -498,7 +468,6 @@ namespace ft
                     }
                     tmp = tmp->next;
                 }
-                //_tail_of_node_list->content = _current_size;
             }
             void unique()
             {
@@ -517,7 +486,6 @@ namespace ft
                     }
                     tmp = tmp->next;
                 }
-                //_tail_of_node_list->content = _current_size;
             }
             template <class BinaryPredicate>
             void unique (BinaryPredicate binary_pred)
@@ -537,7 +505,6 @@ namespace ft
                     }
                     tmp = tmp->next;
                 }
-                //_tail_of_node_list->content = _current_size;
             }
             void merge (List& x)
             {
@@ -660,6 +627,10 @@ namespace ft
                 }
             }
 
+            /***************************************************************************/
+            /*** Allocator --------------------------------------------------------- ***/
+            allocator_type get_allocator() const { return (_alloc); }
+
             private:
                 
                 /*********************************/
@@ -754,8 +725,6 @@ namespace ft
         }
         if (rhs_it == rhs.end() || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
             return (false);
-        // if (lhs_it == lhs.end() || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
-        //     return (true);
         return (true);
     }
 
@@ -786,8 +755,6 @@ namespace ft
         }
         if (lhs_it == lhs.end() || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
             return (false);
-        // if (rhs_it == rhs.end() || (*lhs_it < *rhs_it && lhs_it != lhs.end()))
-        //     return (true);
         return (true);
     }
 

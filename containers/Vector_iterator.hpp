@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 16:27:06 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/04 12:10:40 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/06 16:21:58 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ namespace ft
 {
     namespace vector
     {
-        // # if flag < 0
         /**************************/
         /*                        */
         /*     Const_iterator     */
@@ -66,7 +65,7 @@ namespace ft
                 /***************************************************************************/
                 /*** overloads --------------------------------------------------------- ***/
                 value_type const    &operator*() { return (*_current_elem);}
-                // value_type const    *operator->() { return (&(this->_current_elem));}
+                value_type const    *operator->() { return (&(this->_current_elem));}
                 const_iterator      &operator++() //++i
                 {
                     if (_current_elem && _current_elem + 1)
@@ -91,18 +90,18 @@ namespace ft
                     operator--();
                     return (tmp);
                 }
+                bool operator==(const_iterator const &b)
+                {
+                    return (_current_elem == b._current_elem);
+                }
+                bool operator!=(const_iterator const &b)
+                {
+                    return (_current_elem != b._current_elem);
+                }
 
                 /***************************************************************************/
                 /*** getters ----------------------------------------------------------- ***/
                 value_type    *get_elem() { return (_current_elem);}
-
-                /****************************/
-                /*     Friend functions     */
-                /****************************/
-                template <class A>
-                    friend bool operator==(const_iterator<A> const &a, const_iterator<A> const &b);
-                template <class A>
-                    friend bool operator!=(const_iterator<A> const &a, const_iterator<A> const &b);
 
                 protected:
                     value_type  *_current_elem;
@@ -151,7 +150,7 @@ namespace ft
                 /***************************************************************************/
                 /*** overloads --------------------------------------------------------- ***/
                 reference   operator*() { return (*(this->_current_elem));}
-                // pointer     operator->() { return (&(this->_current_elem->content));}
+                pointer     operator->() { return (&(this->_current_elem));}
                 iterator    &operator++() //++i
                 {
                     if (this->_current_elem && this->_current_elem + 1)
@@ -176,14 +175,6 @@ namespace ft
                     operator--();
                     return (tmp);
                 }
-
-                /****************************/
-                /*     Friend functions     */
-                /****************************/
-                template <class A>
-                    friend bool operator==(const_iterator<A> const &a, const_iterator<A> const &b);
-                template <class A>
-                    friend bool operator!=(const_iterator<A> const &a, const_iterator<A> const &b);
         };
 
         /**********************************/
@@ -229,7 +220,7 @@ namespace ft
                 /***************************************************************************/
                 /*** overloads --------------------------------------------------------- ***/
                 value_type const        &operator*() { return (*(this->_current_elem));}
-                // value_type const        *operator->() { return (&(this->_current_elem->content));}
+                value_type const        *operator->() { return (&(this->_current_elem));}
                 const_reverse_iterator  &operator++() //++i
                 {
                     if (_current_elem && _current_elem - 1)
@@ -254,14 +245,14 @@ namespace ft
                     operator--();
                     return (tmp);
                 }
-
-                /****************************/
-                /*     Friend functions     */
-                /****************************/
-                template <class A>
-                    friend bool operator==(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
-                template <class A>
-                    friend bool operator!=(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
+                bool operator==(const_reverse_iterator const &b)
+                {
+                    return (_current_elem == b._current_elem);
+                }
+                bool operator!=(const_reverse_iterator const &b)
+                {
+                    return (_current_elem != b._current_elem);
+                }
 
                 protected:
                     value_type    *_current_elem;
@@ -310,7 +301,7 @@ namespace ft
                 /***************************************************************************/
                 /*** overloads --------------------------------------------------------- ***/
                 reference           operator*() { return (*(this->_current_elem));}
-                // pointer             operator->() { return (&(this->_current_elem->content));}
+                pointer             operator->() { return (&(this->_current_elem));}
                 reverse_iterator    &operator++() //++i
                 {
                     if (this->_current_elem && this->_current_elem - 1)
@@ -335,43 +326,7 @@ namespace ft
                     operator--();
                     return (tmp);
                 }
-
-                /****************************/
-                /*     Friend functions     */
-                /****************************/            
-                template <class A>
-                    friend bool operator==(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
-                template <class A>
-                    friend bool operator!=(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
         };
-
-        /*****************************************/
-        /*                                       */
-        /*     Non-member function overloads     */
-        /*                                       */
-        /*****************************************/
-        template <class T>
-        bool operator==(const_iterator<T> const &a, const_iterator<T> const &b)
-        {
-            return (a._current_elem == b._current_elem);
-        }
-        template <class T>
-        bool operator!=(const_iterator<T> const &a, const_iterator<T> const &b)
-        {
-            return (a._current_elem != b._current_elem);
-        }
-        template <class T>
-        bool operator==(const_reverse_iterator<T> const &a, const_reverse_iterator<T> const &b)
-        {
-            return (a._current_elem == b._current_elem);
-        }
-        template <class T>
-        bool operator!=(const_reverse_iterator<T> const &a, const_reverse_iterator<T> const &b)
-        {
-            return (a._current_elem != b._current_elem);
-        }
-
-        // #endif
     }
 }
 

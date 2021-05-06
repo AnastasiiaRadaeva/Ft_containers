@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 11:19:58 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/04/29 16:14:36 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/06 16:24:59 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,18 +100,18 @@ namespace ft
                     operator--();
                     return (tmp);
                 }
+                bool operator==(const_iterator<T> const &b)
+                {
+                    return (_current_node == b._current_node);
+                }
+                bool operator!=(const_iterator<T> const &b)
+                {
+                    return (_current_node != b._current_node);
+                }
 
                 /***************************************************************************/
                 /*** getters ----------------------------------------------------------- ***/
                 node<value_type>    *get_node() { return (_current_node);}
-
-                /****************************/
-                /*     Friend functions     */
-                /****************************/
-                template <class A>
-                    friend bool operator==(const_iterator<A> const &a, const_iterator<A> const &b);
-                template <class A>
-                    friend bool operator!=(const_iterator<A> const &a, const_iterator<A> const &b);
 
                 protected:
                     node<value_type>    *_current_node;
@@ -185,14 +185,6 @@ namespace ft
                     operator--();
                     return (tmp);
                 }
-
-                /****************************/
-                /*     Friend functions     */
-                /****************************/
-                template <class A>
-                    friend bool operator==(const_iterator<A> const &a, const_iterator<A> const &b);
-                template <class A>
-                    friend bool operator!=(const_iterator<A> const &a, const_iterator<A> const &b);
         };
 
         /**********************************/
@@ -263,14 +255,14 @@ namespace ft
                     operator--();
                     return (tmp);
                 }
-
-                /****************************/
-                /*     Friend functions     */
-                /****************************/
-                template <class A>
-                    friend bool operator==(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
-                template <class A>
-                    friend bool operator!=(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
+                bool operator==(const_reverse_iterator<T> const &b)
+                {
+                    return (_current_node == b._current_node);
+                }
+                bool operator!=(const_reverse_iterator<T> const &b)
+                {
+                    return (_current_node != b._current_node);
+                }
 
                 protected:
                     node<value_type>    *_current_node;
@@ -344,41 +336,7 @@ namespace ft
                     operator--();
                     return (tmp);
                 }
-
-                /****************************/
-                /*     Friend functions     */
-                /****************************/            
-                template <class A>
-                    friend bool operator==(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
-                template <class A>
-                    friend bool operator!=(const_reverse_iterator<A> const &a, const_reverse_iterator<A> const &b);
         };
-
-        /*****************************************/
-        /*                                       */
-        /*     Non-member function overloads     */
-        /*                                       */
-        /*****************************************/
-        template <class T>
-        bool operator==(const_iterator<T> const &a, const_iterator<T> const &b)
-        {
-            return (a._current_node == b._current_node);
-        }
-        template <class T>
-        bool operator!=(const_iterator<T> const &a, const_iterator<T> const &b)
-        {
-            return (a._current_node != b._current_node);
-        }
-        template <class T>
-        bool operator==(const_reverse_iterator<T> const &a, const_reverse_iterator<T> const &b)
-        {
-            return (a._current_node == b._current_node);
-        }
-        template <class T>
-        bool operator!=(const_reverse_iterator<T> const &a, const_reverse_iterator<T> const &b)
-        {
-            return (a._current_node != b._current_node);
-        }
     }
 }
 

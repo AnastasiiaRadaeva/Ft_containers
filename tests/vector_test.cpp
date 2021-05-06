@@ -6,12 +6,13 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 16:30:48 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/04 17:44:46 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/06 16:39:21 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../containers/Vector.hpp"
 #include <vector>
+#include <unistd.h>
 
 # define COL_AQUAMARINE "\033[0;36m"
 # define COL_GREEN "\033[0;32m"
@@ -503,7 +504,7 @@ void    clear()
 {
     std::string mystr[] = { "I'm", "glad", "to", "see", "you" };
     
-    std::cout << COL_AQUAMARINE << "St vector 1: " << COL_END;
+    std::cout << COL_AQUAMARINE << "St vector: " << COL_END;
     std::vector<std::string> st_vect(mystr, mystr + sizeof(mystr) / sizeof(std::string));
     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_AQUAMARINE);
     std::cout << COL_AQUAMARINE << "Empty: " << COL_END << st_vect.empty() << std::endl;
@@ -1122,4 +1123,6 @@ int main()
     ft_swap();
     std::cout << std::endl;
 
+    // sleep(10000);
+    return (0);
 }

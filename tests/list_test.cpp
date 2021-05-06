@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 16:29:50 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/02 16:30:34 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/06 14:50:40 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,6 @@ bool    uniqueness(int a, int b)
 {
     return (a == b/2);
 }
-
-// bool same_integral_part (double first, double second)
-// {
-//     return ( int(first)==int(second) );
-// }
 
 struct is_near
 {
