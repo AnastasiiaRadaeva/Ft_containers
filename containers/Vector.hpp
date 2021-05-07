@@ -301,8 +301,11 @@ namespace ft
             void        insert (iterator position, InputIterator first, InputIterator last, typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
             {
                 size_type n = 0;
-                InputIterator tmp_pos = first;
-                while (tmp_pos++ != last)
+                Vector<value_type> tmp_vect(first, last);
+                iterator first_new = tmp_vect.begin();
+                iterator last_new = tmp_vect.end();
+                iterator tmp_pos = first_new;
+                while (tmp_pos++ != last_new)
                     n++;
                 if (_size + n > _capacity)
                 {
@@ -322,9 +325,9 @@ namespace ft
                     _alloc.destroy(--_array_finish);
                     --_size;
                 }
-                for (; first != last; first++)
+                for (; first_new != last_new; first_new++)
                 {
-                    _alloc.construct(_array_finish++, *first);
+                    _alloc.construct(_array_finish++, *first_new);
                     ++_size;
                     ++position;
                 }

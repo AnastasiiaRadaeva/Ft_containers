@@ -400,6 +400,14 @@ void    insert_range()
     ft::Vector<std::string>::iterator it_my = ++(my_vect.begin());
     my_vect.insert(it_my, mystr, mystr + sizeof(mystr) / sizeof(std::string));
     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_GREEN);
+    std::cout << std::endl;
+
+    std::cout  << COL_GREEN << "My vector: " << COL_END;
+    print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_GREEN);
+    std::cout << COL_GREEN << "My vector after insert from my vector: " << COL_END;
+    it_my = ++(my_vect.begin());
+    my_vect.insert(it_my, my_vect.begin(), my_vect.end());
+    print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_GREEN);
 }
 
 void    erase_single()
