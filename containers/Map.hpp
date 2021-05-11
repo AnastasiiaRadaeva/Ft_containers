@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Map.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/11 10:14:01 by kbatwoma          #+#    #+#             */
+/*   Updated: 2021/05/11 16:05:08 by kbatwoma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAP_HPP
 # define MAP_HPP
 
@@ -16,37 +28,57 @@ namespace ft
     /*     Class Map     */
     /*                   */
     /*********************/
-    template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T>>>
+    template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > >
     class Map
     {
-        // public:
-        //     /************************/
-        //     /*     Member types     */
-        //     /************************/
-        //     typedef T                                                   value_type;
-        //     typedef Alloc                                               allocator_type;
-        //     typedef typename allocator_type::reference                  reference;
-        //     typedef typename allocator_type::const_reference            const_reference;
-        //     typedef typename allocator_type::pointer                    pointer;
-        //     typedef typename allocator_type::const_pointer              const_pointer;
-        //     typedef typename list::iterator<value_type>                 iterator;
-        //     typedef typename list::const_iterator<value_type>           const_iterator;
-        //     typedef typename list::reverse_iterator<value_type>         reverse_iterator;
-        //     typedef typename list::const_reverse_iterator<value_type>   const_reverse_iterator;
-        //     typedef size_t                                              size_type;
+        public:
+            /************************/
+            /*     Member types     */
+            /************************/
+            typedef Key                                                         key_type;
+            typedef T                                                           mapped_type;
+            typedef std::pair<const key_type, mapped_type>                      value_type;
+            typedef Compare                                                     key_compare;
+            //value_compare
+            typedef Alloc                                                       allocator_type;
+            typedef typename allocator_type::reference                          reference;
+            typedef typename allocator_type::const_reference                    const_reference;
+            typedef typename allocator_type::pointer                            pointer;
+            typedef typename allocator_type::const_pointer                      const_pointer;
+            typedef typename map::iterator<key_type, mapped_type>               iterator;
+            typedef typename map::const_iterator<key_type, mapped_type>         const_iterator;
+            // typedef typename map::reverse_iterator<key_type, mapped_type>          reverse_iterator;
+            // typedef typename map::const_reverse_iterator<key_type, mapped_type>    const_reverse_iterator;
+            //difference_type
+            typedef size_t                                                      size_type;
             
-        //     /****************************/
-        //     /*     Member functions     */
-        //     /****************************/
+            /****************************/
+            /*     Member functions     */
+            /****************************/
 
-        //     /***************************************************************************/
-        //     /*** constructors ------------------------------------------------------ ***/
-        //     explicit List(const allocator_type& alloc = allocator_type()) : _current_size(0), _alloc(alloc)
-        //     {
-        //         _tail_of_node_list = create_node();
-        //         _tail_of_node_list->next = _tail_of_node_list;
-        //         _tail_of_node_list->prev = _tail_of_node_list;
-        //     }
+            /***************************************************************************/
+            /*** constructors ------------------------------------------------------ ***/
+            explicit Map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _root(0), _current_size(0), _alloc(alloc), _comp(comp)
+            {
+                _head = create_node();
+                _head->color = BLACK;
+                _head->right = 0;
+                _head->left = 0;
+                _head->parent = create_node();
+
+                _tail = _head->parent;
+                _tail->color = BLACK;
+                _tail->right = 0;
+                _tail->left = 0;
+                _tail->parent = _head;
+            }
+
+            // template <class InputIterator>
+            // Map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type(),
+            //                                             typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
+            // {
+
+            // }
 
         //     explicit List(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _current_size(n), _alloc(alloc)
         //     {
@@ -141,20 +173,20 @@ namespace ft
 
         //     /***************************************************************************/
         //     /*** iterators --------------------------------------------------------- ***/
-        //     iterator                begin() { return (iterator(_tail_of_node_list->next));}
-        //     const_iterator          begin() const { return (const_iterator(_tail_of_node_list->next));}
-        //     iterator                end() { return (iterator(_tail_of_node_list));}
-        //     const_iterator          end() const { return (const_iterator(_tail_of_node_list));}
+            iterator                begin() { return (iterator(_head->parent));}
+            const_iterator          begin() const { return (const_iterator(_head->parent));}
+            iterator                end() { return (iterator(_tail));}
+            const_iterator          end() const { return (const_iterator(_tail));}
         //     reverse_iterator        rbegin() { return (reverse_iterator(_tail_of_node_list->prev));}
         //     const_reverse_iterator  rbegin() const { return (const_reverse_iterator(_tail_of_node_list->prev));}
         //     reverse_iterator        rend() { return (reverse_iterator(_tail_of_node_list));}
         //     const_reverse_iterator  rend() const { return (const_reverse_iterator(_tail_of_node_list));}
 
-        //     /***************************************************************************/
-        //     /*** Capacity ---------------------------------------------------------- ***/
-        //     bool        empty() const {return (_current_size == 0 ? true : false);}
-        //     size_type   size() const {return (_current_size);}
-        //     size_type   max_size() const {node_alloc node; return(node.max_size());}
+            /***************************************************************************/
+            /*** Capacity ---------------------------------------------------------- ***/
+            bool        empty() const {return (_current_size == 0 ? true : false);}
+            size_type   size() const {return (_current_size);}
+            size_type   max_size() const {node_alloc node; return(node.max_size());}
 
         //     /***************************************************************************/
         //     /*** Element access ---------------------------------------------------- ***/
@@ -620,52 +652,53 @@ namespace ft
         //     /*** Allocator --------------------------------------------------------- ***/
         //     allocator_type get_allocator() const { return (_alloc); }
 
-        //     private:
+            private:
                 
-        //         /*********************************/
-        //         /*     Member types | private    */
-        //         /*********************************/
-        //         typedef typename allocator_type::template rebind<node<value_type> >::other  node_alloc; //equivalent allocator fot type node
-        //         typedef typename node_alloc::pointer                                        node_pointer;
-        //         typedef typename node_alloc::const_reference                                node_const_reference;
+                /*********************************/
+                /*     Member types | private    */
+                /*********************************/
+                typedef typename allocator_type::template rebind<map_node<key_type, mapped_type> >::other   node_alloc; //equivalent allocator fot type node
+                typedef typename node_alloc::pointer                                                        node_pointer;
+                typedef typename node_alloc::const_reference                                                node_const_reference;
                 
-        //         /*************************************/
-        //         /*     Members for node | private    */
-        //         /*************************************/
-        //         node<value_type>    *_tail_of_node_list;
-        //         size_type           _current_size;
-        //         node_alloc          _alloc_for_node;
-        //         allocator_type      _alloc;
+                /****************************/
+                /*     Members | private    */
+                /****************************/
+                map_node<key_type, mapped_type> *_tail;
+                map_node<key_type, mapped_type> *_head;
+                map_node<key_type, mapped_type> *_root;
+                size_type                   _current_size;
+                node_alloc                  _alloc_for_node;
+                allocator_type              _alloc;
+                key_compare                 _comp;
 
-        //         /*************************************/
-        //         /*     Member functions | private    */
-        //         /*************************************/
-        //         node<value_type>    *create_node(value_type value = value_type())
-        //         {
-        //             try
-        //             {
-        //                 node_pointer n_pointer = _alloc_for_node.allocate(1);
-        //                 node<value_type> new_node;
-        //                 new_node.content = value;
-        //                 new_node.next = 0;
-        //                 new_node.prev = 0;
-        //                 node_const_reference ref_node = new_node;
-        //                 _alloc_for_node.construct(n_pointer, ref_node);
-        //                 return (n_pointer);
-        //             }
-        //             catch(const std::bad_alloc& ba)
-        //             {
-        //                 std::cerr << "bad_alloc caught: " << ba.what() << '\n';
-        //             }
-        //             return (0);
-        //         }
+                /*************************************/
+                /*     Member functions | private    */
+                /*************************************/
+                map_node<key_type, mapped_type> *create_node(const key_type key_value = key_type(), mapped_type map_value = mapped_type())
+                {
+                    try
+                    {
+                        node_pointer l_pointer = _alloc_for_node.allocate(1);
+                        map_node<key_type, mapped_type> new_node;
+                        new_node.content = std::make_pair(key_value, map_value);
+                        node_const_reference ref_node = new_node;
+                        _alloc_for_node.construct(l_pointer, ref_node);
+                        return (l_pointer);
+                    }
+                    catch(const std::bad_alloc& ba)
+                    {
+                        std::cerr << "bad_alloc caught: " << ba.what() << '\n';
+                    }
+                    return (0);
+                }
 
-        //         void                delete_node(node<value_type> *node_for_del)
-        //         {
-        //             node_pointer n_pointer = _alloc_for_node.address(*node_for_del);
-        //             _alloc_for_node.destroy(n_pointer);
-        //             _alloc_for_node.deallocate(n_pointer, 1);
-        //         }
+                void                        delete_node(map_node<key_type, mapped_type> *node_for_del)
+                {
+                    node_pointer l_pointer = _alloc_for_node.address(*node_for_del);
+                    _alloc_for_node.destroy(l_pointer);
+                    _alloc_for_node.deallocate(l_pointer, 1);
+                }
     };
 
     /*****************************************/
