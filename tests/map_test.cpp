@@ -22,53 +22,16 @@
 #define PARAMS_ON 1
 #define PARAMS_OFF 0
 
-
-bool fncomp (char lhs, char rhs) {return lhs<rhs;}
-
-struct classcomp {
-  bool operator() (const char& lhs, const char& rhs) const
-  {return lhs<rhs;}
-};
-
-void iterator()
+template <class Cont>
+void    print_container(Cont &map, int params, std::string color)
 {
-  std::map<char,int> first;
-
-  first['a']=10;
-  first['b']=10;
-  first['c']=10;
-  first['a']=10;
-
-  std::map<char,int> second (first.begin(),first.end());
-
-  std::map<char, int>::iterator it = second.begin();
-  std::map<char, int>::iterator it_2 = --(second.end());
-    // std::pair<char, int> a = *it;
-  std::cout << (*it).first << it_2->second << std::endl;
-
-    
-    ft::Map<char,int> my_second;
-  ft::Map<char, int>::iterator my_it = my_second.begin();
-  std::map<char, int>::iterator my_it_2 = second.end();
-    // std::pair<char, int> a = *it;
-  std::cout << (*my_it).first << my_it_2->second << std::endl;
-
-
+    typename Cont::iterator begin;
+    for (begin = map.begin(); begin != map.end(); begin++)
+        std::cout << (*begin).first << ":" << (*begin).second << " ";
+    std::cout << std::endl;
+    if (params == 1)
+        std::cout << color << "Size: " << COL_END << map.size() << std::endl;
 }
-
-// template <class Cont>
-// void    print_container(Cont &vector, int params, std::string color)
-// {
-//     typename Cont::iterator begin;
-//     for (begin = vector.begin(); begin != vector.end(); begin++)
-//         std::cout << *begin << " ";
-//     std::cout << std::endl;
-//     if (params == 1)
-//     {
-//         std::cout << color << "Size: " << COL_END << vector.size();
-//         std::cout << color << " | Capacity: " << COL_END << vector.capacity() << std::endl;
-//     }
-// }
 
 void    constr_default()
 {
@@ -86,31 +49,58 @@ void    constr_default()
     std::cout << COL_MY << "Empty: " << COL_END << my_map.empty() << std::endl;
 }
 
-// void    constr_fill()
-// {
-//     std::cout << COL_ST << "St vector: " << COL_END;
-//     std::vector<int> st_vect(5, 7);
-//     print_container<std::vector<int> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << std::endl;
+void    constr_range()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['d']=70;
+    std::cout << COL_ST << "St map: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_ON, COL_ST);
+    std::cout << std::endl;
 
-//     std::cout << COL_MY << "My vector: " << COL_END;
-//     ft::Vector<int> my_vect(5, 7);
-//     print_container<ft::Vector<int> >(my_vect, PARAMS_ON, COL_MY);
-// }
+    std::map<char,int> second (first.begin(),first.end());
+    std::cout << COL_ST << "St new map: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    std::cout << std::endl;
 
-// void    constr_range()
-// {
-//     int myints[] = { 16, 2, 77, 29 };
+    std::cout << COL_MY << "My new map: " << COL_END;
+    ft::Map<char,int> second_my(first.begin(),first.end());
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+}
 
-//     std::cout << COL_ST << "St vector: " << COL_END;
-//     std::vector<int> st_vect(myints, myints + sizeof(myints) / sizeof(int));
-//     print_container<std::vector<int> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << std::endl;
+void  reverse_iter()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['d']=70;
+    std::cout << COL_ST << "St map: " << COL_END;
+    std::map<char,int>::reverse_iterator  begin;
+    for (begin = first.rbegin(); begin != first.rend(); begin++)
+        std::cout << (*begin).first << ":" << (*begin).second << " ";
+    std::cout << std::endl;
+    std::cout << COL_ST << "Size: " << COL_END << first.size() << std::endl;
+    std::cout << std::endl;
 
-//     std::cout << COL_MY << "My vector: " << COL_END;
-//     ft::Vector<int> my_vect(myints, myints + sizeof(myints) / sizeof(int));
-//     print_container<ft::Vector<int> >(my_vect, PARAMS_ON, COL_MY);
-// }
+    std::map<char,int> second (first.begin(),first.end());
+    std::cout << COL_ST << "St new map: " << COL_END;
+    for (begin = second.rbegin(); begin != second.rend(); begin++)
+        std::cout << (*begin).first << ":" << (*begin).second << " ";
+    std::cout << std::endl;
+    std::cout << COL_ST << "Size: " << COL_END << second.size() << std::endl;
+    std::cout << std::endl;
+
+    std::cout << COL_MY << "My new map: " << COL_END;
+    ft::Map<char,int> second_my(first.begin(),first.end());
+    ft::Map<char,int>::reverse_iterator my_begin;
+    for (my_begin = second_my.rbegin(); my_begin != second_my.rend(); my_begin++)
+        std::cout << (*my_begin).first << ":" << (*my_begin).second << " ";
+    std::cout << std::endl;
+    std::cout << COL_MY << "Size: " << COL_END << second_my.size() << std::endl;
+}
 
 // void    constr_copy()
 // {
@@ -989,21 +979,19 @@ int main()
     constr_default();
     std::cout << std::endl;
 
-    iterator();
+    std::cout << "_______________________________" << std::endl;
+    std::cout << "|                             |" << std::endl;
+    std::cout << "|     Constructor | Range     |" << std::endl;
+    std::cout << "|_____________________________|" << std::endl << std::endl;
+    constr_range();
+    std::cout << std::endl;
 
-    // std::cout << "______________________________" << std::endl;
-    // std::cout << "|                            |" << std::endl;
-    // std::cout << "|     Constructor | Fill     |" << std::endl;
-    // std::cout << "|____________________________|" << std::endl << std::endl;
-    // constr_fill();
-    // std::cout << std::endl;
-
-    // std::cout << "_______________________________" << std::endl;
-    // std::cout << "|                             |" << std::endl;
-    // std::cout << "|     Constructor | Range     |" << std::endl;
-    // std::cout << "|_____________________________|" << std::endl << std::endl;
-    // constr_range();
-    // std::cout << std::endl;
+    std::cout << "____________________________" << std::endl;
+    std::cout << "|                          |" << std::endl;
+    std::cout << "|     Reverse iterator     |" << std::endl;
+    std::cout << "|__________________________|" << std::endl << std::endl;
+    reverse_iter();
+    std::cout << std::endl;
 
     // std::cout << "______________________________" << std::endl;
     // std::cout << "|                            |" << std::endl;

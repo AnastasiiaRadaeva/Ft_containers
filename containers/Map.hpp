@@ -21,6 +21,9 @@
 # include <utility>
 # include "Map_iterator.hpp"
 
+# define RIGHT 2
+# define LEFT 3
+
 namespace ft
 {
     /*********************/
@@ -47,8 +50,8 @@ namespace ft
             typedef typename allocator_type::const_pointer                      const_pointer;
             typedef typename map::iterator<key_type, mapped_type>               iterator;
             typedef typename map::const_iterator<key_type, mapped_type>         const_iterator;
-            // typedef typename map::reverse_iterator<key_type, mapped_type>          reverse_iterator;
-            // typedef typename map::const_reverse_iterator<key_type, mapped_type>    const_reverse_iterator;
+            typedef typename map::reverse_iterator<key_type, mapped_type>       reverse_iterator;
+            typedef typename map::const_reverse_iterator<key_type, mapped_type> const_reverse_iterator;
             //difference_type
             typedef size_t                                                      size_type;
             
@@ -61,65 +64,29 @@ namespace ft
             explicit Map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _root(0), _current_size(0), _alloc(alloc), _comp(comp)
             {
                 _head = create_node();
-                _head->color = BLACK;
-                _head->right = 0;
-                _head->left = 0;
                 _head->parent = create_node();
 
                 _tail = _head->parent;
-                _tail->color = BLACK;
-                _tail->right = 0;
-                _tail->left = 0;
                 _tail->parent = _head;
             }
 
-            // template <class InputIterator>
-            // Map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type(),
-            //                                             typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
+            template <class InputIterator>
+            Map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type(),
+                typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0) : _root(0), _current_size(0), _alloc(alloc), _comp(comp)
+            {
+                _head = create_node();
+                _head->parent = create_node();
+                _tail = _head->parent;
+                _tail->parent = _head;
+
+                while (first != last)
+                    add_new_node(*(first++));
+            }
+
+            // Map (const Map &x)
             // {
 
             // }
-
-        //     explicit List(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _current_size(n), _alloc(alloc)
-        //     {
-        //         _tail_of_node_list = create_node();
-        //         _tail_of_node_list->next = _tail_of_node_list;
-        //         _tail_of_node_list->prev = _tail_of_node_list;
-        //         node<value_type> *tmp_list_1;
-        //         node<value_type> *tmp_list_2;
-        //         tmp_list_1 = _tail_of_node_list;
-        //         for (size_type i = 0; i < n; i++)
-        //         {
-        //             tmp_list_1->next = create_node(val);
-        //             tmp_list_2 = tmp_list_1->next;
-        //             tmp_list_2->prev = tmp_list_1;
-        //             tmp_list_1 = tmp_list_2;
-        //         }
-        //         tmp_list_1->next = _tail_of_node_list;
-        //         _tail_of_node_list->prev = tmp_list_1;
-        //     }
-
-        //     template <class InputIterator>
-        //     List(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
-        //             typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0) : _alloc(alloc) //numeric_limits::is_specialized - true for all arithmetic types
-        //     {
-        //         _tail_of_node_list = create_node();
-        //         _tail_of_node_list->next = _tail_of_node_list;
-        //         _tail_of_node_list->prev = _tail_of_node_list;
-        //         node<value_type> *tmp_list = _tail_of_node_list;
-        //         size_type i = 0;
-        //         while (first != last)
-        //         {
-        //             tmp_list->next = create_node(*first);
-        //             tmp_list->next->prev = tmp_list;
-        //             tmp_list = tmp_list->next;
-        //             first++;
-        //             i++;
-        //         }
-        //         tmp_list->next = _tail_of_node_list;
-        //         _tail_of_node_list->prev = tmp_list;
-        //         _current_size = i;
-        //     }
 
         //     List(List const &copy)
         //     {
@@ -163,13 +130,14 @@ namespace ft
         //         return (*this);
         //     }
             
-        //     /***************************************************************************/
-        //     /*** destructor -------------------------------------------------------- ***/
-        //     ~List()
-        //     {
-        //         clear();
-        //         delete_node(_tail_of_node_list);
-        //     }
+            /***************************************************************************/
+            /*** destructor -------------------------------------------------------- ***/
+            // ~Map()
+            // {
+            //     // clear();
+            //     delete_node(_head);
+            //     delete_node(_tail);
+            // }
 
         //     /***************************************************************************/
         //     /*** iterators --------------------------------------------------------- ***/
@@ -177,10 +145,10 @@ namespace ft
             const_iterator          begin() const { return (const_iterator(_head->parent));}
             iterator                end() { return (iterator(_tail));}
             const_iterator          end() const { return (const_iterator(_tail));}
-        //     reverse_iterator        rbegin() { return (reverse_iterator(_tail_of_node_list->prev));}
-        //     const_reverse_iterator  rbegin() const { return (const_reverse_iterator(_tail_of_node_list->prev));}
-        //     reverse_iterator        rend() { return (reverse_iterator(_tail_of_node_list));}
-        //     const_reverse_iterator  rend() const { return (const_reverse_iterator(_tail_of_node_list));}
+            reverse_iterator        rbegin() { return (reverse_iterator(_tail->parent));}
+            const_reverse_iterator  rbegin() const { return (const_reverse_iterator(_tail->parent));}
+            reverse_iterator        rend() { return (reverse_iterator(_head));}
+            const_reverse_iterator  rend() const { return (const_reverse_iterator(_head));}
 
             /***************************************************************************/
             /*** Capacity ---------------------------------------------------------- ***/
@@ -195,8 +163,8 @@ namespace ft
         //     reference       back() { return (_tail_of_node_list->prev->content);}
         //     const_reference back() const { return (_tail_of_node_list->prev->content);}
 
-        //     /***************************************************************************/
-        //     /*** Modifiers --------------------------------------------------------- ***/
+            /***************************************************************************/
+            /*** Modifiers --------------------------------------------------------- ***/
         //     template <class InputIterator>
         //     void assign (InputIterator first, InputIterator last, typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
         //     {
@@ -391,18 +359,13 @@ namespace ft
         //             }
         //         }
         //     }
-        //     void clear()
-        //     {
-        //         node<value_type> *tmp = _tail_of_node_list->next->next;
-        //         while (tmp->prev != _tail_of_node_list)
-        //         {
-        //             delete_node(_tail_of_node_list->next);
-        //             _tail_of_node_list->next = tmp;
-        //             tmp->prev = _tail_of_node_list;
-        //             tmp = tmp->next;
-        //         }
-        //         _current_size = 0;
-        //     }
+            // void clear()
+            // {
+            //     iterator it_b = begin(), it_e = end();
+            //     map_node<key_type, mapped_type> tmp;
+            //     while ()
+            //     _current_size = 0;
+            // }
 
         //     /***************************************************************************/
         //     /*** Operations -------------------------------------------------------- ***/
@@ -667,21 +630,26 @@ namespace ft
                 map_node<key_type, mapped_type> *_tail;
                 map_node<key_type, mapped_type> *_head;
                 map_node<key_type, mapped_type> *_root;
-                size_type                   _current_size;
-                node_alloc                  _alloc_for_node;
-                allocator_type              _alloc;
-                key_compare                 _comp;
+                size_type                       _current_size;
+                node_alloc                      _alloc_for_node;
+                allocator_type                  _alloc;
+                key_compare                     _comp;
 
                 /*************************************/
                 /*     Member functions | private    */
                 /*************************************/
-                map_node<key_type, mapped_type> *create_node(const key_type key_value = key_type(), mapped_type map_value = mapped_type())
+                map_node<key_type, mapped_type> *create_node(value_type content = value_type())
                 {
                     try
                     {
                         node_pointer l_pointer = _alloc_for_node.allocate(1);
                         map_node<key_type, mapped_type> new_node;
-                        new_node.content = std::make_pair(key_value, map_value);
+                        // new_node.content = std::make_pair(key_value, map_value);
+                        new_node.content = content;
+                        new_node.color = BLACK;
+                        new_node.left = 0;
+                        new_node.right = 0;
+                        new_node.parent = 0;
                         node_const_reference ref_node = new_node;
                         _alloc_for_node.construct(l_pointer, ref_node);
                         return (l_pointer);
@@ -693,11 +661,57 @@ namespace ft
                     return (0);
                 }
 
-                void                        delete_node(map_node<key_type, mapped_type> *node_for_del)
+                void                            delete_node(map_node<key_type, mapped_type> *node_for_del)
                 {
                     node_pointer l_pointer = _alloc_for_node.address(*node_for_del);
                     _alloc_for_node.destroy(l_pointer);
                     _alloc_for_node.deallocate(l_pointer, 1);
+                }
+
+                void                            add_new_node(value_type content)
+                {
+                    map_node<key_type, mapped_type> *current_node = _root, *parent_node = 0;
+                    size_type   branch = 0;
+                    while (current_node != 0 && current_node != _tail && current_node != _head) //ищем нужно место для вставки
+                    {
+                        parent_node = current_node;
+                        if (content.first > current_node->content.first)
+                            {current_node = current_node->right; branch = RIGHT;}
+                        else
+                            {current_node = current_node->left;  branch = LEFT;}
+                    }
+
+                    current_node = create_node(content);
+                    _current_size++;
+                    if (_root == 0) // если корня нет, то создаем и помещяем между головой и хвостом
+                    {
+                        _root = current_node;
+                        _root->left = _head;
+                        _root->right = _tail;
+                        _head->parent = _root;
+                        _tail->parent = _root;
+                        return ;
+                    }
+                    if (branch == RIGHT) // в правую ветку
+                    {
+                        if (parent_node->right == _tail)
+                        {
+                            _tail->parent = current_node;
+                            current_node->right = _tail;
+                        }
+                        parent_node->right = current_node;
+                        current_node->parent = parent_node;
+                    }
+                    else if (branch == LEFT) // в левую ветку
+                    {
+                        if (parent_node->left == _head)
+                        {
+                            _head->parent = current_node;
+                            current_node->left = _head;
+                        }
+                        parent_node->left = current_node;
+                        current_node->parent = parent_node;
+                    }
                 }
     };
 
