@@ -631,7 +631,7 @@ namespace ft
                         current_node->parent = parent_node;
                     }
                     current_node->color = RED
-                    //Algorithm to Maintain Red-Black Property After Insertion
+                    balancing_after_insertion(current_node);
                 }
 
                 void                            left_rotate(map_node<key_type, mapped_type> *current_node)
