@@ -192,9 +192,9 @@ namespace ft
 
                 /***************************************************************************/
                 /*** overloads --------------------------------------------------------- ***/
-                value_type const    &operator*() { return (this->_current_node->content);}
-                value_type const    *operator->() { return (&(this->_current_node->content));}
-                iterator            &operator++() //++i
+                value_type  &operator*() { return (this->_current_node->content);}
+                value_type  *operator->() { return (&(this->_current_node->content));}
+                iterator    &operator++() //++i
                 {
                     if (this->_current_node->right)
                     {
@@ -213,13 +213,13 @@ namespace ft
                     this->_current_node = parent_node;
                     return (*this);
                 }
-                iterator            operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
+                iterator    operator++(int) //i++ возвращаем сам объект, так как локальный объект исчезнет после выхода из функции
                 {
                     iterator tmp(*this);
                     operator++();
                     return (tmp);
                 }
-                iterator            &operator--()
+                iterator    &operator--()
                 {
                     if (this->_current_node->left)
                     {
@@ -238,7 +238,7 @@ namespace ft
                     this->_current_node = parent_node;
                     return (*this);
                 }
-                iterator            operator--(int)
+                iterator    operator--(int)
                 {
                     iterator tmp(*this);
                     operator--();
@@ -403,9 +403,9 @@ namespace ft
 
                 /***************************************************************************/
                 /*** overloads --------------------------------------------------------- ***/
-                value_type const      &operator*() { return (this->_current_node->content);}
-                value_type const      *operator->() { return (&(this->_current_node->content));}
-                reverse_iterator      &operator++() //++i
+                value_type          &operator*() { return (this->_current_node->content);}
+                value_type          *operator->() { return (&(this->_current_node->content));}
+                reverse_iterator    &operator++() //++i
                 {
                     if (this->_current_node->left)
                     {

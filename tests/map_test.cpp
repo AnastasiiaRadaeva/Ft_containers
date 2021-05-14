@@ -102,18 +102,32 @@ void  reverse_iter()
     std::cout << COL_MY << "Size: " << COL_END << second_my.size() << std::endl;
 }
 
-// void    constr_copy()
-// {
-//     int myints[] = { 16, 2, 77, 29 };
+void    constr_copy()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['d']=70;
+    std::cout << std::endl;
 
-//     std::cout << COL_MY << "My vector: " << COL_END;
-//     ft::Vector<int> my_vect(myints, myints + sizeof(myints) / sizeof(int));
-//     print_container<ft::Vector<int> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout << std::endl;
-//     std::cout << COL_MY << "My copy of vector: " << COL_END;
-//     ft::Vector<int> my_copy_vect(my_vect);
-//     print_container<ft::Vector<int> >(my_copy_vect, PARAMS_ON, COL_MY);
-// }
+    std::map<char,int> second (first.begin(),first.end());
+    std::cout << COL_ST << "St map: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    std::cout << std::endl;
+    std::map<char,int> second_copy (second);
+    std::cout << COL_ST << "St copy of map: " << COL_END;
+    print_container<std::map<char, int> >(second_copy, PARAMS_ON, COL_ST);
+    std::cout << std::endl;
+
+    std::cout << COL_MY << "My map: " << COL_END;
+    ft::Map<char,int> second_my(first.begin(),first.end());
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+    std::cout << std::endl;
+    std::cout << COL_MY << "My copy of map: " << COL_END;
+    ft::Map<char,int> second_my_copy(second_my);
+    print_container<ft::Map<char, int> >(second_my_copy, PARAMS_ON, COL_MY);
+}
 
 // void    assignation_operator()
 // {
@@ -993,12 +1007,12 @@ int main()
     reverse_iter();
     std::cout << std::endl;
 
-    // std::cout << "______________________________" << std::endl;
-    // std::cout << "|                            |" << std::endl;
-    // std::cout << "|     Constructor | Copy     |" << std::endl;
-    // std::cout << "|____________________________|" << std::endl << std::endl;
-    // constr_copy();
-    // std::cout << std::endl;
+    std::cout << "______________________________" << std::endl;
+    std::cout << "|                            |" << std::endl;
+    std::cout << "|     Constructor | Copy     |" << std::endl;
+    std::cout << "|____________________________|" << std::endl << std::endl;
+    constr_copy();
+    std::cout << std::endl;
 
     // std::cout << "_____________________" << std::endl;
     // std::cout << "|                   |" << std::endl;

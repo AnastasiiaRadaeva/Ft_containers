@@ -83,29 +83,16 @@ namespace ft
                     add_new_node(*(first++));
             }
 
-            // Map (const Map &x)
-            // {
+            Map (const Map &x) : _root(0), _current_size(0), _alloc(x._alloc), _comp(x._comp)
+            {
+                _head = create_node();
+                _head->parent = create_node();
+                _tail = _head->parent;
+                _tail->parent = _head;
 
-            // }
-
-        //     List(List const &copy)
-        //     {
-        //         _tail_of_node_list = create_node();
-        //         _tail_of_node_list->next = _tail_of_node_list;
-        //         _tail_of_node_list->prev = _tail_of_node_list;
-        //         node<value_type> *tmp_list_1 = _tail_of_node_list;
-        //         node<value_type> *tmp_copy_list = copy._tail_of_node_list->next;
-        //         while (tmp_copy_list != copy._tail_of_node_list)
-        //         {
-        //             tmp_list_1->next = create_node(tmp_copy_list->content);
-        //             tmp_list_1->next->prev = tmp_list_1;
-        //             tmp_list_1 = tmp_list_1->next;
-        //             tmp_copy_list = tmp_copy_list->next;
-        //         }
-        //         tmp_list_1->next = _tail_of_node_list;
-        //         _tail_of_node_list->prev = tmp_list_1;
-        //         _current_size = copy._current_size;
-        //     }
+                for (const_iterator it = x.begin(); it != x.end(); it++)
+                    add_new_node(*it);
+            }
 
         //     /***************************************************************************/
         //     /*** operator= --------------------------------------------------------- ***/
@@ -165,87 +152,6 @@ namespace ft
 
             /***************************************************************************/
             /*** Modifiers --------------------------------------------------------- ***/
-        //     template <class InputIterator>
-        //     void assign (InputIterator first, InputIterator last, typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
-        //     {
-        //         clear();
-        //         node<value_type> *tmp_list = _tail_of_node_list;
-        //         size_type i = 0;
-        //         while (first != last)
-        //         {
-        //             tmp_list->next = create_node(*first);
-        //             tmp_list->next->prev = tmp_list;
-        //             tmp_list = tmp_list->next;
-        //             first++;
-        //             i++;
-        //         }
-        //         tmp_list->next = _tail_of_node_list;
-        //         _tail_of_node_list->prev = tmp_list;
-        //         _current_size = i;
-        //     }
-        //     void assign (size_type n, const value_type& val)
-        //     {
-        //         clear();
-        //         _current_size = n;
-        //         node<value_type> *tmp_list_1;
-        //         node<value_type> *tmp_list_2;
-        //         tmp_list_1 = _tail_of_node_list;
-        //         for (size_type i = 0; i < n; i++)
-        //         {
-        //             tmp_list_1->next = create_node(val);
-        //             tmp_list_2 = tmp_list_1->next;
-        //             tmp_list_2->prev = tmp_list_1;
-        //             tmp_list_1 = tmp_list_2;
-        //         }
-        //         tmp_list_1->next = _tail_of_node_list;
-        //         _tail_of_node_list->prev = tmp_list_1;
-        //     }
-        //     void push_front (const value_type& val)
-        //     {
-        //         node<value_type> *new_node = create_node(val);
-        //         new_node->next = _tail_of_node_list->next;
-        //         new_node->prev = _tail_of_node_list;
-        //         _tail_of_node_list->next->prev = new_node;
-        //         _tail_of_node_list->next = new_node;
-        //         ++_current_size;
-        //     }
-        //     void pop_front()
-        //     {
-        //         if (_tail_of_node_list->next == _tail_of_node_list)
-        //         {
-        //             std::cerr << "You try to delete empty list" << std::endl;
-        //             return;
-        //         }
-        //         node<value_type> *tmp;
-        //         tmp = _tail_of_node_list->next->next;
-        //         delete_node(_tail_of_node_list->next);
-        //         _tail_of_node_list->next = tmp;
-        //         tmp->prev = _tail_of_node_list;
-        //         --_current_size;
-        //     }
-        //     void push_back (const value_type& val)
-        //     {
-        //         node<value_type> *new_node = create_node(val);
-        //         new_node->prev = _tail_of_node_list->prev;
-        //         new_node->next = _tail_of_node_list;
-        //         _tail_of_node_list->prev->next = new_node;
-        //         _tail_of_node_list->prev = new_node;
-        //         ++_current_size;
-        //     }
-        //     void pop_back()
-        //     {
-        //         if (_tail_of_node_list->next == _tail_of_node_list)
-        //         {
-        //             std::cerr << "You try to delete empty list" << std::endl;
-        //             return;
-        //         }
-        //         node<value_type> *tmp;
-        //         tmp = _tail_of_node_list->prev->prev;
-        //         delete_node(_tail_of_node_list->prev);
-        //         _tail_of_node_list->prev = tmp;
-        //         tmp->next = _tail_of_node_list;
-        //         --_current_size;
-        //     }
         //     iterator insert (iterator position, const value_type& val)
         //     {
         //         node<value_type> *tmp_next = position.get_node();
@@ -288,6 +194,19 @@ namespace ft
         //             tmp_next = tmp_prev->next;
         //         }
         //     }
+            void erase (iterator position)
+            {
+                map_node<key_type, mapped_type> *node_for_del = position.get_node();
+                size_type original_color = node_for_del->color;
+                if (node_for_del->left == 0 || node_for_del->left == _head)
+                {
+                    
+
+                }
+
+            }
+            // size_type erase (const key_type& k);
+            // void erase (iterator first, iterator last);
         //     iterator erase (iterator position)
         //     {
         //         if (position.get_node() != _tail_of_node_list)
@@ -361,10 +280,9 @@ namespace ft
         //     }
             // void clear()
             // {
-            //     iterator it_b = begin(), it_e = end();
             //     map_node<key_type, mapped_type> tmp;
-            //     while ()
-            //     _current_size = 0;
+            //     for (iterator it_b = begin(); it_b != end(); it_b++)
+            //         erase(it_b);
             // }
 
         //     /***************************************************************************/
@@ -712,7 +630,98 @@ namespace ft
                         parent_node->left = current_node;
                         current_node->parent = parent_node;
                     }
+                    current_node->color = RED
+                    //Algorithm to Maintain Red-Black Property After Insertion
                 }
+
+                void                            left_rotate(map_node<key_type, mapped_type> *current_node)
+                {
+                    map_node<key_type, mapped_type> *tmp_node = current_node->right;
+                    current_node->left = tmp_node->right;
+                    if (tmp_node->right != 0)
+                        tmp_node->right->parent = current_node;
+                    tmp_node->parent = current_node->parent;
+                    if (current_node->parent == 0)
+                        _root = tmp_node;
+                    else if (current_node == current_node->parent->left)
+                        current_node->parent->left = tmp_node;
+                    else
+                        current_node->parent->right = tmp_node;
+                    tmp_node->left = current_node;
+                    current_node->parent = tmp_node;
+                }
+                void                            right_rotate(map_node<key_type, mapped_type> *current_node)
+                {
+                    map_node<key_type, mapped_type> *tmp_node = current_node->left;
+                    current_node->right = tmp_node->left;
+                    if (tmp_node->left != 0)
+                        tmp_node->left->parent = current_node;
+                    tmp_node->parent = current_node->parent;
+                    if (current_node->parent == 0)
+                        _root = tmp_node;
+                    else if (current_node == current_node->parent->right)
+                        current_node->parent->right = tmp_node;
+                    else
+                        current_node->parent->left = tmp_node;
+                    tmp_node->right = current_node;
+                    current_node->parent = tmp_node;
+                }
+                void                            balancing_after_insertion(map_node<key_type, mapped_type> *new_node)
+                {
+                    //нужно запускать только в случае, когда новая нода минимум 2 от корня
+                    map_node<key_type, mapped_type> *tmp;
+                    while (new_node->parent->color == RED)
+                    {
+                        if (new_node->parent == new_node->parent->parent->left)
+                        {
+                            tmp = new_node->parent->parent->right;
+                            if (tmp->color == RED)
+                            {
+                                new_node->parent->parent->color = RED;
+                                tmp->color = BLACK;
+                                new_node->parent->color = BLACK;
+                                new_node = new_node->parent->parent;
+                            }
+                            else
+                            {
+                                if (new_node == new_node->parent->right)
+                                {
+                                    new_node = new_node->parent;
+                                    left_rotate(new_node);
+                                }
+                                new_node->parent->color == BLACK;
+                                new_node->parent->parent->color == RED;
+                                right_rotate(new_node->parent->parent);
+                            }
+                        }
+                        else
+                        {
+                            tmp = new_node->parent->parent->left;
+                            if (tmp->color == RED)
+                            {
+                                new_node->parent->parent->color = RED;
+                                tmp->color = BLACK;
+                                new_node->parent->color = BLACK;
+                                new_node = new_node->parent->parent;
+                            }
+                            else
+                            {
+                                if (new_node == new_node->parent->left)
+                                {
+                                    new_node = new_node->parent;
+                                    right_rotate(new_node);
+                                }
+                                new_node->parent->color = BLACK;
+                                new_node->parent->parent->color = RED;
+                                left_rotate(new_node->parent->parent);
+                            }
+                        }
+                        if (new_node == _root)
+                            break;
+                    }
+                    _root->color = BLACK;
+                }
+
     };
 
     /*****************************************/
