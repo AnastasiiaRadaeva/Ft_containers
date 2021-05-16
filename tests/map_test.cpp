@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 10:14:33 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/11 13:24:45 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/16 17:25:05 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,15 @@ void    constr_range()
     first['a']=10;
     first['b']=30;
     first['c']=50;
-    first['d']=70;
+    first['i']=70;
+    first['e']=10;
+    first['l']=30;
+    first['g']=50;
+    first['h']=70;
+    first['d']=10;
+    first['j']=30;
+    first['k']=50;
+    first['f']=70;
     std::cout << COL_ST << "St map: " << COL_END;
     print_container<std::map<char, int> >(first, PARAMS_ON, COL_ST);
     std::cout << std::endl;
@@ -68,38 +76,6 @@ void    constr_range()
     std::cout << COL_MY << "My new map: " << COL_END;
     ft::Map<char,int> second_my(first.begin(),first.end());
     print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
-}
-
-void  reverse_iter()
-{
-    std::map<char,int> first;
-    first['a']=10;
-    first['b']=30;
-    first['c']=50;
-    first['d']=70;
-    std::cout << COL_ST << "St map: " << COL_END;
-    std::map<char,int>::reverse_iterator  begin;
-    for (begin = first.rbegin(); begin != first.rend(); begin++)
-        std::cout << (*begin).first << ":" << (*begin).second << " ";
-    std::cout << std::endl;
-    std::cout << COL_ST << "Size: " << COL_END << first.size() << std::endl;
-    std::cout << std::endl;
-
-    std::map<char,int> second (first.begin(),first.end());
-    std::cout << COL_ST << "St new map: " << COL_END;
-    for (begin = second.rbegin(); begin != second.rend(); begin++)
-        std::cout << (*begin).first << ":" << (*begin).second << " ";
-    std::cout << std::endl;
-    std::cout << COL_ST << "Size: " << COL_END << second.size() << std::endl;
-    std::cout << std::endl;
-
-    std::cout << COL_MY << "My new map: " << COL_END;
-    ft::Map<char,int> second_my(first.begin(),first.end());
-    ft::Map<char,int>::reverse_iterator my_begin;
-    for (my_begin = second_my.rbegin(); my_begin != second_my.rend(); my_begin++)
-        std::cout << (*my_begin).first << ":" << (*my_begin).second << " ";
-    std::cout << std::endl;
-    std::cout << COL_MY << "Size: " << COL_END << second_my.size() << std::endl;
 }
 
 void    constr_copy()
@@ -127,6 +103,99 @@ void    constr_copy()
     std::cout << COL_MY << "My copy of map: " << COL_END;
     ft::Map<char,int> second_my_copy(second_my);
     print_container<ft::Map<char, int> >(second_my_copy, PARAMS_ON, COL_MY);
+}
+
+void  iterators()
+{
+    std::cout << "--- Direct order ---" << std::endl;
+    std::cout << COL_ST << "St map: " << COL_END;
+    std::map<char,int> first_st;
+    first_st['a']=10;
+    first_st['b']=30;
+    first_st['c']=50;
+    first_st['i']=70;
+    first_st['e']=10;
+    std::map<char,int>::iterator it_st = first_st.begin();
+    print_container<std::map<char, int> >(first_st, PARAMS_ON, COL_ST);
+    std::cout << COL_ST << "begin: " << COL_END << (*it_st).first << ":" << (*it_st).second << COL_ST << " | --end: " << COL_END << (*(--(first_st.end()))).first << ":" << (*(--(first_st.end()))).second << std::endl;
+    std::cout << std::endl;
+
+    std::cout << COL_MY << "My map: " << COL_END;
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['b']=30;
+    first_my['c']=50;
+    first_my['i']=70;
+    first_my['e']=10;
+    ft::Map<char,int>::iterator it_my = first_my.begin();
+    print_container<ft::Map<char, int> >(first_my, PARAMS_ON, COL_MY);
+    std::cout << COL_MY << "begin: " << COL_END << (*it_my).first << ":" << (*it_my).second << COL_ST << " | --end: " << COL_END << (*(--(first_my.end()))).first << ":" << (*(--(first_my.end()))).second << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "--- Reverse order ---" << std::endl;
+    std::cout << COL_ST << "St map: " << COL_END;
+    std::map<char,int>::reverse_iterator begin;
+    for (begin = first_st.rbegin(); begin != first_st.rend(); begin++)
+        std::cout << (*begin).first << ":" << (*begin).second << " ";
+    std::cout << std::endl;
+    std::cout << COL_ST << "rbegin: " << COL_END << (*(first_st.rbegin())).first << ":" << (*(first_st.rbegin())).second << COL_ST << " | --end: " << COL_END << (*(--(first_st.rend()))).first << ":" << (*(--(first_st.rend()))).second << std::endl;
+    std::cout << std::endl;
+
+    std::cout << COL_MY << "My map: " << COL_END;
+    ft::Map<char,int>::reverse_iterator begin_my;
+    for (begin_my = first_my.rbegin(); begin_my != first_my.rend(); begin_my++)
+        std::cout << (*begin_my).first << ":" << (*begin_my).second << " ";
+    std::cout << std::endl;
+    std::cout << COL_MY << "rbegin: " << COL_END << (*(first_my.rbegin())).first << ":" << (*(first_my.rbegin())).second << COL_MY << " | --end: " << COL_END << (*(--(first_my.rend()))).first << ":" << (*(--(first_my.rend()))).second << std::endl;
+
+    // std::cout << COL_MY << "My map: " << COL_END;
+    // ft::Map<char,int> first_my;
+    // first_my['a']=10;
+    // first_my['b']=30;
+    // first_my['c']=50;
+    // first_my['i']=70;
+    // first_my['e']=10;
+    // ft::Map<char,int>::iterator it_my = first_my.begin();
+    // print_container<ft::Map<char, int> >(first_my, PARAMS_ON, COL_MY);
+    // std::cout << COL_MY << "begin: " << COL_END << (*it_my).first << ":" << (*it_my).second << COL_ST << " | --end: " << COL_END << (*(--(first_my.end()))).first << ":" << (*(--(first_my.end()))).second << std::endl;
+    // std::cout << std::endl;
+
+
+    // std::cout << COL_MY << "My map after operator[]: " << COL_END;
+    // print_container<ft::Map<char, int> >(first_my, PARAMS_ON, COL_MY);
+    // std::cout << COL_MY << "a: " << COL_END << first_my['a'] << COL_MY << " | b: " << COL_END << first_my['b'] << COL_MY << " | c: " << COL_END << first_my['c'] << std::endl;
+
+
+    // std::map<char,int> first;
+    // first['a']=10;
+    // first['b']=30;
+    // first['c']=50;
+    // first['d']=70;
+
+
+    // std::cout << COL_ST << "St map: " << COL_END;
+    // std::map<char,int>::reverse_iterator  begin;
+    // for (begin = first.rbegin(); begin != first.rend(); begin++)
+    //     std::cout << (*begin).first << ":" << (*begin).second << " ";
+    // std::cout << std::endl;
+    // std::cout << COL_ST << "Size: " << COL_END << first.size() << std::endl;
+    // std::cout << std::endl;
+
+    // std::map<char,int> second (first.begin(),first.end());
+    // std::cout << COL_ST << "St new map: " << COL_END;
+    // for (begin = second.rbegin(); begin != second.rend(); begin++)
+    //     std::cout << (*begin).first << ":" << (*begin).second << " ";
+    // std::cout << std::endl;
+    // std::cout << COL_ST << "Size: " << COL_END << second.size() << std::endl;
+    // std::cout << std::endl;
+
+    // std::cout << COL_MY << "My new map: " << COL_END;
+    // ft::Map<char,int> second_my(first.begin(),first.end());
+    // ft::Map<char,int>::reverse_iterator my_begin;
+    // for (my_begin = second_my.rbegin(); my_begin != second_my.rend(); my_begin++)
+    //     std::cout << (*my_begin).first << ":" << (*my_begin).second << " ";
+    // std::cout << std::endl;
+    // std::cout << COL_MY << "Size: " << COL_END << second_my.size() << std::endl;
 }
 
 // void    assignation_operator()
@@ -325,127 +394,215 @@ void    constr_copy()
 //     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
 // }
 
-// void    push_back()
-// {
-//     std::cout << COL_ST << "St vector: " << COL_END;
-//     std::vector<std::string> st_vect(3, "Hello");
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     st_vect.clear();
-//     std::cout << COL_ST << "St vector after clear and push_back \"Hi\": " << COL_END;
-//     st_vect.push_back("Hi");
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << COL_ST << "St vector after clear and push_back \"you are awesome\": " << COL_END;
-//     st_vect.push_back("you");
-//     st_vect.push_back("are");
-//     st_vect.push_back("awesome");
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << std::endl;
+void    operator_access()
+{
+    std::cout << COL_ST << "St map before operator[]: " << COL_END;
+    std::map<char,int> first_st;
+    print_container<std::map<char, int> >(first_st, PARAMS_ON, COL_ST);
+    first_st['a']=10;
+    first_st['b']=30;
+    first_st['c']=50;
+    first_st['i']=70;
+    first_st['a']=20;
+    first_st['e']=10;
+    std::cout << COL_ST << "St map after operator[]: " << COL_END;
+    print_container<std::map<char, int> >(first_st, PARAMS_ON, COL_ST);
+    std::cout << COL_ST << "a: " << COL_END << first_st['a'] << COL_ST << " | b: " << COL_END << first_st['b'] << COL_ST << " | c: " << COL_END << first_st['c'] << std::endl;
+    std::cout << std::endl;
 
-//     std::cout  << COL_MY << "My vector: " << COL_END;
-//     ft::Vector<std::string> my_vect(3, "Hello");
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     my_vect.clear();
-//     std::cout << COL_MY << "My vector after clear and push_back \"Hi\": " << COL_END;
-//     my_vect.push_back("Hi");
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout << COL_MY << "My vector after clear and push_back \"you are awesome\": " << COL_END;
-//     my_vect.push_back("you");
-//     my_vect.push_back("are");
-//     my_vect.push_back("awesome");
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-// }
+    std::cout << COL_MY << "My map before operator[]: " << COL_END;
+    ft::Map<char,int> first_my;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_ON, COL_MY);
+    first_my['a']=10;
+    first_my['b']=30;
+    first_my['c']=50;
+    first_my['i']=70;
+    first_my['a']=20;
+    first_my['e']=10;
 
-// void    pop_back()
-// {
-//     std::cout << COL_ST << "St vector: " << COL_END;
-//     std::vector<std::string> st_vect(3, "Hello");
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << COL_ST << "St vector after 2 pop_back " << COL_END;
-//     st_vect.pop_back();
-//     st_vect.pop_back();
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << std::endl;
+    std::cout << COL_MY << "My map after operator[]: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_ON, COL_MY);
+    std::cout << COL_MY << "a: " << COL_END << first_my['a'] << COL_MY << " | b: " << COL_END << first_my['b'] << COL_MY << " | c: " << COL_END << first_my['c'] << std::endl;
+}
 
-//     std::cout  << COL_MY << "My vector: " << COL_END;
-//     ft::Vector<std::string> my_vect(3, "Hello");
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout << COL_MY << "My vector after 2 pop_back: " << COL_END;
-//     my_vect.pop_back();
-//     my_vect.pop_back();
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-// }
+void    insert_single()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['i']=70;
+    first['e']=10;
 
-// void    insert_single()
-// {
-//     std::cout << COL_ST << "St vector: " << COL_END;
-//     std::vector<std::string> st_vect(3, "Hello");
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << COL_ST << "St vector after insert \"Peer\" in position 3: " << COL_END;
-//     std::vector<std::string>::iterator it_st = --(st_vect.end());
-//     it_st = st_vect.insert(it_st, "Peer");
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << COL_ST << "St insert position: " << COL_END << *it_st << std::endl;
-//     std::cout << std::endl;
+    std::pair<char, int> elem_1 = std::make_pair('d', 25);
+    std::pair<char, int> elem_2 = std::make_pair('c', 25);
+    std::pair<char, int> elem_3 = std::make_pair('r', 47);
+    std::pair<char, int> elem_4 = std::make_pair('h', 25);
+    std::pair<std::map<char, int>::iterator, bool> check_st;
+    std::pair<ft::Map<char, int>::iterator, bool> check_my;
 
-//     std::cout  << COL_MY << "My vector: " << COL_END;
-//     ft::Vector<std::string> my_vect(3, "Hello");
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout << COL_MY << "My vector after insert \"Peer\" in position 3: " << COL_END;
-//     ft::Vector<std::string>::iterator it_my = --(my_vect.end());
-//     it_my = my_vect.insert(it_my, "Peer");
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout << COL_MY << "My insert position: " << COL_END << *it_my << std::endl;
-// }
+    std::map<char,int> second (first.begin(),first.end());
+    std::cout << COL_ST << "St map before insert: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    std::cout << COL_MY << "My map before insert: " << COL_END;
+    ft::Map<char,int> second_my(first.begin(),first.end());
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+    std::cout << std::endl;
 
-// void    insert_fill()
-// {
-//     std::cout << COL_ST << "St vector: " << COL_END;
-//     std::vector<std::string> st_vect(3, "Hello");
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << COL_ST << "St vector after insert 5 \"Peer\" in position 2: " << COL_END;
-//     std::vector<std::string>::iterator it_st = ++(st_vect.begin());
-//     st_vect.insert(it_st, 5, "Peer");
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << std::endl;
+    check_st = second.insert(elem_1);
+    std::cout << COL_ST << "St map after insert \"d\": " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*(check_st.first)).first << COL_ST << " | In map: " << COL_END << (check_st.second ? "yes" : "no") << std::endl;
+    check_my = second_my.insert(elem_1);
+    std::cout << COL_MY << "My map after insert \"d\": " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*(check_my.first)).first << COL_MY << " | In map: " << COL_END << (check_my.second ? "yes" : "no") << std::endl;
+    std::cout << std::endl;
 
-//     std::cout  << COL_MY << "My vector: " << COL_END;
-//     ft::Vector<std::string> my_vect(3, "Hello");
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout << COL_MY << "My vector after insert 5 \"Peer\" in position 2: " << COL_END;
-//     ft::Vector<std::string>::iterator it_my = ++(my_vect.begin());
-//     my_vect.insert(it_my, 5, "Peer");
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-// }
+    check_st = second.insert(elem_2);
+    std::cout << COL_ST << "St map after insert \"c\": " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*(check_st.first)).first << COL_ST << " | In map: " << COL_END << (check_st.second ? "yes" : "no") << std::endl;
+    check_my = second_my.insert(elem_2);
+    std::cout << COL_MY << "My map after insert \"d\": " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*(check_my.first)).first << COL_MY << " | In map: " << COL_END << (check_my.second ? "yes" : "no") << std::endl;
+    std::cout << std::endl;
 
-// void    insert_range()
-// {
-//     std::string mystr[] = { "I'm", "glad", "to", "see", "you" };
+    check_st = second.insert(elem_3);
+    std::cout << COL_ST << "St map after insert \"r\": " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*(check_st.first)).first << COL_ST << " | In map: " << COL_END << (check_st.second ? "yes" : "no") << std::endl;
+    check_my = second_my.insert(elem_3);
+    std::cout << COL_MY << "My map after insert \"d\": " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*(check_my.first)).first << COL_MY << " | In map: " << COL_END << (check_my.second ? "yes" : "no") << std::endl;
+    std::cout << std::endl;
 
-//     std::cout << COL_ST << "St vector: " << COL_END;
-//     std::vector<std::string> st_vect(3, "Hello");
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << COL_ST << "St vector after insert in position 2: " << COL_END;
-//     std::vector<std::string>::iterator it_st = ++(st_vect.begin());
-//     st_vect.insert(it_st, mystr, mystr + sizeof(mystr) / sizeof(std::string));
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << std::endl;
+    check_st = second.insert(elem_4);
+    std::cout << COL_ST << "St map after insert \"h\": " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*(check_st.first)).first << COL_ST << " | In map: " << COL_END << (check_st.second ? "yes" : "no") << std::endl;
+    check_my = second_my.insert(elem_4);
+    std::cout << COL_MY << "My map after insert \"d\": " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*(check_my.first)).first << COL_MY << " | In map: " << COL_END << (check_my.second ? "yes" : "no") << std::endl;
+}
 
-//     std::cout  << COL_MY << "My vector: " << COL_END;
-//     ft::Vector<std::string> my_vect(3, "Hello");
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout << COL_MY << "My vector after insert in position 2: " << COL_END;
-//     ft::Vector<std::string>::iterator it_my = ++(my_vect.begin());
-//     my_vect.insert(it_my, mystr, mystr + sizeof(mystr) / sizeof(std::string));
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout << std::endl;
+void    insert_with_hint()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['i']=70;
+    first['e']=10;
 
-//     std::cout  << COL_MY << "My vector: " << COL_END;
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout << COL_MY << "My vector after insert from my vector: " << COL_END;
-//     it_my = ++(my_vect.begin());
-//     my_vect.insert(it_my, my_vect.begin(), my_vect.end());
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-// }
+    std::pair<char, int> elem_1 = std::make_pair('d', 25);
+    std::pair<char, int> elem_2 = std::make_pair('c', 25);
+    std::pair<char, int> elem_3 = std::make_pair('r', 47);
+    std::pair<char, int> elem_4 = std::make_pair('h', 25);
+
+    std::map<char,int> second (first.begin(),first.end());
+    std::map<char, int>::iterator it_st = second.begin();
+    it_st++;
+    it_st++; //на c
+    std::cout << COL_ST << "St map before insert: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    std::cout << COL_MY << "My map before insert: " << COL_END;
+    ft::Map<char,int> second_my(first.begin(),first.end());
+    ft::Map<char,int>::iterator it_my = second_my.begin();
+    it_my++;
+    it_my++;//c
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+    std::cout << std::endl;
+
+    it_st = second.insert(it_st, elem_1);
+    std::cout << COL_ST << "St map after insert \"d\": " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*it_st).first << COL_END << std::endl;
+    it_my = second_my.insert(it_my, elem_1);
+    std::cout << COL_MY << "My map after insert \"d\": " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*it_my).first << std::endl;
+    std::cout << std::endl;
+
+    it_st = second.insert(it_st, elem_2);
+    std::cout << COL_ST << "St map after insert \"c\": " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*it_st).first << COL_END << std::endl;
+    it_my = second_my.insert(it_my, elem_2);
+    std::cout << COL_MY << "My map after insert \"c\": " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*it_my).first << std::endl;
+    std::cout << std::endl;
+
+    it_st = second.insert(it_st, elem_3);
+    std::cout << COL_ST << "St map after insert \"r\": " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*it_st).first << COL_END << std::endl;
+    it_my = second_my.insert(it_my, elem_3);
+    std::cout << COL_MY << "My map after insert \"r\": " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*it_my).first << std::endl;
+    std::cout << std::endl;
+
+    it_st = second.insert(it_st, elem_4);
+    std::cout << COL_ST << "St map after insert \"h\": " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*it_st).first << COL_END << std::endl;
+    it_my = second_my.insert(it_my, elem_4);
+    std::cout << COL_MY << "My map after insert \"h\": " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*it_my).first << std::endl;
+}
+
+void    insert_range()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['i']=70;
+    first['e']=10;
+    std::cout << COL_ST << "Map 1: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_ON, COL_ST);
+
+    std::map<char,int> first_2;
+    first_2['z']=10;
+    first_2['d']=30;
+    first_2['w']=50;
+    first_2['y']=70;
+    first_2['e']=10;
+    std::cout << COL_ST << "Map 2: " << COL_END;
+    print_container<std::map<char, int> >(first_2, PARAMS_ON, COL_ST);
+    std::cout << std::endl;
+    
+    std::map<char,int> second (first.begin(),first.end());
+    std::cout << COL_ST << "St map before insert: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    std::cout << COL_MY << "My map before insert: " << COL_END;
+    ft::Map<char,int> second_my(first.begin(),first.end());
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+    std::cout << std::endl;
+
+    second.insert(first_2.begin(), first_2.end());
+    std::cout << COL_ST << "St map after insert: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    
+    second_my.insert(first_2.begin(), first_2.end());
+    std::cout << COL_MY << "My map after insert: " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+    std::cout << std::endl;
+
+    second.insert(++(second.begin()), --(second.end()));
+    std::cout << COL_ST << "St map after insert from herself: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    
+    second_my.insert(++(second_my.begin()), --(second_my.end()));
+    std::cout << COL_MY << "My map after insert from herself: " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+}
 
 // void    erase_single()
 // {
@@ -515,35 +672,52 @@ void    constr_copy()
 //     std::cout << COL_MY << "My erase position: " << COL_END << *it_my << std::endl;
 // }
 
-// void    swap()
-// {
-//     std::string mystr[] = { "I'm", "glad", "to", "see", "you" };
-    
-//     std::cout << COL_ST << "St vector 1: " << COL_END;
-//     std::vector<std::string> st_vect(mystr, mystr + sizeof(mystr) / sizeof(std::string));
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << COL_ST << "St vector 2: " << COL_END;
-//     std::vector<std::string> st_vect_2(3, "Hello");
-//     print_container<std::vector<std::string> >(st_vect_2, PARAMS_ON, COL_ST);
-//     st_vect.swap(st_vect_2);
-//     std::cout << COL_ST << "St vector 1 after swap: " << COL_END;
-//     print_container<std::vector<std::string> >(st_vect, PARAMS_ON, COL_ST);
-//     std::cout << COL_ST << "St vector 2 after swap: " << COL_END;
-//     print_container<std::vector<std::string> >(st_vect_2, PARAMS_ON, COL_ST);
-//     std::cout << std::endl;
-
-//     std::cout  << COL_MY << "My vector 1: " << COL_END;
-//     ft::Vector<std::string> my_vect(mystr, mystr + sizeof(mystr) / sizeof(std::string));
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout  << COL_MY << "My vector 2: " << COL_END;
-//     ft::Vector<std::string> my_vect_2(3, "Hello");
-//     print_container<ft::Vector<std::string> >(my_vect_2, PARAMS_ON, COL_MY);
-//     my_vect.swap(my_vect_2);
-//     std::cout  << COL_MY << "My vector 1 after swap: " << COL_END;
-//     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
-//     std::cout  << COL_MY << "My vector 2 after swap: " << COL_END;
-//     print_container<ft::Vector<std::string> >(my_vect_2, PARAMS_ON, COL_MY);
-// }
+void    swap()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['i']=70;
+    first['e']=10;
+    std::map<char,int> second;
+    second['z']=10;
+    second['d']=30;
+    second['w']=50;
+    second['y']=70;
+    second['e']=10;
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['b']=30;
+    first_my['c']=50;
+    first_my['i']=70;
+    first_my['e']=10;
+    ft::Map<char,int> second_my;
+    second_my['z']=10;
+    second_my['d']=30;
+    second_my['w']=50;
+    second_my['y']=70;
+    second_my['e']=10;
+    std::cout << COL_ST << "St map 1 before swap: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_ON, COL_ST);
+    std::cout << COL_ST << "St map 2 before swap: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    std::cout << COL_MY << "My map 1 before swap: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_ON, COL_MY);
+    std::cout << COL_MY << "My map 2 before swap: " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+    std::cout << std::endl;
+    first.swap(second);
+    first_my.swap(second_my);
+    std::cout << COL_ST << "St map 1 after swap: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_ON, COL_ST);
+    std::cout << COL_ST << "St map 2 after swap: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    std::cout << COL_MY << "My map 1 after swap: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_ON, COL_MY);
+    std::cout << COL_MY << "My map 2 after swap: " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+}
 
 // void    clear()
 // {
@@ -568,6 +742,56 @@ void    constr_copy()
 //     print_container<ft::Vector<std::string> >(my_vect, PARAMS_ON, COL_MY);
 //     std::cout << COL_MY << "Empty: " << COL_END << my_vect.empty() << std::endl;
 // }
+
+void    find()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['i']=70;
+    first['e']=10;
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['b']=30;
+    first_my['c']=50;
+    first_my['i']=70;
+    first_my['e']=10;
+
+    std::cout << COL_ST << "St map: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Find b: " << COL_END << (*(first.find('b'))).first << ":" << (*(first.find('b'))).second << COL_ST << " | Find i: " << COL_END << (*(first.find('i'))).first << ":" << (*(first.find('i'))).second << COL_ST << " | Find m: " << COL_END << (*(first.find('m'))).first << ":" << (*(first.find('m'))).second << std::endl;
+    std::cout << std::endl;
+
+    std::cout << COL_MY << "My map: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Find b: " << COL_END << (*(first_my.find('b'))).first << ":" << (*(first_my.find('b'))).second << COL_MY << " | Find i: " << COL_END << (*(first_my.find('i'))).first << ":" << (*(first_my.find('i'))).second << COL_ST << " | Find m: " << COL_END << (*(first.find('m'))).first << ":" << (*(first.find('m'))).second << std::endl;
+}
+
+void    count()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['i']=70;
+    first['e']=10;
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['b']=30;
+    first_my['c']=50;
+    first_my['i']=70;
+    first_my['e']=10;
+
+    std::cout << COL_ST << "St map: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Count b: " << COL_END << first.count('b') << COL_ST << " | Count i: " << COL_END << first.count('i') << COL_ST << " | Count m: " << COL_END << first.count('m') << std::endl;
+    std::cout << std::endl;
+
+    std::cout << COL_MY << "My map: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Count b: " << COL_END << first_my.count('b') << COL_MY << " | Count i: " << COL_END << first_my.count('i') << COL_MY << " | Count m: " << COL_END << first_my.count('m') << std::endl;
+    }
 
 // void    equal()
 // {
@@ -986,10 +1210,10 @@ void    constr_copy()
 
 int main()
 {
-    std::cout << "_________________________________" << std::endl;
-    std::cout << "|                               |" << std::endl;
-    std::cout << "|     Constructor | Default     |" << std::endl;
-    std::cout << "|_______________________________|" << std::endl << std::endl;
+    std::cout << "___________________________________________________________" << std::endl;
+    std::cout << "|                                                         |" << std::endl;
+    std::cout << "|     Constructor | Default + Size | Max_size | Empty     |" << std::endl;
+    std::cout << "|_________________________________________________________|" << std::endl << std::endl;
     constr_default();
     std::cout << std::endl;
 
@@ -998,13 +1222,6 @@ int main()
     std::cout << "|     Constructor | Range     |" << std::endl;
     std::cout << "|_____________________________|" << std::endl << std::endl;
     constr_range();
-    std::cout << std::endl;
-
-    std::cout << "____________________________" << std::endl;
-    std::cout << "|                          |" << std::endl;
-    std::cout << "|     Reverse iterator     |" << std::endl;
-    std::cout << "|__________________________|" << std::endl << std::endl;
-    reverse_iter();
     std::cout << std::endl;
 
     std::cout << "______________________________" << std::endl;
@@ -1021,75 +1238,40 @@ int main()
     // assignation_operator();
     // std::cout << std::endl;
 
-    // std::cout << "_______________________________________" << std::endl;
-    // std::cout << "|                                     |" << std::endl;
-    // std::cout << "|     Begin | End | Rbegin | Rend     |" << std::endl;
-    // std::cout << "|_____________________________________|" << std::endl << std::endl;
-    // iterators();
-    // std::cout << std::endl;
-
-    // std::cout << "_________________________________________________________________" << std::endl;
-    // std::cout << "|                                                               |" << std::endl;
-    // std::cout << "|     Size | Max_size | Resize | Capacity | Empty | Reserve     |" << std::endl;
-    // std::cout << "|_______________________________________________________________|" << std::endl << std::endl;
-    // sizes();
-    // std::cout << std::endl;
-
-    // std::cout << "______________" << std::endl;
-    // std::cout << "|            |" << std::endl;
-    // std::cout << "|     At     |" << std::endl;
-    // std::cout << "|____________|" << std::endl << std::endl;
-    // at();
-    // std::cout << std::endl;
+    std::cout << "_______________________________________" << std::endl;
+    std::cout << "|                                     |" << std::endl;
+    std::cout << "|     Begin | End | Rbegin | Rend     |" << std::endl;
+    std::cout << "|_____________________________________|" << std::endl << std::endl;
+    iterators();
+    std::cout << std::endl;
     
-    // std::cout << "________________________" << std::endl;
-    // std::cout << "|                      |" << std::endl;
-    // std::cout << "|     Front | Back     |" << std::endl;
-    // std::cout << "|______________________|" << std::endl << std::endl;
-    // front_back();
-    // std::cout << std::endl;
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                    |" << std::endl;
+    std::cout << "|     Operator[]     |" << std::endl;
+    std::cout << "|____________________|" << std::endl << std::endl;
+    operator_access();
+    std::cout << std::endl;
 
-    // std::cout << "__________________" << std::endl;
-    // std::cout << "|                |" << std::endl;
-    // std::cout << "|     Assign     |" << std::endl;
-    // std::cout << "|________________|" << std::endl << std::endl;
-    // assign();
-    // std::cout << std::endl;
+    std::cout << "___________________________________" << std::endl;
+    std::cout << "|                                 |" << std::endl;
+    std::cout << "|     Insert | Single element     |" << std::endl;
+    std::cout << "|_________________________________|" << std::endl << std::endl;
+    insert_single();
+    std::cout << std::endl;
 
-    // std::cout << "_____________________" << std::endl;
-    // std::cout << "|                   |" << std::endl;
-    // std::cout << "|     Push_back     |" << std::endl;
-    // std::cout << "|___________________|" << std::endl << std::endl;
-    // push_back();
-    // std::cout << std::endl;
+    std::cout << "______________________________" << std::endl;
+    std::cout << "|                            |" << std::endl;
+    std::cout << "|     Insert | With hint     |" << std::endl;
+    std::cout << "|____________________________|" << std::endl << std::endl;
+    insert_with_hint();
+    std::cout << std::endl;
 
-    // std::cout << "____________________" << std::endl;
-    // std::cout << "|                  |" << std::endl;
-    // std::cout << "|     Pop_back     |" << std::endl;
-    // std::cout << "|__________________|" << std::endl << std::endl;
-    // pop_back();
-    // std::cout << std::endl;
-
-    // std::cout << "___________________________________" << std::endl;
-    // std::cout << "|                                 |" << std::endl;
-    // std::cout << "|     Insert | Single element     |" << std::endl;
-    // std::cout << "|_________________________________|" << std::endl << std::endl;
-    // insert_single();
-    // std::cout << std::endl;
-
-    // std::cout << "_________________________" << std::endl;
-    // std::cout << "|                       |" << std::endl;
-    // std::cout << "|     Insert | Fill     |" << std::endl;
-    // std::cout << "|_______________________|" << std::endl << std::endl;
-    // insert_fill();
-    // std::cout << std::endl;
-
-    // std::cout << "__________________________" << std::endl;
-    // std::cout << "|                        |" << std::endl;
-    // std::cout << "|     Insert | Range     |" << std::endl;
-    // std::cout << "|________________________|" << std::endl << std::endl;
-    // insert_range();
-    // std::cout << std::endl;
+    std::cout << "__________________________" << std::endl;
+    std::cout << "|                        |" << std::endl;
+    std::cout << "|     Insert | Range     |" << std::endl;
+    std::cout << "|________________________|" << std::endl << std::endl;
+    insert_range();
+    std::cout << std::endl;
 
     // std::cout << "__________________________________" << std::endl;
     // std::cout << "|                                |" << std::endl;
@@ -1105,12 +1287,12 @@ int main()
     // erase_range();
     // std::cout << std::endl;
 
-    // std::cout << "________________" << std::endl;
-    // std::cout << "|              |" << std::endl;
-    // std::cout << "|     Swap     |" << std::endl;
-    // std::cout << "|______________|" << std::endl << std::endl;
-    // swap();
-    // std::cout << std::endl;
+    std::cout << "________________" << std::endl;
+    std::cout << "|              |" << std::endl;
+    std::cout << "|     Swap     |" << std::endl;
+    std::cout << "|______________|" << std::endl << std::endl;
+    swap();
+    std::cout << std::endl;
 
     // std::cout << "_________________" << std::endl;
     // std::cout << "|               |" << std::endl;
@@ -1118,6 +1300,20 @@ int main()
     // std::cout << "|_______________|" << std::endl << std::endl;
     // clear();
     // std::cout << std::endl;
+
+    std::cout << "________________" << std::endl;
+    std::cout << "|              |" << std::endl;
+    std::cout << "|     Find     |" << std::endl;
+    std::cout << "|______________|" << std::endl << std::endl;
+    find();
+    std::cout << std::endl;
+
+    std::cout << "_________________" << std::endl;
+    std::cout << "|               |" << std::endl;
+    std::cout << "|     Count     |" << std::endl;
+    std::cout << "|_______________|" << std::endl << std::endl;
+    count();
+    std::cout << std::endl;
 
     // std::cout << "______________________" << std::endl;
     // std::cout << "|                    |" << std::endl;

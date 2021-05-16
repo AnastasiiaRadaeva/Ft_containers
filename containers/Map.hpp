@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 10:14:01 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/11 16:05:08 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/16 17:24:40 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ namespace ft
             typedef T                                                           mapped_type;
             typedef std::pair<const key_type, mapped_type>                      value_type;
             typedef Compare                                                     key_compare;
-            //value_compare
+            //value_compare`
             typedef Alloc                                                       allocator_type;
             typedef typename allocator_type::reference                          reference;
             typedef typename allocator_type::const_reference                    const_reference;
@@ -61,7 +61,7 @@ namespace ft
 
             /***************************************************************************/
             /*** constructors ------------------------------------------------------ ***/
-            explicit Map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _root(0), _current_size(0), _alloc(alloc), _comp(comp)
+            explicit Map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _root(0), _current_size(0), _alloc(alloc), _key_comp(comp)
             {
                 _head = create_node();
                 _head->parent = create_node();
@@ -72,7 +72,7 @@ namespace ft
 
             template <class InputIterator>
             Map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type(),
-                typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0) : _root(0), _current_size(0), _alloc(alloc), _comp(comp)
+                typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0) : _root(0), _current_size(0), _alloc(alloc), _key_comp(comp)
             {
                 _head = create_node();
                 _head->parent = create_node();
@@ -83,7 +83,7 @@ namespace ft
                     add_new_node(*(first++));
             }
 
-            Map (const Map &x) : _root(0), _current_size(0), _alloc(x._alloc), _comp(x._comp)
+            Map (const Map &x) : _root(0), _current_size(0), _alloc(x._alloc), _key_comp(x._key_comp)
             {
                 _head = create_node();
                 _head->parent = create_node();
@@ -126,8 +126,8 @@ namespace ft
             //     delete_node(_tail);
             // }
 
-        //     /***************************************************************************/
-        //     /*** iterators --------------------------------------------------------- ***/
+            /***************************************************************************/
+            /*** iterators --------------------------------------------------------- ***/
             iterator                begin() { return (iterator(_head->parent));}
             const_iterator          begin() const { return (const_iterator(_head->parent));}
             iterator                end() { return (iterator(_tail));}
@@ -143,68 +143,61 @@ namespace ft
             size_type   size() const {return (_current_size);}
             size_type   max_size() const {node_alloc node; return(node.max_size());}
 
-        //     /***************************************************************************/
-        //     /*** Element access ---------------------------------------------------- ***/
-        //     reference       front() { return (_tail_of_node_list->next->content);}
-        //     const_reference front() const { return (_tail_of_node_list->next->content);}
-        //     reference       back() { return (_tail_of_node_list->prev->content);}
-        //     const_reference back() const { return (_tail_of_node_list->prev->content);}
+            /***************************************************************************/
+            /*** Element access ---------------------------------------------------- ***/
+            mapped_type &operator[](const key_type& k)
+            {
+                return ((*(insert(std::make_pair(k, mapped_type()))).first).second);
+            }
 
             /***************************************************************************/
             /*** Modifiers --------------------------------------------------------- ***/
-        //     iterator insert (iterator position, const value_type& val)
-        //     {
-        //         node<value_type> *tmp_next = position.get_node();
-        //         node<value_type> *tmp_prev = tmp_next->prev;
-        //         tmp_prev->next = create_node(val);
-        //         tmp_prev->next->prev = tmp_prev;
-        //         tmp_next->prev = tmp_prev->next;
-        //         tmp_prev->next->next = tmp_next;
-        //         ++_current_size;
-        //         return (tmp_prev->next);
-        //     }
-        //     void insert (iterator position, size_type n, const value_type& val)
-        //     {
-        //         node<value_type> *tmp_next = position.get_node();
-        //         node<value_type> *tmp_prev = tmp_next->prev;
-        //         for (size_type i = 0; i < n; i++)
-        //         {
-        //             tmp_prev->next = create_node(val);
-        //             tmp_prev->next->prev = tmp_prev;
-        //             tmp_next->prev = tmp_prev->next;
-        //             tmp_prev->next->next = tmp_next;
-        //             tmp_next = tmp_prev->next;
-        //         }
-        //         _current_size += n;
-        //     }
-        //     template <class InputIterator>
-        //     void insert (iterator position, InputIterator first, InputIterator last,
-        //                 typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
-        //     {
-        //         node<value_type> *tmp_next = position.get_node();
-        //         node<value_type> *tmp_prev = tmp_next->prev;
-        //         for (; first != last; first++)
-        //         {
-        //             tmp_prev->next = create_node(*first);
-        //             tmp_prev->next->prev = tmp_prev;
-        //             tmp_next->prev = tmp_prev->next;
-        //             tmp_prev->next->next = tmp_next;
-        //             _current_size++;
-        //             tmp_prev = tmp_prev->next;
-        //             tmp_next = tmp_prev->next;
-        //         }
-        //     }
-            void erase (iterator position)
+            std::pair<iterator, bool>   insert(const value_type& val)
             {
-                map_node<key_type, mapped_type> *node_for_del = position.get_node();
-                size_type original_color = node_for_del->color;
-                if (node_for_del->left == 0 || node_for_del->left == _head)
+                map_node<key_type, mapped_type> *new_node;
+                if ((new_node = find_node(val.first, _root)) != 0)
                 {
+                    iterator it(new_node);
+                    return (std::make_pair(it, false));
+                }
+                new_node = add_new_node(val);
+                iterator it(new_node);
+                return (std::make_pair(it, true));
+            }
+            iterator                    insert(iterator position, const value_type& val)
+            {
+                map_node<key_type, mapped_type> *new_node;
+                if ((new_node = find_node(val.first, position.get_node())) != 0)
+                {
+                    iterator it(new_node);
+                    return (it);
+                }
+                iterator it(add_new_node(val));
+                return (it);
+            }
+            template <class InputIterator>
+            void                        insert(InputIterator first, InputIterator last, typename std::enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type* = 0)
+            {
+                map_node<key_type, mapped_type> *new_node;
+                for (; first != last; first++)
+                {
+                    if ((new_node = find_node((*first).first, _root)) != 0)
+                        continue;
+                    new_node = add_new_node(*first);
+                }
+            }
+
+            // void erase (iterator position)
+            // {
+            //     map_node<key_type, mapped_type> *node_for_del = position.get_node();
+            //     size_type original_color = node_for_del->color;
+            //     if (node_for_del->left == 0 || node_for_del->left == _head)
+            //     {
                     
 
-                }
+            //     }
 
-            }
+            // }
             // size_type erase (const key_type& k);
             // void erase (iterator first, iterator last);
         //     iterator erase (iterator position)
@@ -239,45 +232,29 @@ namespace ft
         //         }
         //         return (pos);
         //     }
-        //     void swap (List& x)
-        //     {
-        //         List<value_type> tmp(x);
-        //         x.assign(this->begin(), this->end());
-        //         x._current_size = _current_size;
-        //         this->assign(tmp.begin(), tmp.end());
-        //         _current_size = tmp._current_size;
-        //     }
-        //     void resize (size_type n, value_type val = value_type())
-        //     {
-        //         if (_current_size < n)
-        //         {
-        //             node<value_type>    *tmp = _tail_of_node_list->prev;
-        //             while (_current_size < n)
-        //             {
-        //                 tmp->next = create_node(val);
-        //                 tmp->next->prev = tmp;
-        //                 tmp = tmp->next;
-        //                 _current_size++;
-        //             }
-        //             tmp->next = _tail_of_node_list;
-        //             _tail_of_node_list->prev = tmp;
-        //         }
-        //         if (_current_size > n)
-        //         {
-        //             node<value_type>    *tmp = _tail_of_node_list;
-        //             _current_size = n;
-        //             while (n-- > 0)
-        //                 tmp = tmp->next; // на выходе я стою на последнем элементе, который должен существовать
-        //             node<value_type> *tmp_2 = tmp->next->next;
-        //             while (tmp_2->prev != _tail_of_node_list)
-        //             {
-        //                 delete_node(tmp->next);
-        //                 tmp->next = tmp_2;
-        //                 tmp_2->prev = tmp;
-        //                 tmp_2 = tmp_2->next;
-        //             }
-        //         }
-        //     }
+            void                            swap(Map& x)
+            {
+                map_node<key_type, mapped_type>  *tmp;
+                tmp = _root;
+                _root = x._root;
+                x._root = tmp;
+
+                tmp = _tail;
+                _tail = x._tail;
+                x._tail = tmp;
+
+                tmp = _head;
+                _head = x._head;
+                x._head = tmp;
+
+                size_type   tmp_size;
+                tmp_size = _current_size;
+                _current_size = x._current_size;
+                x._current_size = tmp_size;
+
+                //_key_comp
+                //_map_comp
+            }
             // void clear()
             // {
             //     map_node<key_type, mapped_type> tmp;
@@ -285,8 +262,30 @@ namespace ft
             //         erase(it_b);
             // }
 
-        //     /***************************************************************************/
-        //     /*** Operations -------------------------------------------------------- ***/
+            /***************************************************************************/
+            /*** Operations -------------------------------------------------------- ***/
+            iterator        find(const key_type& k)
+            {
+                map_node<key_type, mapped_type> *tmp;
+                if ((tmp = find_node(k, _root)) == 0)
+                    return (this->end());
+                iterator it(tmp);
+                return (it);
+            }
+            const_iterator  find(const key_type& k) const
+            {
+                map_node<key_type, mapped_type> *tmp;
+                if ((tmp = find_node(k, _root)) == 0)
+                    return (this->end());
+                const_iterator it(tmp);
+                return (it);
+            }
+            size_type       count(const key_type& k) const
+            {
+                map_node<key_type, mapped_type> *tmp = find_node(k, _root);
+                return (tmp == 0 ? 0 : 1);
+            }
+
         //     void splice (iterator position, List& x)
         //     {
         //         node<value_type> *next_lst = position.get_node();
@@ -551,7 +550,7 @@ namespace ft
                 size_type                       _current_size;
                 node_alloc                      _alloc_for_node;
                 allocator_type                  _alloc;
-                key_compare                     _comp;
+                key_compare                     _key_comp;
 
                 /*************************************/
                 /*     Member functions | private    */
@@ -586,7 +585,7 @@ namespace ft
                     _alloc_for_node.deallocate(l_pointer, 1);
                 }
 
-                void                            add_new_node(value_type content)
+                map_node<key_type, mapped_type> *add_new_node(value_type content)
                 {
                     map_node<key_type, mapped_type> *current_node = _root, *parent_node = 0;
                     size_type   branch = 0;
@@ -598,7 +597,6 @@ namespace ft
                         else
                             {current_node = current_node->left;  branch = LEFT;}
                     }
-
                     current_node = create_node(content);
                     _current_size++;
                     if (_root == 0) // если корня нет, то создаем и помещяем между головой и хвостом
@@ -608,7 +606,7 @@ namespace ft
                         _root->right = _tail;
                         _head->parent = _root;
                         _tail->parent = _root;
-                        return ;
+                        return (current_node);
                     }
                     if (branch == RIGHT) // в правую ветку
                     {
@@ -630,52 +628,60 @@ namespace ft
                         parent_node->left = current_node;
                         current_node->parent = parent_node;
                     }
-                    current_node->color = RED
-                    balancing_after_insertion(current_node);
+                    current_node->color = RED;
+                    if (current_node->parent != _root)
+                        balancing_after_insertion(current_node); //делаем так, тк балансировка нужна только для уровней глубже, чем ребенок корня
+                    return (current_node);
                 }
 
                 void                            left_rotate(map_node<key_type, mapped_type> *current_node)
                 {
                     map_node<key_type, mapped_type> *tmp_node = current_node->right;
-                    current_node->left = tmp_node->right;
-                    if (tmp_node->right != 0)
-                        tmp_node->right->parent = current_node;
+                    current_node->right = tmp_node->left;
+                    //head остался 
+                    if (tmp_node->left != 0)
+                        tmp_node->left->parent = current_node;
                     tmp_node->parent = current_node->parent;
                     if (current_node->parent == 0)
                         _root = tmp_node;
-                    else if (current_node == current_node->parent->left)
-                        current_node->parent->left = tmp_node;
                     else
-                        current_node->parent->right = tmp_node;
+                    {
+                        if (current_node == current_node->parent->left)
+                            current_node->parent->left = tmp_node;
+                        else
+                            current_node->parent->right = tmp_node;
+                    }
                     tmp_node->left = current_node;
                     current_node->parent = tmp_node;
                 }
                 void                            right_rotate(map_node<key_type, mapped_type> *current_node)
                 {
                     map_node<key_type, mapped_type> *tmp_node = current_node->left;
-                    current_node->right = tmp_node->left;
-                    if (tmp_node->left != 0)
-                        tmp_node->left->parent = current_node;
+                    current_node->left = tmp_node->right;
+                    if (tmp_node->right != 0)
+                        tmp_node->right->parent = current_node;
                     tmp_node->parent = current_node->parent;
                     if (current_node->parent == 0)
                         _root = tmp_node;
-                    else if (current_node == current_node->parent->right)
-                        current_node->parent->right = tmp_node;
                     else
-                        current_node->parent->left = tmp_node;
+                    {
+                        if (current_node == current_node->parent->right)
+                            current_node->parent->right = tmp_node;
+                        else
+                            current_node->parent->left = tmp_node;
+                    }
                     tmp_node->right = current_node;
                     current_node->parent = tmp_node;
                 }
                 void                            balancing_after_insertion(map_node<key_type, mapped_type> *new_node)
                 {
-                    //нужно запускать только в случае, когда новая нода минимум 2 от корня
                     map_node<key_type, mapped_type> *tmp;
                     while (new_node->parent->color == RED)
                     {
                         if (new_node->parent == new_node->parent->parent->left)
                         {
                             tmp = new_node->parent->parent->right;
-                            if (tmp->color == RED)
+                            if (tmp && tmp->color == RED)
                             {
                                 new_node->parent->parent->color = RED;
                                 tmp->color = BLACK;
@@ -689,15 +695,15 @@ namespace ft
                                     new_node = new_node->parent;
                                     left_rotate(new_node);
                                 }
-                                new_node->parent->color == BLACK;
-                                new_node->parent->parent->color == RED;
+                                new_node->parent->color = BLACK;
+                                new_node->parent->parent->color = RED;
                                 right_rotate(new_node->parent->parent);
                             }
                         }
                         else
                         {
                             tmp = new_node->parent->parent->left;
-                            if (tmp->color == RED)
+                            if (tmp && tmp->color == RED)
                             {
                                 new_node->parent->parent->color = RED;
                                 tmp->color = BLACK;
@@ -721,7 +727,30 @@ namespace ft
                     }
                     _root->color = BLACK;
                 }
-
+                map_node<key_type, mapped_type> *find_node(const key_type &key, map_node<key_type, mapped_type> *current_node) const
+                {
+                    if (current_node != _root)
+                        while (current_node)
+                        {
+                            if (current_node->content.first == key)
+                                return(current_node);
+                            else if (current_node->content.first < key)
+                                current_node = current_node->right;
+                            else
+                                current_node = current_node->left;
+                        }
+                    current_node = _root;
+                    while (current_node)
+                    {
+                        if (current_node->content.first == key)
+                            return(current_node);
+                        else if (current_node->content.first < key)
+                            current_node = current_node->right;
+                        else
+                            current_node = current_node->left;
+                    }
+                    return (current_node);
+                }
     };
 
     /*****************************************/
