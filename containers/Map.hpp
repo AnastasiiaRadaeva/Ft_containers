@@ -578,11 +578,77 @@ namespace ft
                     return (0);
                 }
 
-                void                            delete_node(map_node<key_type, mapped_type> *node_for_del)
+                void                            destroy_deallocate_node(map_node<key_type, mapped_type> *node_for_del)
                 {
                     node_pointer l_pointer = _alloc_for_node.address(*node_for_del);
                     _alloc_for_node.destroy(l_pointer);
                     _alloc_for_node.deallocate(l_pointer, 1);
+                }
+                void                            transplant(map_node<key_type, mapped_type> *first, map_node<key_type, mapped_type> *second)
+                {
+                    if (first->parent == 0)
+                        _root = second;
+                    else if (first == first->parent->left)
+                        first->parent->left = second;
+                    else if (first == first->parent->right)
+                        first->parent->right = second;
+                    second->parent = first->parent;
+                }
+                void                            delete_node(map_node<key_type, mapped_type> *node_for_del)
+                {
+                    size_type   original_color = node_for_del->color;
+                    map_node<key_type, mapped_type> *tmp_x, *tmp_y;
+
+                    if (node_for_del->left == 0 && node_for_del->right == 0)
+                    {
+                        if (node_for_del == node_for_del->parent->left)
+                            node_for_del->parent->left == 0;
+                        else
+                            node_for_del->parent->right == 0;
+                        tmp_x = node_for_del->parent;
+                        //это от меня
+                    }
+                    else if (node_for_del->left == 0)
+                    {
+                        tmp_x = node_for_del->right;
+                        transplant(node_for_del, tmp_x);
+                    }
+                    else if (node_for_del->right == 0)
+                    {
+                        tmp_x = node_for_del->left;
+                        transplant(node_for_del, tmp_x);
+                    }
+                    else
+                    {
+                        tmp_y = node_for_del->right;
+                        while (tmp_y->left)
+                            tmp_y = tmp_y->left;
+                        original_color = tmp_y->color;
+                        tmp_x = tmp_y->right;
+                        if (tmp_y->right && tmp_y->parent != node_for_del)
+                        {
+                            transplant(tmp_y, tmp_y->right);
+                            tmp_y->right = node_for_del->right;
+                            tmp_y->right->parent = tmp_y;
+                        }
+                        transplant(node_for_del, tmp_y);
+                        tmp_y->left = node_for_del->left;
+                        tmp_y->left->parent = tmp_y;
+                        tmp_y->color = node_for_del->color;
+                        if (tmp_y == _tail && tmp_y->left == _head)
+                        {
+                            _root = 0;
+                            _tail->parent = _head;
+                            _tail->left = 0;
+                        }
+                        ///проверить тут все ещё раз
+                    }
+                    destroy_deallocate_node(node_for_del);
+                    balancing_after_deletion();
+                }
+                void                            balancing_after_deletion()
+                {
+
                 }
 
                 map_node<key_type, mapped_type> *add_new_node(value_type content)
