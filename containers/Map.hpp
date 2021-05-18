@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 10:14:01 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/16 17:24:40 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/18 19:06:05 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <limits>
 # include <utility>
 # include "Map_iterator.hpp"
+# include "Vector.hpp"
 
 # define RIGHT 2
 # define LEFT 3
@@ -121,9 +122,9 @@ namespace ft
             /*** destructor -------------------------------------------------------- ***/
             // ~Map()
             // {
-            //     // clear();
-            //     delete_node(_head);
-            //     delete_node(_tail);
+            //     clear();
+            //     destroy_deallocate_node(_head);
+            //     destroy_deallocate_node(_tail);
             // }
 
             /***************************************************************************/
@@ -187,52 +188,32 @@ namespace ft
                 }
             }
 
-            // void erase (iterator position)
-            // {
-            //     map_node<key_type, mapped_type> *node_for_del = position.get_node();
-            //     size_type original_color = node_for_del->color;
-            //     if (node_for_del->left == 0 || node_for_del->left == _head)
-            //     {
-                    
-
-            //     }
-
-            // }
-            // size_type erase (const key_type& k);
-            // void erase (iterator first, iterator last);
-        //     iterator erase (iterator position)
-        //     {
-        //         if (position.get_node() != _tail_of_node_list)
-        //         {
-        //             node<value_type> *to_del = position.get_node();
-        //             node<value_type> *prev_lst = to_del->prev;
-        //             prev_lst->next = to_del->next;
-        //             to_del->next->prev = prev_lst;
-        //             delete_node(to_del);
-        //             _current_size--;
-        //             return (prev_lst->next);
-        //         }
-        //         return (0);
-        //     }
-        //     iterator erase (iterator first, iterator last)
-        //     {
-        //         node<value_type> *to_del = first.get_node();
-        //         node<value_type> *prev_lst = to_del->prev;
-        //         node<value_type> *pos;
-        //         while (first != last && to_del != _tail_of_node_list)
-        //         {
-        //             prev_lst->next = to_del->next;
-        //             to_del->next->prev = prev_lst;
-        //             delete_node(to_del);
-        //             pos = prev_lst->next;
-        //             _current_size--;
-        //             first++;
-        //             to_del = first.get_node();
-        //             prev_lst = to_del->prev;
-        //         }
-        //         return (pos);
-        //     }
-            void                            swap(Map& x)
+            void                        erase (iterator position)
+            {
+                delete_node(position.get_node());
+            }
+            size_type                   erase (const key_type& k)
+            {
+                iterator position;
+                if ((position = find(k)) == _tail)
+                    return (0);
+                delete_node(position.get_node());
+                return (1);
+            }
+            void                        erase (iterator first, iterator last)
+            {
+                Vector<key_type> tmp;
+                for (; first != last; first++)
+                    tmp.push_back(first->first);
+                iterator position;
+                while (!tmp.empty())
+                {
+                    position = find(tmp.back());
+                    delete_node(position.get_node());
+                    tmp.pop_back();
+                }
+            }
+            void                        swap(Map& x)
             {
                 map_node<key_type, mapped_type>  *tmp;
                 tmp = _root;
@@ -255,12 +236,15 @@ namespace ft
                 //_key_comp
                 //_map_comp
             }
-            // void clear()
-            // {
-            //     map_node<key_type, mapped_type> tmp;
-            //     for (iterator it_b = begin(); it_b != end(); it_b++)
-            //         erase(it_b);
-            // }
+            void                        clear()
+            {
+                erase(this->begin(), this->end());
+            }
+            
+            /***************************************************************************/
+            /*** Observers --------------------------------------------------------- ***/
+            // key_compare key_comp() const;
+            // value_compare value_comp() const;
 
             /***************************************************************************/
             /*** Operations -------------------------------------------------------- ***/
@@ -285,252 +269,16 @@ namespace ft
                 map_node<key_type, mapped_type> *tmp = find_node(k, _root);
                 return (tmp == 0 ? 0 : 1);
             }
+            // iterator lower_bound (const key_type& k);
+            // const_iterator lower_bound (const key_type& k) const;
+            // iterator upper_bound (const key_type& k);
+            // const_iterator upper_bound (const key_type& k) const;
+            // std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
+            // std::pair<iterator,iterator>             equal_range (const key_type& k);
 
-        //     void splice (iterator position, List& x)
-        //     {
-        //         node<value_type> *next_lst = position.get_node();
-        //         node<value_type> *prev_lst = next_lst->prev;
-        //         prev_lst->next = x._tail_of_node_list->next;
-        //         x._tail_of_node_list->next->prev = prev_lst;
-        //         next_lst->prev = x._tail_of_node_list->prev;
-        //         x._tail_of_node_list->prev->next = next_lst;
-        //         _current_size += x._current_size;
-
-        //         x._tail_of_node_list->next = x._tail_of_node_list;
-        //         x._tail_of_node_list->prev = x._tail_of_node_list;
-        //         x._current_size = 0;
-        //     }	
-        //     void splice (iterator position, List& x, iterator i)
-        //     {
-        //         node<value_type> *next_lst = position.get_node();
-        //         node<value_type> *prev_lst = next_lst->prev;
-        //         node<value_type> *new_lst = i.get_node();
-        //         new_lst->prev->next = new_lst->next;
-        //         new_lst->next->prev = new_lst->prev;
-        //         prev_lst->next = new_lst;
-        //         new_lst->prev = prev_lst;
-        //         next_lst->prev = new_lst;
-        //         new_lst->next = next_lst;
-        //         _current_size++;
-        //         x._current_size--;
-        //     }
-        //     void splice (iterator position, List& x, iterator first, iterator last)
-        //     {
-        //         node<value_type> *next_lst = position.get_node();
-        //         node<value_type> *prev_lst = next_lst->prev;
-        //         node<value_type> *new_lst = first.get_node();
-        //         while (first++ != last)
-        //         {
-        //             new_lst->prev->next = new_lst->next;
-        //             new_lst->next->prev = new_lst->prev;
-        //             prev_lst->next = new_lst;
-        //             new_lst->prev = prev_lst;
-        //             next_lst->prev = new_lst;
-        //             new_lst->next = next_lst;
-        //             _current_size++;
-        //             x._current_size--;
-        //             prev_lst = prev_lst->next;
-        //             new_lst = first.get_node();
-        //         }
-        //     }
-        //     void remove (const value_type& val)
-        //     {
-        //         node<value_type> *tmp = _tail_of_node_list->next;
-        //         node<value_type> *node_after_del;
-        //         while (tmp != _tail_of_node_list)
-        //         {
-        //             if (tmp->content == val)
-        //             {
-        //                 tmp = tmp->prev;
-        //                 node_after_del = tmp->next->next;
-        //                 delete_node(tmp->next);
-        //                 tmp->next = node_after_del;
-        //                 node_after_del->prev = tmp;
-        //                 _current_size--;
-        //             }
-        //             tmp = tmp->next;
-        //         }
-        //     }
-        //     template <class Predicate>
-        //     void remove_if (Predicate pred)
-        //     {
-        //         node<value_type> *tmp = _tail_of_node_list->next;
-        //         node<value_type> *node_after_del;
-        //         while (tmp != _tail_of_node_list)
-        //         {
-        //             if (pred(tmp->content))
-        //             {
-        //                 tmp = tmp->prev;
-        //                 node_after_del = tmp->next->next;
-        //                 delete_node(tmp->next);
-        //                 tmp->next = node_after_del;
-        //                 node_after_del->prev = tmp;
-        //                 _current_size--;
-        //             }
-        //             tmp = tmp->next;
-        //         }
-        //     }
-        //     void unique()
-        //     {
-        //         node<value_type> *tmp = _tail_of_node_list->next->next;
-        //         node<value_type> *node_after_del;
-        //         while (tmp != _tail_of_node_list)
-        //         {
-        //             if (tmp->content == tmp->prev->content)
-        //             {
-        //                 tmp = tmp->prev;
-        //                 node_after_del = tmp->next->next;
-        //                 delete_node(tmp->next);
-        //                 tmp->next = node_after_del;
-        //                 node_after_del->prev = tmp;
-        //                 _current_size--;
-        //             }
-        //             tmp = tmp->next;
-        //         }
-        //     }
-        //     template <class BinaryPredicate>
-        //     void unique (BinaryPredicate binary_pred)
-        //     {
-        //         node<value_type> *tmp = _tail_of_node_list->next->next;
-        //         node<value_type> *node_after_del;
-        //         while (tmp != _tail_of_node_list)
-        //         {
-        //             if (binary_pred(tmp->prev->content, tmp->content))
-        //             {
-        //                 tmp = tmp->prev;
-        //                 node_after_del = tmp->next->next;
-        //                 delete_node(tmp->next);
-        //                 tmp->next = node_after_del;
-        //                 node_after_del->prev = tmp;
-        //                 _current_size--;
-        //             }
-        //             tmp = tmp->next;
-        //         }
-        //     }
-        //     void merge (List& x)
-        //     {
-        //         if (this != &x)
-        //         {
-        //             iterator pos_in_my_list, pos_in_x;
-        //             pos_in_my_list = begin();
-        //             pos_in_x = x.begin();
-        //             while (pos_in_my_list != end())
-        //             {
-        //                 while (pos_in_x != x.end() && *pos_in_x < *pos_in_my_list)
-        //                 {
-        //                     splice(pos_in_my_list, x, pos_in_x);
-        //                     pos_in_x = x.begin();
-        //                 }
-        //                 pos_in_my_list++;
-        //             }
-        //             if (pos_in_x != x.end())
-        //                 splice (pos_in_my_list, x, pos_in_x, x.end());
-        //         }
-        //     }
-        //     template <class Compare>
-        //     void merge (List& x, Compare comp)
-        //     {
-        //         if (this != &x)
-        //         {
-        //             iterator pos_in_my_list, pos_in_x;
-        //             pos_in_my_list = begin();
-        //             pos_in_x = x.begin();
-        //             while (pos_in_my_list != end())
-        //             {
-        //                 while (pos_in_x != x.end() && comp(*pos_in_x, *pos_in_my_list))
-        //                 {
-        //                     splice(pos_in_my_list, x, pos_in_x);
-        //                     pos_in_x = x.begin();
-        //                 }
-        //                 pos_in_my_list++;
-        //             }
-        //             if (pos_in_x != x.end())
-        //                 splice (pos_in_my_list, x, pos_in_x, x.end());
-        //         }
-        //     }
-        //     void sort()
-        //     {
-        //         node<value_type> *tmp_first;
-        //         node<value_type> *tmp_second;
-        //         node<value_type> *tmp_help;
-        //         for (size_type i = 0; i < (_current_size - 1); i++)
-        //         {
-        //             tmp_first = _tail_of_node_list->next;
-        //             tmp_second = _tail_of_node_list->next->next;
-        //             for (size_type j = 0; j < (_current_size - 1) - i; j++)
-        //             {
-        //                 if (tmp_first->content > tmp_second->content)
-        //                 {
-        //                     tmp_help = tmp_first->prev;
-        //                     tmp_help->next = tmp_second;
-
-        //                     tmp_first->prev = tmp_second;
-        //                     tmp_first->next = tmp_second->next;
-                            
-        //                     tmp_second->next = tmp_first;
-        //                     tmp_second->prev = tmp_help;
-
-        //                     tmp_first = tmp_first->prev;
-        //                     tmp_second = tmp_first->next;
-
-        //                     tmp_second->next->prev = tmp_second;
-        //                 }
-        //                 tmp_first = tmp_first->next;
-        //                 tmp_second = tmp_second->next;
-        //             }
-        //         }
-        //     }
-        //     template <class Compare>
-        //     void sort (Compare comp)
-        //     {
-        //         node<value_type> *tmp_first;
-        //         node<value_type> *tmp_second;
-        //         node<value_type> *tmp_help;
-        //         for (size_type i = 0; i < (_current_size - 1); i++)
-        //         {
-        //             tmp_first = _tail_of_node_list->next;
-        //             tmp_second = _tail_of_node_list->next->next;
-        //             for (size_type j = 0; j < (_current_size - 1) - i; j++)
-        //             {
-        //                 if (comp(tmp_second->content, tmp_first->content))
-        //                 {
-        //                     tmp_help = tmp_first->prev;
-        //                     tmp_help->next = tmp_second;
-
-        //                     tmp_first->prev = tmp_second;
-        //                     tmp_first->next = tmp_second->next;
-                            
-        //                     tmp_second->next = tmp_first;
-        //                     tmp_second->prev = tmp_help;
-
-        //                     tmp_first = tmp_first->prev;
-        //                     tmp_second = tmp_first->next;
-
-        //                     tmp_second->next->prev = tmp_second;
-        //                 }
-        //                 tmp_first = tmp_first->next;
-        //                 tmp_second = tmp_second->next;
-        //             }
-        //         }      
-        //     }
-        //     void reverse()
-        //     {
-        //         if (!_tail_of_node_list)
-        //             return;
-        //         node<value_type> *tmp = _tail_of_node_list;
-        //         node<value_type> *tmp_buff = _tail_of_node_list->next;
-        //         while (tmp_buff != _tail_of_node_list)
-        //         {
-        //             tmp_buff = tmp->next;
-        //             tmp->next = tmp->prev;
-        //             tmp->prev = tmp_buff;
-        //             tmp = tmp_buff;
-        //         }
-        //     }
-
-        //     /***************************************************************************/
-        //     /*** Allocator --------------------------------------------------------- ***/
-        //     allocator_type get_allocator() const { return (_alloc); }
+            /***************************************************************************/
+            /*** Allocator --------------------------------------------------------- ***/
+            allocator_type get_allocator() const { return (_alloc); }
 
             private:
                 
@@ -583,6 +331,7 @@ namespace ft
                     node_pointer l_pointer = _alloc_for_node.address(*node_for_del);
                     _alloc_for_node.destroy(l_pointer);
                     _alloc_for_node.deallocate(l_pointer, 1);
+                    node_for_del = 0;
                 }
                 void                            transplant(map_node<key_type, mapped_type> *first, map_node<key_type, mapped_type> *second)
                 {
@@ -592,31 +341,57 @@ namespace ft
                         first->parent->left = second;
                     else if (first == first->parent->right)
                         first->parent->right = second;
-                    second->parent = first->parent;
+                    if (second)
+                        second->parent = first->parent;
                 }
                 void                            delete_node(map_node<key_type, mapped_type> *node_for_del)
                 {
+                    if (node_for_del == _head || node_for_del == _tail)
+                        return ;
                     size_type   original_color = node_for_del->color;
                     map_node<key_type, mapped_type> *tmp_x, *tmp_y;
-
-                    if (node_for_del->left == 0 && node_for_del->right == 0)
-                    {
-                        if (node_for_del == node_for_del->parent->left)
-                            node_for_del->parent->left == 0;
-                        else
-                            node_for_del->parent->right == 0;
-                        tmp_x = node_for_del->parent;
-                        //это от меня
-                    }
-                    else if (node_for_del->left == 0)
+                    tmp_y = node_for_del;
+                    if (node_for_del->left == 0 || node_for_del->left == _head)
                     {
                         tmp_x = node_for_del->right;
                         transplant(node_for_del, tmp_x);
+                        if (node_for_del->left == _head)
+                        {
+                            if (tmp_x)
+                            {
+                                _head->parent = tmp_x;
+                                if (tmp_x == _tail)
+                                {
+                                    _tail->parent = _head;
+                                    _root = 0;
+                                }
+                                else
+                                    tmp_x->left = _head;
+                            }
+                            else
+                            {
+                                _head->parent = node_for_del->parent;
+                                node_for_del->parent->left = _head;
+                            }
+                        }
                     }
-                    else if (node_for_del->right == 0)
+                    else if (node_for_del->right == 0 || node_for_del->right == _tail)
                     {
                         tmp_x = node_for_del->left;
                         transplant(node_for_del, tmp_x);
+                        if (node_for_del->right == _tail)
+                        {
+                            if (tmp_x)
+                            {
+                                _tail->parent = tmp_x;
+                                tmp_x->right = _tail;
+                            }
+                            else
+                            {
+                                _tail->parent = node_for_del->parent;
+                                node_for_del->parent->right = _tail;
+                            }
+                        }
                     }
                     else
                     {
@@ -625,9 +400,9 @@ namespace ft
                             tmp_y = tmp_y->left;
                         original_color = tmp_y->color;
                         tmp_x = tmp_y->right;
-                        if (tmp_y->right && tmp_y->parent != node_for_del)
+                        if (tmp_y->parent != node_for_del)
                         {
-                            transplant(tmp_y, tmp_y->right);
+                            transplant(tmp_y, tmp_x);
                             tmp_y->right = node_for_del->right;
                             tmp_y->right->parent = tmp_y;
                         }
@@ -635,20 +410,83 @@ namespace ft
                         tmp_y->left = node_for_del->left;
                         tmp_y->left->parent = tmp_y;
                         tmp_y->color = node_for_del->color;
-                        if (tmp_y == _tail && tmp_y->left == _head)
-                        {
-                            _root = 0;
-                            _tail->parent = _head;
-                            _tail->left = 0;
-                        }
-                        ///проверить тут все ещё раз
                     }
                     destroy_deallocate_node(node_for_del);
-                    balancing_after_deletion();
+                    if (original_color == BLACK && tmp_x != 0)
+                        balancing_after_deletion(tmp_x);
+                    _current_size--;
                 }
-                void                            balancing_after_deletion()
+                void                            balancing_after_deletion(map_node<key_type, mapped_type> *current_node)
                 {
-
+                    map_node<key_type, mapped_type> *tmp_node;
+                    while (current_node != _root && current_node->color == BLACK && current_node != _tail && current_node != _head)
+                    {
+                        if (current_node == current_node->parent->left)
+                        {
+                            tmp_node = current_node->parent->right;
+                            if (tmp_node && tmp_node->color == RED)
+                            {
+                                tmp_node->color = BLACK;
+                                current_node->parent->color = RED;
+                                left_rotate(current_node->parent);
+                                tmp_node = current_node->parent->right;
+                            }
+                            if (tmp_node && (tmp_node->left && tmp_node->left->color == BLACK) && (tmp_node->right && tmp_node->right->color == BLACK))
+                            {
+                                tmp_node->color = RED;
+                                current_node = current_node->parent;
+                            }
+                            else
+                            {
+                                if (tmp_node->right && tmp_node->right->color == BLACK)
+                                {
+                                    tmp_node->left->color = BLACK;
+                                    tmp_node->color = RED;
+                                    right_rotate(tmp_node);
+                                    tmp_node = current_node->parent->right;
+                                }
+                                if (tmp_node)
+                                    tmp_node->color = current_node->parent->color;
+                                current_node->parent->color = BLACK;
+                                if (tmp_node && tmp_node->right)
+                                    tmp_node->right->color = BLACK;
+                                left_rotate(current_node);
+                                current_node = _root;
+                            }
+                        }
+                        else
+                        {
+                            tmp_node = current_node->parent->left;
+                            if (tmp_node && tmp_node->color == RED)
+                            {
+                                tmp_node->color = BLACK;
+                                current_node->parent->color = RED;
+                                right_rotate(current_node->parent);
+                                tmp_node = current_node->parent->left;
+                            }
+                            if (tmp_node && (tmp_node->right && tmp_node->right->color == BLACK) && (tmp_node->left && tmp_node->left->color == BLACK))
+                            {
+                                tmp_node->color = RED;
+                                current_node = current_node->parent->left;
+                            }
+                            else if (tmp_node && tmp_node->left)
+                            {
+                                if (tmp_node->left->color == BLACK && tmp_node->right)
+                                {
+                                    tmp_node->right->color = BLACK;
+                                    tmp_node->color = RED;
+                                    left_rotate(tmp_node);
+                                    tmp_node = current_node->parent->left;
+                                }
+                                tmp_node->color = current_node->parent->color;
+                                current_node->parent->color = BLACK;
+                                tmp_node->left->color = BLACK;
+                                right_rotate(current_node->parent);
+                                current_node = _root;
+                            }
+                        }
+                    }
+                current_node->color = BLACK;
                 }
 
                 map_node<key_type, mapped_type> *add_new_node(value_type content)
@@ -658,7 +496,8 @@ namespace ft
                     while (current_node != 0 && current_node != _tail && current_node != _head) //ищем нужно место для вставки
                     {
                         parent_node = current_node;
-                        if (content.first > current_node->content.first)
+                        if (!(_key_comp(content.first, current_node->content.first)))
+                        // if ( content.first > current_node->content.first)
                             {current_node = current_node->right; branch = RIGHT;}
                         else
                             {current_node = current_node->left;  branch = LEFT;}
@@ -702,6 +541,8 @@ namespace ft
 
                 void                            left_rotate(map_node<key_type, mapped_type> *current_node)
                 {
+                    if (current_node == _root || current_node->parent == _root)
+                        return ;
                     map_node<key_type, mapped_type> *tmp_node = current_node->right;
                     current_node->right = tmp_node->left;
                     //head остался 
@@ -722,6 +563,8 @@ namespace ft
                 }
                 void                            right_rotate(map_node<key_type, mapped_type> *current_node)
                 {
+                    if (current_node == _root || current_node->parent == _root)
+                        return ;
                     map_node<key_type, mapped_type> *tmp_node = current_node->left;
                     current_node->left = tmp_node->right;
                     if (tmp_node->right != 0)
