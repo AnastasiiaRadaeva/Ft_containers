@@ -369,7 +369,7 @@ namespace ft
                     _root = mate_node;
                 else
                 {
-                    if (current_node = current_node->parent->left)
+                    if (current_node == current_node->parent->left)
                         current_node->parent->left = mate_node;
                     else 
                         current_node->parent->right = mate_node;
@@ -432,6 +432,7 @@ namespace ft
             }
             map_node<key_type, mapped_type> *add_new_node(value_type content)
             {
+                _current_size++;
                 if (_root == 0)
                 {
                     _root = create_node(content);
@@ -479,19 +480,47 @@ namespace ft
                         _tail->parent = new_node;
                     }
                 }
-                if (parent_node != _root)
-                    balancing_after_insertion(new_node);
+                balancing_after_insertion(new_node);
                 return(new_node);
             }
             void                            balancing_after_insertion(map_node<key_type, mapped_type> *new_node)
             {
-
-
+                while (new_node->parent && new_node->parent->color == RED)
+                {
+                    map_node<key_type, mapped_type> *uncle_node = uncle(new_node);
+                    map_node<key_type, mapped_type> *grandpa_node = grandparent(new_node);
+                    if (uncle_node && uncle_node->color == RED)
+                    {
+                        uncle_node->color = BLACK;
+                        new_node->parent->color = BLACK;
+                        grandpa_node->color = RED;
+                        new_node = grandpa_node;
+                    }
+                    else
+                    {
+                        if (new_node == new_node->parent->right && new_node->parent == grandpa_node->left)
+                        {
+                            left_rotation(new_node->parent);
+                            new_node = new_node->left;
+                        }
+                        else if (new_node == new_node->parent->left && new_node->parent == grandpa_node->right)
+                        {
+                            right_rotation(new_node->parent);
+                            new_node = new_node->right;
+                        } //привели к варианту, когда новая новая ищется или по максимуму или по минимуму от дедушки
+                        if (new_node->parent == grandpa_node->left)
+                            right_rotation(grandpa_node);
+                        else
+                            left_rotation(grandpa_node);
+                        new_node->parent->color = BLACK;
+                        grandpa_node->color = RED;
+                    }
+                }
+                _root->color = BLACK;
             }
 
             /***************************************************************************/
             /*** Deletion ---------------------------------------------------------- ***/
-
             void    destroy_deallocate_node(map_node<key_type, mapped_type> *node_for_del)
             {
                 node_pointer l_pointer = _alloc_for_node.address(*node_for_del);
@@ -596,7 +625,7 @@ namespace ft
                             {
                                 tmp_node->color = BLACK;
                                 current_node->parent->color = RED;
-                                left_rotate(current_node->parent);
+                                left_rotation(current_node->parent);
                                 tmp_node = current_node->parent->right;
                             }
                             if (tmp_node && (tmp_node->left && tmp_node->left->color == BLACK) && (tmp_node->right && tmp_node->right->color == BLACK))
@@ -610,7 +639,7 @@ namespace ft
                                 {
                                     tmp_node->left->color = BLACK;
                                     tmp_node->color = RED;
-                                    right_rotate(tmp_node);
+                                    right_rotation(tmp_node);
                                     tmp_node = current_node->parent->right;
                                 }
                                 if (tmp_node)
@@ -618,7 +647,7 @@ namespace ft
                                 current_node->parent->color = BLACK;
                                 if (tmp_node && tmp_node->right)
                                     tmp_node->right->color = BLACK;
-                                left_rotate(current_node);
+                                left_rotation(current_node);
                                 current_node = _root;
                             }
                         }
@@ -629,7 +658,7 @@ namespace ft
                             {
                                 tmp_node->color = BLACK;
                                 current_node->parent->color = RED;
-                                right_rotate(current_node->parent);
+                                right_rotation(current_node->parent);
                                 tmp_node = current_node->parent->left;
                             }
                             if (tmp_node && (tmp_node->right && tmp_node->right->color == BLACK) && (tmp_node->left && tmp_node->left->color == BLACK))
@@ -643,13 +672,13 @@ namespace ft
                                 {
                                     tmp_node->right->color = BLACK;
                                     tmp_node->color = RED;
-                                    left_rotate(tmp_node);
+                                    left_rotation(tmp_node);
                                     tmp_node = current_node->parent->left;
                                 }
                                 tmp_node->color = current_node->parent->color;
                                 current_node->parent->color = BLACK;
                                 tmp_node->left->color = BLACK;
-                                right_rotate(current_node->parent);
+                                right_rotation(current_node->parent);
                                 current_node = _root;
                             }
                         }

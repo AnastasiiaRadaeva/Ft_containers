@@ -39,14 +39,14 @@ void    constr_default()
     std::map<int, std::string> st_map;
     std::cout << COL_ST << "Size: " << COL_END << st_map.size() << std::endl;
     std::cout << COL_ST << "Max size: " << COL_END << st_map.max_size() << std::endl;
-    std::cout << COL_ST << "Empty: " << COL_END << st_map.empty() << std::endl;
+    std::cout << COL_ST << "Empty: " << COL_END << (st_map.empty() ? "yes" : "no") << std::endl;
     std::cout << std::endl;
 
     std::cout << COL_MY << "My map" << COL_END << std::endl;
     ft::Map<int, std::string> my_map;
     std::cout << COL_MY << "Size: " << COL_END << my_map.size() << std::endl;
     std::cout << COL_MY << "Max size: " << COL_END << my_map.max_size() << std::endl;
-    std::cout << COL_MY << "Empty: " << COL_END << my_map.empty() << std::endl;
+    std::cout << COL_MY << "Empty: " << COL_END << (my_map.empty() ? "yes" : "no") << std::endl;
 }
 
 void    constr_range()
@@ -76,8 +76,6 @@ void    constr_range()
     std::cout << COL_MY << "My new map: " << COL_END;
     ft::Map<char,int> second_my(first.begin(),first.end());
     print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
-    second_my.clear();
-    std::cout << second_my.empty() << std::endl;
 }
 
 void    constr_copy()
@@ -140,6 +138,7 @@ void  iterators()
     for (begin = first_st.rbegin(); begin != first_st.rend(); begin++)
         std::cout << (*begin).first << ":" << (*begin).second << " ";
     std::cout << std::endl;
+    std::cout << COL_ST << "Size: " COL_END << first_st.size() << std::endl;
     std::cout << COL_ST << "rbegin: " << COL_END << (*(first_st.rbegin())).first << ":" << (*(first_st.rbegin())).second << COL_ST << " | --end: " << COL_END << (*(--(first_st.rend()))).first << ":" << (*(--(first_st.rend()))).second << std::endl;
     std::cout << std::endl;
 
@@ -148,6 +147,7 @@ void  iterators()
     for (begin_my = first_my.rbegin(); begin_my != first_my.rend(); begin_my++)
         std::cout << (*begin_my).first << ":" << (*begin_my).second << " ";
     std::cout << std::endl;
+    std::cout << COL_MY << "Size: " COL_END << first_my.size() << std::endl;
     std::cout << COL_MY << "rbegin: " << COL_END << (*(first_my.rbegin())).first << ":" << (*(first_my.rbegin())).second << COL_MY << " | --end: " << COL_END << (*(--(first_my.rend()))).first << ":" << (*(--(first_my.rend()))).second << std::endl;
 }
 
@@ -221,7 +221,7 @@ void    insert_single()
     print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
     std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*(check_st.first)).first << COL_ST << " | In map: " << COL_END << (check_st.second ? "yes" : "no") << std::endl;
     check_my = second_my.insert(elem_2);
-    std::cout << COL_MY << "My map after insert \"d\": " << COL_END;
+    std::cout << COL_MY << "My map after insert \"c\": " << COL_END;
     print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
     std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*(check_my.first)).first << COL_MY << " | In map: " << COL_END << (check_my.second ? "yes" : "no") << std::endl;
     std::cout << std::endl;
@@ -231,7 +231,7 @@ void    insert_single()
     print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
     std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*(check_st.first)).first << COL_ST << " | In map: " << COL_END << (check_st.second ? "yes" : "no") << std::endl;
     check_my = second_my.insert(elem_3);
-    std::cout << COL_MY << "My map after insert \"d\": " << COL_END;
+    std::cout << COL_MY << "My map after insert \"r\": " << COL_END;
     print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
     std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*(check_my.first)).first << COL_MY << " | In map: " << COL_END << (check_my.second ? "yes" : "no") << std::endl;
     std::cout << std::endl;
@@ -241,7 +241,7 @@ void    insert_single()
     print_container<std::map<char, int> >(second, PARAMS_OFF, COL_ST);
     std::cout << COL_ST << "Size: " << COL_END << second.size() << COL_ST << " | Returned element: " << COL_END << (*(check_st.first)).first << COL_ST << " | In map: " << COL_END << (check_st.second ? "yes" : "no") << std::endl;
     check_my = second_my.insert(elem_4);
-    std::cout << COL_MY << "My map after insert \"d\": " << COL_END;
+    std::cout << COL_MY << "My map after insert \"h\": " << COL_END;
     print_container<ft::Map<char, int> >(second_my, PARAMS_OFF, COL_MY);
     std::cout << COL_MY << "Size: " << COL_END << second_my.size() << COL_MY << " | Returned element: " << COL_END << (*(check_my.first)).first << COL_MY << " | In map: " << COL_END << (check_my.second ? "yes" : "no") << std::endl;
 }
@@ -706,26 +706,26 @@ int main()
     insert_range();
     std::cout << std::endl;
 
-    std::cout << "__________________________________" << std::endl;
-    std::cout << "|                                |" << std::endl;
-    std::cout << "|     Erase | Single element     |" << std::endl;
-    std::cout << "|________________________________|" << std::endl << std::endl;
-    erase_single();
-    std::cout << std::endl;
+    // std::cout << "__________________________________" << std::endl;
+    // std::cout << "|                                |" << std::endl;
+    // std::cout << "|     Erase | Single element     |" << std::endl;
+    // std::cout << "|________________________________|" << std::endl << std::endl;
+    // erase_single();
+    // std::cout << std::endl;
 
-    std::cout << "_______________________" << std::endl;
-    std::cout << "|                     |" << std::endl;
-    std::cout << "|     Erase | Key     |" << std::endl;
-    std::cout << "|_____________________|" << std::endl << std::endl;
-    erase_key();
-    std::cout << std::endl;
+    // std::cout << "_______________________" << std::endl;
+    // std::cout << "|                     |" << std::endl;
+    // std::cout << "|     Erase | Key     |" << std::endl;
+    // std::cout << "|_____________________|" << std::endl << std::endl;
+    // erase_key();
+    // std::cout << std::endl;
 
-    std::cout << "_________________________" << std::endl;
-    std::cout << "|                       |" << std::endl;
-    std::cout << "|     Erase | Range     |" << std::endl;
-    std::cout << "|_______________________|" << std::endl << std::endl;
-    erase_range();
-    std::cout << std::endl;
+    // std::cout << "_________________________" << std::endl;
+    // std::cout << "|                       |" << std::endl;
+    // std::cout << "|     Erase | Range     |" << std::endl;
+    // std::cout << "|_______________________|" << std::endl << std::endl;
+    // erase_range();
+    // std::cout << std::endl;
 
     std::cout << "________________" << std::endl;    
     std::cout << "|              |" << std::endl;
@@ -734,12 +734,12 @@ int main()
     swap();
     std::cout << std::endl;
 
-    std::cout << "_________________" << std::endl;
-    std::cout << "|               |" << std::endl;
-    std::cout << "|     Clear     |" << std::endl;
-    std::cout << "|_______________|" << std::endl << std::endl;
-    clear();
-    std::cout << std::endl;
+    // std::cout << "_________________" << std::endl;
+    // std::cout << "|               |" << std::endl;
+    // std::cout << "|     Clear     |" << std::endl;
+    // std::cout << "|_______________|" << std::endl << std::endl;
+    // clear();
+    // std::cout << std::endl;
 
     std::cout << "________________" << std::endl;
     std::cout << "|              |" << std::endl;
