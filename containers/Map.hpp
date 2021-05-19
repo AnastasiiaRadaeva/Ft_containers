@@ -280,59 +280,227 @@ namespace ft
             /*** Allocator --------------------------------------------------------- ***/
             allocator_type get_allocator() const { return (_alloc); }
 
-            private:
+        private:
+            
+            /*********************************/
+            /*     Member types | private    */
+            /*********************************/
+            typedef typename allocator_type::template rebind<map_node<key_type, mapped_type> >::other   node_alloc; //equivalent allocator fot type node
+            typedef typename node_alloc::pointer                                                        node_pointer;
+            typedef typename node_alloc::const_reference                                                node_const_reference;
                 
-                /*********************************/
-                /*     Member types | private    */
-                /*********************************/
-                typedef typename allocator_type::template rebind<map_node<key_type, mapped_type> >::other   node_alloc; //equivalent allocator fot type node
-                typedef typename node_alloc::pointer                                                        node_pointer;
-                typedef typename node_alloc::const_reference                                                node_const_reference;
-                
-                /****************************/
-                /*     Members | private    */
-                /****************************/
-                map_node<key_type, mapped_type> *_tail;
-                map_node<key_type, mapped_type> *_head;
-                map_node<key_type, mapped_type> *_root;
-                size_type                       _current_size;
-                node_alloc                      _alloc_for_node;
-                allocator_type                  _alloc;
-                key_compare                     _key_comp;
+            /****************************/
+            /*     Members | private    */
+            /****************************/
+            map_node<key_type, mapped_type> *_tail;
+            map_node<key_type, mapped_type> *_head;
+            map_node<key_type, mapped_type> *_root;
+            size_type                       _current_size;
+            node_alloc                      _alloc_for_node;
+            allocator_type                  _alloc;
+            key_compare                     _key_comp;
 
-                /*************************************/
-                /*     Member functions | private    */
-                /*************************************/
-                map_node<key_type, mapped_type> *create_node(value_type content = value_type())
-                {
-                    try
-                    {
-                        node_pointer l_pointer = _alloc_for_node.allocate(1);
-                        map_node<key_type, mapped_type> new_node;
-                        // new_node.content = std::make_pair(key_value, map_value);
-                        new_node.content = content;
-                        new_node.color = BLACK;
-                        new_node.left = 0;
-                        new_node.right = 0;
-                        new_node.parent = 0;
-                        node_const_reference ref_node = new_node;
-                        _alloc_for_node.construct(l_pointer, ref_node);
-                        return (l_pointer);
-                    }
-                    catch(const std::bad_alloc& ba)
-                    {
-                        std::cerr << "bad_alloc caught: " << ba.what() << '\n';
-                    }
+            /*************************************/
+            /*     Member functions | private    */
+            /*************************************/
+
+            /***************************************************************************/
+            /*** Secondary functions ----------------------------------------------- ***/
+            map_node<key_type, mapped_type> *grandparent(map_node<key_type, mapped_type> *current_node)
+            {
+                if (current_node != 0 && current_node->parent != 0)
+                    return (current_node->parent->parent);
+                return (0);
+            }
+            map_node<key_type, mapped_type> *uncle(map_node<key_type, mapped_type> *current_node)
+            {
+                map_node<key_type, mapped_type> *grandpa = grandparent(current_node);
+                if (grandpa == 0)
                     return (0);
-                }
-
-                void                            destroy_deallocate_node(map_node<key_type, mapped_type> *node_for_del)
+                if (current_node->parent == grandpa->left)
+                    return (grandpa->right);
+                else
+                    return (grandpa->left);
+            }
+            map_node<key_type, mapped_type> *minimum(map_node<key_type, mapped_type> *current_node)
+            {
+                if (!current_node)
+                    return (0);
+                while (current_node->left && current_node->left != _head)
+                    current_node = current_node->left;
+                return (current_node);                
+            }
+            map_node<key_type, mapped_type> *maximum(map_node<key_type, mapped_type> *current_node)
+            {
+                if (!current_node)
+                    return (0);
+                while (current_node->right && current_node->right != _tail)
+                    current_node = current_node->right;
+                return (current_node);                
+            }
+            void                            left_rotation(map_node<key_type, mapped_type> *current_node)
+            {
+                if (current_node->right == _tail) //защита на случай, если правым окажется хвост
+                    return ;
+                map_node<key_type, mapped_type> *mate_node = current_node->right;
+                mate_node->parent = current_node->parent;
+                if (current_node->parent == 0)
+                    _root = mate_node;
+                else
                 {
-                    node_pointer l_pointer = _alloc_for_node.address(*node_for_del);
-                    _alloc_for_node.destroy(l_pointer);
-                    _alloc_for_node.deallocate(l_pointer, 1);
-                    node_for_del = 0;
+                    if (current_node == current_node->parent->left)
+                        current_node->parent->left = mate_node;
+                    else
+                        current_node->parent->right = mate_node;
                 }
+                current_node->right = mate_node->left;
+                if (mate_node->left)
+                    mate_node->left->parent = current_node;
+                current_node->parent = mate_node;
+                mate_node->left = current_node;
+            }
+            void                            right_rotation(map_node<key_type, mapped_type> *current_node)
+            {
+                if (current_node->left == _head)
+                    return ;
+                map_node<key_type, mapped_type> *mate_node = current_node->left;
+                mate_node->parent = current_node->parent;
+                if (current_node->parent == 0)
+                    _root = mate_node;
+                else
+                {
+                    if (current_node = current_node->parent->left)
+                        current_node->parent->left = mate_node;
+                    else 
+                        current_node->parent->right = mate_node;
+                }
+                current_node->left = mate_node->right;
+                if (mate_node->right)
+                    mate_node->right->parent = current_node;
+                current_node->parent = mate_node;
+                mate_node->right = current_node;
+            }
+
+            map_node<key_type, mapped_type> *find_node(const key_type &key, map_node<key_type, mapped_type> *current_node) const
+            {
+                if (current_node != _root)
+                    while (current_node)
+                    {
+                        if (current_node->content.first == key)
+                            return(current_node);
+                        else if (_key_comp(current_node->content.first, key))
+                            current_node = current_node->right;
+                        else
+                            current_node = current_node->left;
+                    }
+                current_node = _root;
+                while (current_node)
+                {
+                    if (current_node->content.first == key)
+                            return(current_node);
+                    else if (_key_comp(current_node->content.first, key))
+                        current_node = current_node->right;
+                    else
+                        current_node = current_node->left;
+                }
+                return (current_node);
+            }
+
+            /***************************************************************************/
+            /*** Insertion --------------------------------------------------------- ***/
+            map_node<key_type, mapped_type> *create_node(value_type content = value_type())
+            {
+                try
+                {
+                    node_pointer l_pointer = _alloc_for_node.allocate(1);
+                    map_node<key_type, mapped_type> new_node;
+                    // new_node.content = std::make_pair(key_value, map_value);
+                    new_node.content = content;
+                    new_node.color = BLACK;
+                    new_node.left = 0;
+                    new_node.right = 0;
+                    new_node.parent = 0;
+                    node_const_reference ref_node = new_node;
+                    _alloc_for_node.construct(l_pointer, ref_node);
+                    return (l_pointer);
+                }
+                catch(const std::bad_alloc& ba)
+                {
+                    std::cerr << "bad_alloc caught: " << ba.what() << '\n';
+                }
+                return (0);
+            }
+            map_node<key_type, mapped_type> *add_new_node(value_type content)
+            {
+                if (_root == 0)
+                {
+                    _root = create_node(content);
+                    _root->right = _tail;
+                    _root->left = _head;
+                    _tail->parent = _root;
+                    _head->parent = _root;
+                    return (_root);
+                }
+                map_node<key_type, mapped_type> *current_node = _root, *parent_node, *new_node;
+                size_type                       branch = 0;
+                while (current_node && current_node != _tail && current_node != _head)
+                {
+                    parent_node = current_node;
+                    if (_key_comp(current_node->content.first, content.first))
+                    {
+                        current_node = current_node->right;
+                        branch = RIGHT;
+                    }
+                    else
+                    {
+                        current_node = current_node->left;
+                        branch = LEFT;
+                    }
+                }
+                new_node = create_node(content);
+                new_node->color = RED;
+                if (branch == LEFT)
+                {
+                    parent_node->left = new_node;
+                    new_node->parent = parent_node;
+                    if (current_node == _head)
+                    {
+                        new_node->left = _head;
+                        _head->parent = new_node;
+                    }
+                }
+                else
+                {
+                    parent_node->right = new_node;
+                    new_node->parent = parent_node;
+                    if (current_node == _tail)
+                    {
+                        new_node->right = _tail;
+                        _tail->parent = new_node;
+                    }
+                }
+                if (parent_node != _root)
+                    balancing_after_insertion(new_node);
+                return(new_node);
+            }
+            void                            balancing_after_insertion(map_node<key_type, mapped_type> *new_node)
+            {
+
+
+            }
+
+            /***************************************************************************/
+            /*** Deletion ---------------------------------------------------------- ***/
+
+            void    destroy_deallocate_node(map_node<key_type, mapped_type> *node_for_del)
+            {
+                node_pointer l_pointer = _alloc_for_node.address(*node_for_del);
+                _alloc_for_node.destroy(l_pointer);
+                _alloc_for_node.deallocate(l_pointer, 1);
+                node_for_del = 0;
+            }
+
+
                 void                            transplant(map_node<key_type, mapped_type> *first, map_node<key_type, mapped_type> *second)
                 {
                     if (first->parent == 0)
@@ -489,177 +657,60 @@ namespace ft
                 current_node->color = BLACK;
                 }
 
-                map_node<key_type, mapped_type> *add_new_node(value_type content)
-                {
-                    map_node<key_type, mapped_type> *current_node = _root, *parent_node = 0;
-                    size_type   branch = 0;
-                    while (current_node != 0 && current_node != _tail && current_node != _head) //ищем нужно место для вставки
-                    {
-                        parent_node = current_node;
-                        if (!(_key_comp(content.first, current_node->content.first)))
-                        // if ( content.first > current_node->content.first)
-                            {current_node = current_node->right; branch = RIGHT;}
-                        else
-                            {current_node = current_node->left;  branch = LEFT;}
-                    }
-                    current_node = create_node(content);
-                    _current_size++;
-                    if (_root == 0) // если корня нет, то создаем и помещяем между головой и хвостом
-                    {
-                        _root = current_node;
-                        _root->left = _head;
-                        _root->right = _tail;
-                        _head->parent = _root;
-                        _tail->parent = _root;
-                        return (current_node);
-                    }
-                    if (branch == RIGHT) // в правую ветку
-                    {
-                        if (parent_node->right == _tail)
-                        {
-                            _tail->parent = current_node;
-                            current_node->right = _tail;
-                        }
-                        parent_node->right = current_node;
-                        current_node->parent = parent_node;
-                    }
-                    else if (branch == LEFT) // в левую ветку
-                    {
-                        if (parent_node->left == _head)
-                        {
-                            _head->parent = current_node;
-                            current_node->left = _head;
-                        }
-                        parent_node->left = current_node;
-                        current_node->parent = parent_node;
-                    }
-                    current_node->color = RED;
-                    if (current_node->parent != _root)
-                        balancing_after_insertion(current_node); //делаем так, тк балансировка нужна только для уровней глубже, чем ребенок корня
-                    return (current_node);
-                }
-
-                void                            left_rotate(map_node<key_type, mapped_type> *current_node)
-                {
-                    if (current_node == _root || current_node->parent == _root)
-                        return ;
-                    map_node<key_type, mapped_type> *tmp_node = current_node->right;
-                    current_node->right = tmp_node->left;
-                    //head остался 
-                    if (tmp_node->left != 0)
-                        tmp_node->left->parent = current_node;
-                    tmp_node->parent = current_node->parent;
-                    if (current_node->parent == 0)
-                        _root = tmp_node;
-                    else
-                    {
-                        if (current_node == current_node->parent->left)
-                            current_node->parent->left = tmp_node;
-                        else
-                            current_node->parent->right = tmp_node;
-                    }
-                    tmp_node->left = current_node;
-                    current_node->parent = tmp_node;
-                }
-                void                            right_rotate(map_node<key_type, mapped_type> *current_node)
-                {
-                    if (current_node == _root || current_node->parent == _root)
-                        return ;
-                    map_node<key_type, mapped_type> *tmp_node = current_node->left;
-                    current_node->left = tmp_node->right;
-                    if (tmp_node->right != 0)
-                        tmp_node->right->parent = current_node;
-                    tmp_node->parent = current_node->parent;
-                    if (current_node->parent == 0)
-                        _root = tmp_node;
-                    else
-                    {
-                        if (current_node == current_node->parent->right)
-                            current_node->parent->right = tmp_node;
-                        else
-                            current_node->parent->left = tmp_node;
-                    }
-                    tmp_node->right = current_node;
-                    current_node->parent = tmp_node;
-                }
-                void                            balancing_after_insertion(map_node<key_type, mapped_type> *new_node)
-                {
-                    map_node<key_type, mapped_type> *tmp;
-                    while (new_node->parent->color == RED)
-                    {
-                        if (new_node->parent == new_node->parent->parent->left)
-                        {
-                            tmp = new_node->parent->parent->right;
-                            if (tmp && tmp->color == RED)
-                            {
-                                new_node->parent->parent->color = RED;
-                                tmp->color = BLACK;
-                                new_node->parent->color = BLACK;
-                                new_node = new_node->parent->parent;
-                            }
-                            else
-                            {
-                                if (new_node == new_node->parent->right)
-                                {
-                                    new_node = new_node->parent;
-                                    left_rotate(new_node);
-                                }
-                                new_node->parent->color = BLACK;
-                                new_node->parent->parent->color = RED;
-                                right_rotate(new_node->parent->parent);
-                            }
-                        }
-                        else
-                        {
-                            tmp = new_node->parent->parent->left;
-                            if (tmp && tmp->color == RED)
-                            {
-                                new_node->parent->parent->color = RED;
-                                tmp->color = BLACK;
-                                new_node->parent->color = BLACK;
-                                new_node = new_node->parent->parent;
-                            }
-                            else
-                            {
-                                if (new_node == new_node->parent->left)
-                                {
-                                    new_node = new_node->parent;
-                                    right_rotate(new_node);
-                                }
-                                new_node->parent->color = BLACK;
-                                new_node->parent->parent->color = RED;
-                                left_rotate(new_node->parent->parent);
-                            }
-                        }
-                        if (new_node == _root)
-                            break;
-                    }
-                    _root->color = BLACK;
-                }
-                map_node<key_type, mapped_type> *find_node(const key_type &key, map_node<key_type, mapped_type> *current_node) const
-                {
-                    if (current_node != _root)
-                        while (current_node)
-                        {
-                            if (current_node->content.first == key)
-                                return(current_node);
-                            else if (current_node->content.first < key)
-                                current_node = current_node->right;
-                            else
-                                current_node = current_node->left;
-                        }
-                    current_node = _root;
-                    while (current_node)
-                    {
-                        if (current_node->content.first == key)
-                            return(current_node);
-                        else if (current_node->content.first < key)
-                            current_node = current_node->right;
-                        else
-                            current_node = current_node->left;
-                    }
-                    return (current_node);
-                }
+                // void                            balancing_after_insertion(map_node<key_type, mapped_type> *new_node)
+                // {
+                //     map_node<key_type, mapped_type> *tmp;
+                //     while (new_node->parent->color == RED)
+                //     {
+                //         if (new_node->parent == new_node->parent->parent->left)
+                //         {
+                //             tmp = new_node->parent->parent->right;
+                //             if (tmp && tmp->color == RED)
+                //             {
+                //                 new_node->parent->parent->color = RED;
+                //                 tmp->color = BLACK;
+                //                 new_node->parent->color = BLACK;
+                //                 new_node = new_node->parent->parent;
+                //             }
+                //             else
+                //             {
+                //                 if (new_node == new_node->parent->right)
+                //                 {
+                //                     new_node = new_node->parent;
+                //                     left_rotate(new_node);
+                //                 }
+                //                 new_node->parent->color = BLACK;
+                //                 new_node->parent->parent->color = RED;
+                //                 right_rotate(new_node->parent->parent);
+                //             }
+                //         }
+                //         else
+                //         {
+                //             tmp = new_node->parent->parent->left;
+                //             if (tmp && tmp->color == RED)
+                //             {
+                //                 new_node->parent->parent->color = RED;
+                //                 tmp->color = BLACK;
+                //                 new_node->parent->color = BLACK;
+                //                 new_node = new_node->parent->parent;
+                //             }
+                //             else
+                //             {
+                //                 if (new_node == new_node->parent->left)
+                //                 {
+                //                     new_node = new_node->parent;
+                //                     right_rotate(new_node);
+                //                 }
+                //                 new_node->parent->color = BLACK;
+                //                 new_node->parent->parent->color = RED;
+                //                 left_rotate(new_node->parent->parent);
+                //             }
+                //         }
+                //         if (new_node == _root)
+                //             break;
+                //     }
+                //     _root->color = BLACK;
+                // }
     };
 
     /*****************************************/
