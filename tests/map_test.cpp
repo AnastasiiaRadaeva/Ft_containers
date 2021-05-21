@@ -105,6 +105,33 @@ void    constr_copy()
     print_container<ft::Map<char, int> >(second_my_copy, PARAMS_ON, COL_MY);
 }
 
+void    assignation_operator()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['d']=70;
+    std::cout << std::endl;
+
+    std::map<char,int> second (first.begin(),first.end());
+    std::cout << COL_ST << "St map: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    std::cout << std::endl;
+    std::map<char,int> second_copy = second;
+    std::cout << COL_ST << "St map after operator=: " << COL_END;
+    print_container<std::map<char, int> >(second_copy, PARAMS_ON, COL_ST);
+    std::cout << std::endl;
+
+    std::cout << COL_MY << "My map: " << COL_END;
+    ft::Map<char,int> second_my(first.begin(),first.end());
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+    std::cout << std::endl;
+    std::cout << COL_MY << "My map after operator=: " << COL_END;
+    ft::Map<char,int> second_my_copy = second_my;
+    print_container<ft::Map<char, int> >(second_my_copy, PARAMS_ON, COL_MY);
+}
+
 void  iterators()
 {
     std::cout << "--- Direct order ---" << std::endl;
@@ -657,103 +684,103 @@ int main()
     constr_range();
     std::cout << std::endl;
 
-    // std::cout << "______________________________" << std::endl;
-    // std::cout << "|                            |" << std::endl;
-    // std::cout << "|     Constructor | Copy     |" << std::endl;
-    // std::cout << "|____________________________|" << std::endl << std::endl;
-    // constr_copy();
-    // std::cout << std::endl;
+    std::cout << "______________________________" << std::endl;
+    std::cout << "|                            |" << std::endl;
+    std::cout << "|     Constructor | Copy     |" << std::endl;
+    std::cout << "|____________________________|" << std::endl << std::endl;
+    constr_copy();
+    std::cout << std::endl;
 
-    // // std::cout << "_____________________" << std::endl;
-    // // std::cout << "|                   |" << std::endl;
-    // // std::cout << "|     Operator=     |" << std::endl;
-    // // std::cout << "|___________________|" << std::endl << std::endl;
-    // // assignation_operator();
-    // // std::cout << std::endl;
+    std::cout << "_____________________" << std::endl;
+    std::cout << "|                   |" << std::endl;
+    std::cout << "|     Operator=     |" << std::endl;
+    std::cout << "|___________________|" << std::endl << std::endl;
+    assignation_operator();
+    std::cout << std::endl;
 
-    // std::cout << "_______________________________________" << std::endl;
-    // std::cout << "|                                     |" << std::endl;
-    // std::cout << "|     Begin | End | Rbegin | Rend     |" << std::endl;
-    // std::cout << "|_____________________________________|" << std::endl << std::endl;
-    // iterators();
-    // std::cout << std::endl;
+    std::cout << "_______________________________________" << std::endl;
+    std::cout << "|                                     |" << std::endl;
+    std::cout << "|     Begin | End | Rbegin | Rend     |" << std::endl;
+    std::cout << "|_____________________________________|" << std::endl << std::endl;
+    iterators();
+    std::cout << std::endl;
     
-    // std::cout << "______________________" << std::endl;
-    // std::cout << "|                    |" << std::endl;
-    // std::cout << "|     Operator[]     |" << std::endl;
-    // std::cout << "|____________________|" << std::endl << std::endl;
-    // operator_access();
-    // std::cout << std::endl;
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                    |" << std::endl;
+    std::cout << "|     Operator[]     |" << std::endl;
+    std::cout << "|____________________|" << std::endl << std::endl;
+    operator_access();
+    std::cout << std::endl;
 
-    // std::cout << "___________________________________" << std::endl;
-    // std::cout << "|                                 |" << std::endl;
-    // std::cout << "|     Insert | Single element     |" << std::endl;
-    // std::cout << "|_________________________________|" << std::endl << std::endl;
-    // insert_single();
-    // std::cout << std::endl;
+    std::cout << "___________________________________" << std::endl;
+    std::cout << "|                                 |" << std::endl;
+    std::cout << "|     Insert | Single element     |" << std::endl;
+    std::cout << "|_________________________________|" << std::endl << std::endl;
+    insert_single();
+    std::cout << std::endl;
 
-    // std::cout << "______________________________" << std::endl;
-    // std::cout << "|                            |" << std::endl;
-    // std::cout << "|     Insert | With hint     |" << std::endl;
-    // std::cout << "|____________________________|" << std::endl << std::endl;
-    // insert_with_hint();
-    // std::cout << std::endl;
+    std::cout << "______________________________" << std::endl;
+    std::cout << "|                            |" << std::endl;
+    std::cout << "|     Insert | With hint     |" << std::endl;
+    std::cout << "|____________________________|" << std::endl << std::endl;
+    insert_with_hint();
+    std::cout << std::endl;
 
-    // std::cout << "__________________________" << std::endl;
-    // std::cout << "|                        |" << std::endl;
-    // std::cout << "|     Insert | Range     |" << std::endl;
-    // std::cout << "|________________________|" << std::endl << std::endl;
-    // insert_range();
-    // std::cout << std::endl;
+    std::cout << "__________________________" << std::endl;
+    std::cout << "|                        |" << std::endl;
+    std::cout << "|     Insert | Range     |" << std::endl;
+    std::cout << "|________________________|" << std::endl << std::endl;
+    insert_range();
+    std::cout << std::endl;
 
-    // std::cout << "__________________________________" << std::endl;
-    // std::cout << "|                                |" << std::endl;
-    // std::cout << "|     Erase | Single element     |" << std::endl;
-    // std::cout << "|________________________________|" << std::endl << std::endl;
-    // erase_single();
-    // std::cout << std::endl;
+    std::cout << "__________________________________" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "|     Erase | Single element     |" << std::endl;
+    std::cout << "|________________________________|" << std::endl << std::endl;
+    erase_single();
+    std::cout << std::endl;
 
-    // std::cout << "_______________________" << std::endl;
-    // std::cout << "|                     |" << std::endl;
-    // std::cout << "|     Erase | Key     |" << std::endl;
-    // std::cout << "|_____________________|" << std::endl << std::endl;
-    // erase_key();
-    // std::cout << std::endl;
+    std::cout << "_______________________" << std::endl;
+    std::cout << "|                     |" << std::endl;
+    std::cout << "|     Erase | Key     |" << std::endl;
+    std::cout << "|_____________________|" << std::endl << std::endl;
+    erase_key();
+    std::cout << std::endl;
 
-    // std::cout << "_________________________" << std::endl;
-    // std::cout << "|                       |" << std::endl;
-    // std::cout << "|     Erase | Range     |" << std::endl;
-    // std::cout << "|_______________________|" << std::endl << std::endl;
-    // erase_range();
-    // std::cout << std::endl;
+    std::cout << "_________________________" << std::endl;
+    std::cout << "|                       |" << std::endl;
+    std::cout << "|     Erase | Range     |" << std::endl;
+    std::cout << "|_______________________|" << std::endl << std::endl;
+    erase_range();
+    std::cout << std::endl;
 
-    // std::cout << "________________" << std::endl;    
-    // std::cout << "|              |" << std::endl;
-    // std::cout << "|     Swap     |" << std::endl;
-    // std::cout << "|______________|" << std::endl << std::endl;
-    // swap();
-    // std::cout << std::endl;
+    std::cout << "________________" << std::endl;    
+    std::cout << "|              |" << std::endl;
+    std::cout << "|     Swap     |" << std::endl;
+    std::cout << "|______________|" << std::endl << std::endl;
+    swap();
+    std::cout << std::endl;
 
-    // std::cout << "_________________" << std::endl;
-    // std::cout << "|               |" << std::endl;
-    // std::cout << "|     Clear     |" << std::endl;
-    // std::cout << "|_______________|" << std::endl << std::endl;
-    // clear();
-    // std::cout << std::endl;
+    std::cout << "_________________" << std::endl;
+    std::cout << "|               |" << std::endl;
+    std::cout << "|     Clear     |" << std::endl;
+    std::cout << "|_______________|" << std::endl << std::endl;
+    clear();
+    std::cout << std::endl;
 
-    // std::cout << "________________" << std::endl;
-    // std::cout << "|              |" << std::endl;
-    // std::cout << "|     Find     |" << std::endl;
-    // std::cout << "|______________|" << std::endl << std::endl;
-    // find();
-    // std::cout << std::endl;
+    std::cout << "________________" << std::endl;
+    std::cout << "|              |" << std::endl;
+    std::cout << "|     Find     |" << std::endl;
+    std::cout << "|______________|" << std::endl << std::endl;
+    find();
+    std::cout << std::endl;
 
-    // std::cout << "_________________" << std::endl;
-    // std::cout << "|               |" << std::endl;
-    // std::cout << "|     Count     |" << std::endl;
-    // std::cout << "|_______________|" << std::endl << std::endl;
-    // count();
-    // std::cout << std::endl;
+    std::cout << "_________________" << std::endl;
+    std::cout << "|               |" << std::endl;
+    std::cout << "|     Count     |" << std::endl;
+    std::cout << "|_______________|" << std::endl << std::endl;
+    count();
+    std::cout << std::endl;
 
     // sleep(10000);
     return (0);

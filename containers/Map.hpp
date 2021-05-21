@@ -95,28 +95,19 @@ namespace ft
                     add_new_node(*it);
             }
 
-        //     /***************************************************************************/
-        //     /*** operator= --------------------------------------------------------- ***/
-        //     List &operator=(List const &b)
-        //     {
-        //         if (this != &b)
-        //         {
-        //             clear();
-        //             node<value_type> *tmp_list_1 = _tail_of_node_list;
-        //             node<value_type> *tmp_b_list = b._tail_of_node_list->next;
-        //             while (tmp_b_list != b._tail_of_node_list)
-        //             {
-        //                 tmp_list_1->next = create_node(tmp_b_list->content);
-        //                 tmp_list_1->next->prev = tmp_list_1;
-        //                 tmp_list_1 = tmp_list_1->next;
-        //                 tmp_b_list = tmp_b_list->next;
-        //             }
-        //             tmp_list_1->next = _tail_of_node_list;
-        //             _tail_of_node_list->prev = tmp_list_1;
-        //             _current_size = b._current_size;
-        //         }
-        //         return (*this);
-        //     }
+            /***************************************************************************/
+            /*** operator= --------------------------------------------------------- ***/
+            Map &operator=(const Map& x)
+            {
+                if (this != &x)
+                {
+                    clear();
+                    _alloc = x._alloc;
+                    _key_comp = x._key_comp;
+                    insert(x.begin(), x.end());
+                }
+                return(*this);
+            }
             
             /***************************************************************************/
             /*** destructor -------------------------------------------------------- ***/
@@ -209,7 +200,6 @@ namespace ft
                 while (!tmp.empty())
                 {
                     position = find(tmp.back());
-                    std::cout << position->first << std::endl;
                     delete_node(position.get_node());
                     tmp.pop_back();
                 }
@@ -421,8 +411,6 @@ namespace ft
             {
                 try
                 {
-                std::cout << "Nastya" << std::endl;
-
                     node_pointer l_pointer = _alloc_for_node.allocate(1);
                     map_node<key_type, mapped_type> new_node;
                     // new_node.content = std::make_pair(key_value, map_value);
@@ -552,95 +540,245 @@ namespace ft
             }
             void    delete_node(map_node<key_type, mapped_type> *node_for_del)
             {
-                map_node<key_type, mapped_type> *child = (node_for_del->right == 0 && node_for_del->left) ? node_for_del->left : node_for_del->right;
-                transplant(node_for_del, child);
-                if (node_for_del->color == BLACK)
-                {
-                    if (child->color == RED)
-                        child->color = BLACK;
-                    else
-                        delete_case_1(child);
-                }
-                destroy_deallocate_node(node_for_del);
+                if (node_for_del == _tail || node_for_del == _head)
+                    return ;
+                size_type                       color = node_for_del->color;
+                size_type                       branch;
+                map_node<key_type, mapped_type> *node_for_balancing;
+                map_node<key_type, mapped_type> *minimum_node;
+                map_node<key_type, mapped_type> *parent;
+
                 _current_size--;
-            }
-            void    delete_case_1(map_node<key_type, mapped_type> *current_node)
-            {
-                if (current_node->parent)
-                    delete_case_2(current_node);
-            }
-            void    delete_case_2(map_node<key_type, mapped_type> *current_node)
-            {
-                map_node<key_type, mapped_type> *brother_node = brother(current_node);
-                if (brother_node->color == RED)
+                if (_current_size == 0) //добавила от себя - если был только корень и мы удаляем его
                 {
-                    current_node->parent->color = RED;
-                    brother_node->color = BLACK;
-                    if (current_node == current_node->parent->left)
-                        left_rotation(current_node->parent);
+                    destroy_deallocate_node(node_for_del);
+                    _tail->parent = _head;
+                    _head->parent = _tail;
+                    _root = 0;
+                    return ;
+                }
+                if (node_for_del->left && (node_for_del->right && node_for_del->right != _tail))
+                {
+                    minimum_node = minimum(node_for_del->right);
+                    color = minimum_node->color;
+                    node_for_balancing = minimum_node->right;
+                    branch = RIGHT;
+                    parent = minimum_node;
+                    if (minimum_node->parent != node_for_del)
+                    {
+                        transplant(minimum_node, node_for_balancing);
+                        minimum_node->right = node_for_del->right;
+                        node_for_del->right->parent = minimum_node;
+                        branch = LEFT;
+                        parent = minimum_node->parent;
+                    }
+                    transplant(node_for_del, minimum_node);
+                    minimum_node->left = node_for_del->left;
+                    node_for_del->left->parent = minimum_node;
+                    minimum_node->color = node_for_del->color;
+                }
+                else if (node_for_del == _root)
+                {
+                    node_for_del->left->right = _tail;
+                    _tail->parent = node_for_del->left;
+                    node_for_del->left->parent = 0;
+                    _root = node_for_del->left;
+                    _root->color = BLACK;
+                    destroy_deallocate_node(node_for_del);
+                    return ;
+                }
+                else
+                {
+                    parent = node_for_del->parent;
+                    node_for_balancing = (node_for_del->left == 0) ? node_for_del->right : node_for_del->left;
+                    if (node_for_del == parent->left)
+                        branch = LEFT;
                     else
-                        right_rotation(current_node->parent);
-                }
-                delete_case_3(current_node);
-            }
-            void    delete_case_3(map_node<key_type, mapped_type> *current_node)
-            {
-                map_node<key_type, mapped_type> *brother_node = brother(current_node);
-                if ((current_node->parent->color == BLACK) && (brother_node->color == BLACK) && (brother_node->left->color == BLACK) && (brother_node->right->color == BLACK))
-                {
-                    brother_node->color = RED;
-                    delete_case_1(current_node->parent);
-                }
-                else
-                    delete_case_4(current_node);
-            }
-            void    delete_case_4(map_node<key_type, mapped_type> *current_node)
-            {
-                map_node<key_type, mapped_type> *brother_node = brother(current_node);
-                if ((current_node->parent->color == RED) && (brother_node->color == BLACK) && (brother_node->left->color == BLACK) && (brother_node->right->color == BLACK))
-                {
-                    brother_node->color = RED;
-                    current_node->parent->color = BLACK;
-                }
-                else
-                    delete_case_5(current_node);
-            }
-            void    delete_case_5(map_node<key_type, mapped_type> *current_node)
-            {
-                map_node<key_type, mapped_type> *brother_node = brother(current_node);
-                if (brother_node->color == BLACK)
-                {
-                    if ((current_node == current_node->parent->left) && (brother_node->left->color == RED) && (brother_node->right->color == BLACK))
+                        branch = RIGHT;
+                    transplant(node_for_del, node_for_balancing);
+                    if (node_for_del->left && node_for_del->right && node_for_del->right == _tail)
                     {
-                        brother_node->color = RED;
-                        brother_node->left->color = BLACK;
-                        right_rotation(brother_node);
-                    }
-                    else if ((current_node == current_node->parent->right) && (brother_node->left->color == BLACK) && (brother_node->right->color == RED))
-                    {
-                        brother_node->color = RED;
-                        brother_node->right->color = BLACK;
-                        left_rotation(brother_node);
+                        node_for_balancing->right = _tail;
+                        _tail->parent = node_for_balancing;
                     }
                 }
-                delete_case_6(current_node);
+                if (color == BLACK)
+                    balancing_after_deletion(parent, branch);
+                destroy_deallocate_node(node_for_del);
             }
-            void    delete_case_6(map_node<key_type, mapped_type> *current_node)
+            void    balancing_after_deletion(map_node<key_type, mapped_type> *parent_of_cur_node, size_type branch)
             {
-                map_node<key_type, mapped_type> *brother_node = brother(current_node);
-                brother_node->color = current_node->parent->color;
-                current_node->parent->color = BLACK;
-                if (current_node == current_node->parent->left)
+                map_node<key_type, mapped_type> *current_node = (branch == LEFT) ? parent_of_cur_node->left : parent_of_cur_node->right;
+                map_node<key_type, mapped_type> *brother_node = (branch == LEFT) ? parent_of_cur_node->right : parent_of_cur_node->left;
+                size_type                       loop = 1;
+                if (current_node && current_node->color == RED)
                 {
-                    brother_node->right->color = BLACK;
-                    left_rotation(current_node->parent);
+                    current_node->color = BLACK;
+                    return ;
                 }
-                else
+                while (parent_of_cur_node != 0 && loop == 1)
                 {
-                    brother_node->left->color = BLACK;
-                    right_rotation(current_node->parent);
+                    loop = 0;
+                    if (brother_node->color == RED)
+                    {
+                        parent_of_cur_node->color = RED;
+                        brother_node->color = BLACK;
+                        if (brother_node == parent_of_cur_node->left)
+                        {
+                            right_rotation(parent_of_cur_node);
+                            brother_node = parent_of_cur_node->left;
+                        }
+                        else
+                        {
+                            left_rotation(parent_of_cur_node);
+                            brother_node = parent_of_cur_node->right;
+                        }
+                    }
+                    if (parent_of_cur_node->color == BLACK && brother_node->color == BLACK && (brother_node->right == 0 || brother_node->right->color == BLACK)
+                        && (brother_node->left == 0 || brother_node->left->color == BLACK))
+                    {
+                        brother_node->color = RED;
+                        current_node = parent_of_cur_node;
+                        parent_of_cur_node = current_node->parent;
+                        brother_node = brother(current_node);
+                        loop = 1;
+                    }
+                    else{ 
+                    if (parent_of_cur_node->color == RED && brother_node->color == BLACK && (brother_node->right == 0 || brother_node->right->color == BLACK)
+                        && (brother_node->left == 0 || brother_node->left->color == BLACK))
+                    {
+                        brother_node->color = RED;
+                        parent_of_cur_node->color = BLACK;
+                    }
+                    else
+                    {
+                        if (brother_node->color == BLACK)
+                        {
+                            if (brother_node == parent_of_cur_node->right && (brother_node->left && brother_node->left->color == RED)
+                                && (brother_node->right == 0 || brother_node->right->color == BLACK))
+                            {
+                                brother_node->color = RED;
+                                brother_node->left->color = BLACK;
+                                right_rotation(brother_node);
+                            }
+                            else if (brother_node == parent_of_cur_node->left && (brother_node->right && brother_node->right->color == RED)
+                                && (brother_node->left == 0 || brother_node->left->color == BLACK))
+                            {
+                                brother_node->color = RED;
+                                brother_node->right->color = BLACK;
+                                left_rotation(brother_node);
+                            }
+                            brother_node = brother(current_node);
+                            parent_of_cur_node = current_node->parent;
+                        }
+                        brother_node->color = parent_of_cur_node->color;
+                        parent_of_cur_node->color = BLACK;
+                        if (brother_node == parent_of_cur_node->right && brother_node->right && brother_node->left->color == RED)
+                        {
+                            brother_node->right->color = BLACK;
+                            left_rotation(parent_of_cur_node);
+                        }
+                        else if (brother_node == parent_of_cur_node->left && brother_node->left && brother_node->left->color == RED)
+                        {
+                            brother_node->left->color = BLACK;
+                            right_rotation(parent_of_cur_node);
+                        }
+                    }
+                    }
                 }
             }
+
+            // void    delete_node(map_node<key_type, mapped_type> *node_for_del)
+            // {
+            //     map_node<key_type, mapped_type> *child = (node_for_del->right == 0 && node_for_del->left) ? node_for_del->left : node_for_del->right;
+            //     transplant(node_for_del, child);
+            //     if (node_for_del->color == BLACK)
+            //     {
+            //         if (child->color == RED)
+            //             child->color = BLACK;
+            //         else
+            //             delete_case_1(child);
+            //     }
+            //     destroy_deallocate_node(node_for_del);
+            //     _current_size--;
+            // }
+            // void    delete_case_1(map_node<key_type, mapped_type> *current_node)
+            // {
+            //     if (current_node->parent)
+            //         delete_case_2(current_node);
+            // }
+            // void    delete_case_2(map_node<key_type, mapped_type> *current_node)
+            // {
+            //     map_node<key_type, mapped_type> *brother_node = brother(current_node);
+            //     if (brother_node->color == RED)
+            //     {
+            //         current_node->parent->color = RED;
+            //         brother_node->color = BLACK;
+            //         if (current_node == current_node->parent->left)
+            //             left_rotation(current_node->parent);
+            //         else
+            //             right_rotation(current_node->parent);
+            //     }
+            //     delete_case_3(current_node);
+            // }
+            // void    delete_case_3(map_node<key_type, mapped_type> *current_node)
+            // {
+            //     map_node<key_type, mapped_type> *brother_node = brother(current_node);
+            //     if ((current_node->parent->color == BLACK) && (brother_node->color == BLACK) && (brother_node->left->color == BLACK) && (brother_node->right->color == BLACK))
+            //     {
+            //         brother_node->color = RED;
+            //         delete_case_1(current_node->parent);
+            //     }
+            //     else
+            //         delete_case_4(current_node);
+            // }
+            // void    delete_case_4(map_node<key_type, mapped_type> *current_node)
+            // {
+            //     map_node<key_type, mapped_type> *brother_node = brother(current_node);
+            //     if ((current_node->parent->color == RED) && (brother_node->color == BLACK) && (brother_node->left->color == BLACK) && (brother_node->right->color == BLACK))
+            //     {
+            //         brother_node->color = RED;
+            //         current_node->parent->color = BLACK;
+            //     }
+            //     else
+            //         delete_case_5(current_node);
+            // }
+            // void    delete_case_5(map_node<key_type, mapped_type> *current_node)
+            // {
+            //     map_node<key_type, mapped_type> *brother_node = brother(current_node);
+            //     if (brother_node->color == BLACK)
+            //     {
+            //         if ((current_node == current_node->parent->left) && (brother_node->left->color == RED) && (brother_node->right->color == BLACK))
+            //         {
+            //             brother_node->color = RED;
+            //             brother_node->left->color = BLACK;
+            //             right_rotation(brother_node);
+            //         }
+            //         else if ((current_node == current_node->parent->right) && (brother_node->left->color == BLACK) && (brother_node->right->color == RED))
+            //         {
+            //             brother_node->color = RED;
+            //             brother_node->right->color = BLACK;
+            //             left_rotation(brother_node);
+            //         }
+            //     }
+            //     delete_case_6(current_node);
+            // }
+            // void    delete_case_6(map_node<key_type, mapped_type> *current_node)
+            // {
+            //     map_node<key_type, mapped_type> *brother_node = brother(current_node);
+            //     brother_node->color = current_node->parent->color;
+            //     current_node->parent->color = BLACK;
+            //     if (current_node == current_node->parent->left)
+            //     {
+            //         brother_node->right->color = BLACK;
+            //         left_rotation(current_node->parent);
+            //     }
+            //     else
+            //     {
+            //         brother_node->left->color = BLACK;
+            //         right_rotation(current_node->parent);
+            //     }
+            // }
 
 
 
