@@ -43,7 +43,6 @@ namespace ft
             typedef T                                                           mapped_type;
             typedef std::pair<const key_type, mapped_type>                      value_type;
             typedef Compare                                                     key_compare;
-            //value_compare`
             typedef Alloc                                                       allocator_type;
             typedef typename allocator_type::reference                          reference;
             typedef typename allocator_type::const_reference                    const_reference;
@@ -53,9 +52,20 @@ namespace ft
             typedef typename map::const_iterator<key_type, mapped_type>         const_iterator;
             typedef typename map::reverse_iterator<key_type, mapped_type>       reverse_iterator;
             typedef typename map::const_reverse_iterator<key_type, mapped_type> const_reverse_iterator;
-            //difference_type
             typedef size_t                                                      size_type;
-            
+
+            class value_compare
+            {
+                public:
+                    value_compare(key_compare c) : _comp(c) {}
+
+                    bool operator()(const value_type& x, const value_type& y) const
+                    {
+                        return _comp(x.first, y.first);
+                    }
+                    key_compare _comp;
+            };
+
             /****************************/
             /*     Member functions     */
             /****************************/
@@ -224,8 +234,10 @@ namespace ft
                 _current_size = x._current_size;
                 x._current_size = tmp_size;
 
-                //_key_comp
-                //_map_comp
+                key_compare tmp_comp;
+                tmp_comp = _key_comp;
+                _key_comp = x._key_comp;
+                x._key_comp = tmp_comp;
             }
             void                        clear()
             {
@@ -234,8 +246,15 @@ namespace ft
             
             /***************************************************************************/
             /*** Observers --------------------------------------------------------- ***/
-            // key_compare key_comp() const;
-            // value_compare value_comp() const;
+            key_compare key_comp() const
+            {
+                return (_key_comp);
+            }
+            value_compare value_comp() const
+            {
+                value_compare value_comp(_key_comp);
+                return (value_comp);
+            }
 
             /***************************************************************************/
             /*** Operations -------------------------------------------------------- ***/
@@ -260,12 +279,54 @@ namespace ft
                 map_node<key_type, mapped_type> *tmp = find_node(k, _root);
                 return (tmp == 0 ? 0 : 1);
             }
-            // iterator lower_bound (const key_type& k);
-            // const_iterator lower_bound (const key_type& k) const;
-            // iterator upper_bound (const key_type& k);
-            // const_iterator upper_bound (const key_type& k) const;
-            // std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
-            // std::pair<iterator,iterator>             equal_range (const key_type& k);
+            iterator        lower_bound (const key_type& k)
+            {
+                iterator it = this->begin();
+                for (; it != this->end(); it++)
+                {
+                    if (!(_key_comp(it->first, k)))
+                        return (it);
+                }
+                return (it);
+            }
+            const_iterator  lower_bound (const key_type& k) const
+            {
+                const_iterator it = this->begin();
+                for (; it != this->end(); it++)
+                {
+                    if (!(_key_comp(it->first, k)))
+                        return (it);
+                }
+                return (it);
+            }
+            iterator upper_bound (const key_type& k)
+            {
+                iterator it = this->begin();
+                for (; it != this->end(); it++)
+                {
+                    if (_key_comp(k, it->first))
+                        return (it);
+                }
+                return (it);
+            }
+            const_iterator upper_bound (const key_type& k) const
+            {
+                const_iterator it = this->begin();
+                for (; it != this->end(); it++)
+                {
+                    if (_key_comp(k, it->first))
+                        return (it);
+                }
+                return (it);
+            }
+            std::pair<const_iterator,const_iterator>    equal_range(const key_type& k) const
+            {
+                return (std::make_pair(lower_bound(k), upper_bound(k)));
+            }
+            std::pair<iterator,iterator>                equal_range(const key_type& k)
+            {
+                return (std::make_pair(lower_bound(k), upper_bound(k)));
+            }
 
             /***************************************************************************/
             /*** Allocator --------------------------------------------------------- ***/
@@ -413,7 +474,6 @@ namespace ft
                 {
                     node_pointer l_pointer = _alloc_for_node.allocate(1);
                     map_node<key_type, mapped_type> new_node;
-                    // new_node.content = std::make_pair(key_value, map_value);
                     new_node.content = content;
                     new_node.color = BLACK;
                     new_node.left = 0;
@@ -549,7 +609,7 @@ namespace ft
                 map_node<key_type, mapped_type> *parent;
 
                 _current_size--;
-                if (_current_size == 0) //добавила от себя - если был только корень и мы удаляем его
+                if (_current_size == 0)
                 {
                     destroy_deallocate_node(node_for_del);
                     _tail->parent = _head;

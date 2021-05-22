@@ -668,6 +668,126 @@ void    count()
     std::cout << COL_MY << "Count b: " << COL_END << first_my.count('b') << COL_MY << " | Count i: " << COL_END << first_my.count('i') << COL_MY << " | Count m: " << COL_END << first_my.count('m') << std::endl;
 }
 
+void    bound()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['i']=70;
+    first['e']=10;
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['b']=30;
+    first_my['c']=50;
+    first_my['i']=70;
+    first_my['e']=10;
+
+    std::cout << COL_ST << "St map: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "Lower bound b: " << COL_END << (first.lower_bound('b'))->first << COL_ST << " | i: " << COL_END << (first.lower_bound('i'))->first << COL_ST << " | m: " << COL_END << (first.lower_bound('m'))->first << COL_ST << " | e: " << COL_END << (first.lower_bound('e'))->first << COL_ST << " | d: " << COL_END << (first.lower_bound('d'))->first << std::endl;
+    std::cout << COL_ST << "Upper bound b: " << COL_END << (first.upper_bound('b'))->first << COL_ST << " | i: " << COL_END << (first.upper_bound('i'))->first << COL_ST << " | m: " << COL_END << (first.upper_bound('m'))->first << COL_ST << " | e: " << COL_END << (first.upper_bound('e'))->first << COL_ST << " | d: " << COL_END << (first.upper_bound('d'))->first << std::endl;
+    std::cout << std::endl;
+
+    std::cout << COL_MY << "My map: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "Lower bound b: " << COL_END << (first_my.lower_bound('b'))->first << COL_MY << " | i: " << COL_END << (first_my.lower_bound('i'))->first << COL_MY << " | m: " << COL_END << (first_my.lower_bound('m'))->first << COL_MY << " | e: " << COL_END << (first_my.lower_bound('e'))->first << COL_MY << " | d: " << COL_END << (first_my.lower_bound('d'))->first << std::endl;
+    std::cout << COL_MY << "Upper bound b: " << COL_END << (first_my.upper_bound('b'))->first << COL_MY << " | i: " << COL_END << (first_my.upper_bound('i'))->first << COL_MY << " | m: " << COL_END << (first_my.upper_bound('m'))->first << COL_MY << " | e: " << COL_END << (first_my.upper_bound('e'))->first << COL_MY << " | d: " << COL_END << (first_my.upper_bound('d'))->first << std::endl;
+}
+
+void    equal_range()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['i']=70;
+    first['e']=10;
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['b']=30;
+    first_my['c']=50;
+    first_my['i']=70;
+    first_my['e']=10;
+
+    std::cout << COL_ST << "St map: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "First  b: " << COL_END << (first.equal_range('b').first)->first << COL_ST << " | i: " << COL_END << (first.equal_range('i').first)->first << COL_ST << " | m: " << COL_END << (first.equal_range('m').first)->first << COL_ST << " | e: " << COL_END << (first.equal_range('e').first)->first << COL_ST << " | d: " << COL_END << (first.equal_range('b').first)->first << std::endl;
+    std::cout << COL_ST << "Second b: " << COL_END << (first.equal_range('b').second)->first << COL_ST << " | i: " << COL_END << (first.equal_range('i').second)->first << COL_ST << " | m: " << COL_END << (first.equal_range('m').second)->first << COL_ST << " | e: " << COL_END << (first.equal_range('e').second)->first << COL_ST << " | d: " << COL_END << (first.equal_range('b').second)->first << std::endl;
+    std::cout << std::endl;
+
+    std::cout << COL_MY << "My map: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "First  b: " << COL_END << (first_my.equal_range('b').first)->first << COL_MY << " | i: " << COL_END << (first_my.equal_range('i').first)->first << COL_MY << " | m: " << COL_END << (first_my.equal_range('m').first)->first << COL_MY << " | e: " << COL_END << (first_my.equal_range('e').first)->first << COL_MY << " | d: " << COL_END << (first_my.equal_range('b').first)->first << std::endl;
+    std::cout << COL_MY << "Second b: " << COL_END << (first_my.equal_range('b').second)->first << COL_MY << " | i: " << COL_END << (first_my.equal_range('i').second)->first << COL_MY << " | m: " << COL_END << (first_my.equal_range('m').second)->first << COL_MY << " | e: " << COL_END << (first_my.equal_range('e').second)->first << COL_MY << " | d: " << COL_END << (first_my.equal_range('b').second)->first << std::endl;
+}
+
+void    key_comp()
+{
+    std::map<char,int> first;
+    std::map<char,int>::key_compare comp_st = first.key_comp();
+    first['a']=100;
+    first['b']=200;
+    first['c']=300;
+    char highest = first.rbegin()->first;     // key value of last element
+
+    std::cout << COL_ST << "St map: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "St map with key_comp: " << COL_END;
+    std::map<char,int>::iterator it = first.begin();
+    do {
+        std::cout << it->first << ":" << it->second << ' ';
+    } while ( comp_st((*it++).first, highest) );
+    std::cout << std::endl << std::endl;
+    
+    ft::Map<char,int> first_my;
+    ft::Map<char,int>::key_compare comp_my = first_my.key_comp();
+    first_my['a']=100;
+    first_my['b']=200;
+    first_my['c']=300;
+    char highest_my = first_my.rbegin()->first;     // key value of last element
+
+    std::cout << COL_MY << "My map: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "My map with key_comp: " << COL_END;
+    ft::Map<char,int>::iterator it_my = first_my.begin();
+    do {
+        std::cout << it_my->first << ":" << it_my->second << ' ';
+    } while ( comp_my((*it_my++).first, highest_my) );
+}
+
+void    value_comp()
+{
+    std::map<char,int> first;
+    first['a']=100;
+    first['b']=200;
+    first['c']=300;
+    std::pair<char, int> highest = *first.rbegin();
+
+    std::cout << COL_ST << "St map: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_OFF, COL_ST);
+    std::cout << COL_ST << "St map with value_comp: " << COL_END;
+    std::map<char,int>::iterator it = first.begin();
+    do {
+        std::cout << it->first << ":" << it->second << ' ';
+    } while (first.value_comp()((*it++), highest) );
+    std::cout << std::endl << std::endl;
+    
+    ft::Map<char,int> first_my;
+    first_my['a']=100;
+    first_my['b']=200;
+    first_my['c']=300;
+    std::pair<char, int> highest_my = *first_my.rbegin();     // key value of last element
+
+    std::cout << COL_MY << "My map: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_OFF, COL_MY);
+    std::cout << COL_MY << "My map with value_comp: " << COL_END;
+    ft::Map<char,int>::iterator it_my = first_my.begin();
+    do {
+        std::cout << it_my->first << ":" << it_my->second << ' ';
+    } while (first_my.value_comp()((*it_my++), highest_my));
+}
+
 int main()
 {
     std::cout << "___________________________________________________________" << std::endl;
@@ -780,6 +900,34 @@ int main()
     std::cout << "|     Count     |" << std::endl;
     std::cout << "|_______________|" << std::endl << std::endl;
     count();
+    std::cout << std::endl;
+
+    std::cout << "_____________________________________" << std::endl;
+    std::cout << "|                                   |" << std::endl;
+    std::cout << "|     Lower_bound | Upper_bound     |" << std::endl;
+    std::cout << "|___________________________________|" << std::endl << std::endl;
+    bound();
+    std::cout << std::endl;
+
+    std::cout << "_______________________" << std::endl;
+    std::cout << "|                     |" << std::endl;
+    std::cout << "|     Equal_range     |" << std::endl;
+    std::cout << "|_____________________|" << std::endl << std::endl;
+    equal_range();
+    std::cout << std::endl;
+
+    std::cout << "____________________" << std::endl;
+    std::cout << "|                  |" << std::endl;
+    std::cout << "|     Key_comp     |" << std::endl;
+    std::cout << "|__________________|" << std::endl << std::endl;
+    key_comp();
+    std::cout << std::endl;
+
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                    |" << std::endl;
+    std::cout << "|     Value_comp     |" << std::endl;
+    std::cout << "|____________________|" << std::endl << std::endl;
+    value_comp();
     std::cout << std::endl;
 
     // sleep(10000);
