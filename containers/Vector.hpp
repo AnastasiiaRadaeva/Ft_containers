@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 16:27:21 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/06 16:26:15 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/23 20:19:59 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -511,7 +511,6 @@ namespace ft
     template <class T, class Alloc>
     bool operator<= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs)
     {
-
         vector::const_iterator<T> lhs_it = lhs.begin();
         vector::const_iterator<T> rhs_it = rhs.begin();
         while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
@@ -559,12 +558,6 @@ namespace ft
     {
         x.swap(y);
     }
-
-    // template <class Alloc>
-    // class Vector<bool, Alloc>
-    // {
-
-    // };
 }
 
 #endif

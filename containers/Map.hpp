@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 10:14:01 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/18 19:06:05 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/23 20:19:50 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -754,100 +754,97 @@ namespace ft
     /*     Non-member function overloads     */
     /*                                       */
     /*****************************************/
-    // template <class T, class Alloc>
-    // bool operator== (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     return (lhs_it == lhs.end() && rhs_it == rhs.end());
-    // }
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator==(const Map<Key,T,Compare,Alloc>& lhs, const Map<Key,T,Compare,Alloc>& rhs)
+    {
+        map::const_iterator<Key, T> lhs_it = lhs.begin();
+        map::const_iterator<Key, T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        return (lhs_it == lhs.end() && rhs_it == rhs.end());
+    }
     
-    // template <class T, class Alloc>
-    // bool operator!= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     return (lhs_it != lhs.end() || rhs_it != rhs.end());
-    // }
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator!=( const Map<Key,T,Compare,Alloc>& lhs, const Map<Key,T,Compare,Alloc>& rhs )
+    {
+        map::const_iterator<Key, T> lhs_it = lhs.begin();
+        map::const_iterator<Key, T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        return (lhs_it != lhs.end() || rhs_it != rhs.end());
+    }
     
-    // template <class T, class Alloc>
-    // bool operator<  (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // // Если значения одинаковы, то сравнивается длина списка
-    // // Если значения отличаются, то сравниваются значения
-    // // Сравнивает до первого не равного числа
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     if (rhs_it == rhs.end() || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
-    //         return (false);
-    //     return (true);
-    // }
-
-    // template <class T, class Alloc>
-    // bool operator<= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     if ((rhs_it == rhs.end() && lhs_it != lhs.end()) || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
-    //         return (false);
-    //     return (true);
-    // }
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator<(const Map<Key,T,Compare,Alloc>& lhs, const Map<Key,T,Compare,Alloc>& rhs )
+    {
+        map::const_iterator<Key, T> lhs_it = lhs.begin();
+        map::const_iterator<Key, T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if (rhs_it == rhs.end() || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
+            return (false);
+        return (true);
+    }
     
-    // template <class T, class Alloc>
-    // bool operator>  (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     if (lhs_it == lhs.end() || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
-    //         return (false);
-    //     return (true);
-    // }
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator<=(const Map<Key,T,Compare,Alloc>& lhs, const Map<Key,T,Compare,Alloc>& rhs )
+    {
+        map::const_iterator<Key, T> lhs_it = lhs.begin();
+        map::const_iterator<Key, T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if ((rhs_it == rhs.end() && lhs_it != lhs.end()) || (*lhs_it > *rhs_it && lhs_it != lhs.end()))
+            return (false);
+        return (true);
+    }
+    
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator>(const Map<Key,T,Compare,Alloc>& lhs, const Map<Key,T,Compare,Alloc>& rhs )
+    {
+        map::const_iterator<Key, T> lhs_it = lhs.begin();
+        map::const_iterator<Key, T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if (lhs_it == lhs.end() || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
+            return (false);
+        return (true);
+    }
+    
+    template <class Key, class T, class Compare, class Alloc>
+    bool operator>=(const Map<Key,T,Compare,Alloc>& lhs, const Map<Key,T,Compare,Alloc>& rhs )
+    {
+        map::const_iterator<Key, T> lhs_it = lhs.begin();
+        map::const_iterator<Key, T> rhs_it = rhs.begin();
+        while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
+        {
+            lhs_it++;
+            rhs_it++;
+        }
+        if ((lhs_it == lhs.end() && rhs_it != rhs.end()) || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
+            return (false);
+        return (true);
+    }
 
-    // template <class T, class Alloc>
-    // bool operator>= (const List<T,Alloc>& lhs, const List<T,Alloc>& rhs)
-    // {
-    //     list::const_iterator<T> lhs_it = lhs.begin();
-    //     list::const_iterator<T> rhs_it = rhs.begin();
-    //     while (lhs_it != lhs.end() && rhs_it != rhs.end() && *lhs_it == *rhs_it)
-    //     {
-    //         lhs_it++;
-    //         rhs_it++;
-    //     }
-    //     if ((lhs_it == lhs.end() && rhs_it != rhs.end()) || (*lhs_it < *rhs_it && rhs_it != rhs.end()))
-    //         return (false);
-    //     return (true);
-    // }
-
-    // template <class T, class Alloc>
-    // void swap (List<T,Alloc>& x, List<T,Alloc>& y)
-    // {
-    //     x.swap(y);
-    // }
+    template <class Key, class T, class Compare, class Alloc>
+    void swap(Map<Key,T,Compare,Alloc>& x, Map<Key,T,Compare,Alloc>& y)
+    {
+        x.swap(y);
+    }
 }
 
 #endif

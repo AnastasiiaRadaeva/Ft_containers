@@ -6,7 +6,7 @@
 /*   By: kbatwoma <kbatwoma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 10:14:33 by kbatwoma          #+#    #+#             */
-/*   Updated: 2021/05/18 19:12:01 by kbatwoma         ###   ########.fr       */
+/*   Updated: 2021/05/23 20:25:27 by kbatwoma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -788,6 +788,422 @@ void    value_comp()
     } while (first_my.value_comp()((*it_my++), highest_my));
 }
 
+void    equal()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['d']=70;
+
+    std::map<char,int> second(first);
+    std::cout << COL_ST << "St equivalent: " << COL_END;
+    std::cout << (first == second) << std::endl;
+    second['c']=70;
+    std::cout << COL_ST << "St not equivalent: " << COL_END;
+    std::cout << (first == second) << std::endl;
+    std::cout << std::endl;
+
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['b']=30;
+    first_my['c']=50;
+    first_my['d']=70;
+
+    ft::Map<char,int> second_my(first_my);
+    std::cout << COL_MY << "My equivalent: " << COL_END;
+    std::cout << (first_my == second_my) << std::endl;
+    second_my['c']=70;
+    std::cout << COL_MY << "My not equivalent: " << COL_END;
+    std::cout << (first_my == second_my) << std::endl;
+}
+
+void    not_equal()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['b']=30;
+    first['c']=50;
+    first['d']=70;
+
+    std::map<char,int> second(first);
+    std::cout << COL_ST << "St equivalent: " << COL_END;
+    std::cout << (first != second) << std::endl;
+    second['c']=70;
+    std::cout << COL_ST << "St not equivalent: " << COL_END;
+    std::cout << (first != second) << std::endl;
+    std::cout << std::endl;
+
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['b']=30;
+    first_my['c']=50;
+    first_my['d']=70;
+
+    ft::Map<char,int> second_my(first_my);
+    std::cout << COL_MY << "My equivalent: " << COL_END;
+    std::cout << (first_my != second_my) << std::endl;
+    second_my['c']=70;
+    std::cout << COL_MY << "My not equivalent: " << COL_END;
+    std::cout << (first_my != second_my) << std::endl;
+}
+
+void    less()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['c']=30;
+    first['d']=50;
+    first['e']=70;
+    first['m']=10;
+    std::map<char,int> second;
+    second['a']=10;
+    second['c']=30;
+    second['d']=50;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 3 elem (value_pair are equivalent): " << COL_END;
+    std::cout << (first < second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 6 elem (value_pair are equivalent): " << COL_END;
+    second['e']=70;
+    second['m']=10;
+    second['l']=95;
+    std::cout << (first < second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value_pair are equivalent): " << COL_END;
+    second.erase('l');
+    std::cout << (first < second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value of d in map 1 is greater): " << COL_END;
+    first['d']=100;
+    std::cout << (first < second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    second['d']=120;
+    std::cout << (first < second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 7 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    first['x']=20;
+    first['y']=23;
+    std::cout << (first < second) << std::endl;
+    std::cout << std::endl;
+
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['c']=30;
+    first_my['d']=50;
+    first_my['e']=70;
+    first_my['m']=10;
+    ft::Map<char,int> second_my;
+    second_my['a']=10;
+    second_my['c']=30;
+    second_my['d']=50;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 3 elem (value_pair are equivalent): " << COL_END;
+    std::cout << (first_my < second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 6 elem (value_pair are equivalent): " << COL_END;
+    second_my['e']=70;
+    second_my['m']=10;
+    second_my['l']=95;
+    std::cout << (first_my < second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value_pair are equivalent): " << COL_END;
+    second_my.erase('l');
+    std::cout << (first_my < second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value of d in map 1 is greater): " << COL_END;
+    first_my['d']=100;
+    std::cout << (first_my < second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    second_my['d']=120;
+    std::cout << (first_my < second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 7 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    first_my['x']=20;
+    first_my['y']=23;
+    std::cout << (first_my < second_my) << std::endl;
+}
+
+void    less_or_egual()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['c']=30;
+    first['d']=50;
+    first['e']=70;
+    first['m']=10;
+    std::map<char,int> second;
+    second['a']=10;
+    second['c']=30;
+    second['d']=50;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 3 elem (value_pair are equivalent): " << COL_END;
+    std::cout << (first <= second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 6 elem (value_pair are equivalent): " << COL_END;
+    second['e']=70;
+    second['m']=10;
+    second['l']=95;
+    std::cout << (first <= second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value_pair are equivalent): " << COL_END;
+    second.erase('l');
+    std::cout << (first <= second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value of d in map 1 is greater): " << COL_END;
+    first['d']=100;
+    std::cout << (first <= second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    second['d']=120;
+    std::cout << (first <= second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 7 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    first['x']=20;
+    first['y']=23;
+    std::cout << (first <= second) << std::endl;
+    std::cout << std::endl;
+
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['c']=30;
+    first_my['d']=50;
+    first_my['e']=70;
+    first_my['m']=10;
+    ft::Map<char,int> second_my;
+    second_my['a']=10;
+    second_my['c']=30;
+    second_my['d']=50;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 3 elem (value_pair are equivalent): " << COL_END;
+    std::cout << (first_my <= second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 6 elem (value_pair are equivalent): " << COL_END;
+    second_my['e']=70;
+    second_my['m']=10;
+    second_my['l']=95;
+    std::cout << (first_my <= second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value_pair are equivalent): " << COL_END;
+    second_my.erase('l');
+    std::cout << (first_my <= second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value of d in map 1 is greater): " << COL_END;
+    first_my['d']=100;
+    std::cout << (first_my <= second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    second_my['d']=120;
+    std::cout << (first_my <= second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 7 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    first_my['x']=20;
+    first_my['y']=23;
+    std::cout << (first_my <= second_my) << std::endl;
+}
+
+void    greater()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['c']=30;
+    first['d']=50;
+    first['e']=70;
+    first['m']=10;
+    std::map<char,int> second;
+    second['a']=10;
+    second['c']=30;
+    second['d']=50;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 3 elem (value_pair are equivalent): " << COL_END;
+    std::cout << (first > second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 6 elem (value_pair are equivalent): " << COL_END;
+    second['e']=70;
+    second['m']=10;
+    second['l']=95;
+    std::cout << (first > second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value_pair are equivalent): " << COL_END;
+    second.erase('l');
+    std::cout << (first > second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value of d in map 1 is greater): " << COL_END;
+    first['d']=100;
+    std::cout << (first > second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    second['d']=120;
+    std::cout << (first > second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 7 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    first['x']=20;
+    first['y']=23;
+    std::cout << (first > second) << std::endl;
+    std::cout << std::endl;
+
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['c']=30;
+    first_my['d']=50;
+    first_my['e']=70;
+    first_my['m']=10;
+    ft::Map<char,int> second_my;
+    second_my['a']=10;
+    second_my['c']=30;
+    second_my['d']=50;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 3 elem (value_pair are equivalent): " << COL_END;
+    std::cout << (first_my > second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 6 elem (value_pair are equivalent): " << COL_END;
+    second_my['e']=70;
+    second_my['m']=10;
+    second_my['l']=95;
+    std::cout << (first_my > second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value_pair are equivalent): " << COL_END;
+    second_my.erase('l');
+    std::cout << (first_my > second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value of d in map 1 is greater): " << COL_END;
+    first_my['d']=100;
+    std::cout << (first_my > second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    second_my['d']=120;
+    std::cout << (first_my > second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 7 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    first_my['x']=20;
+    first_my['y']=23;
+    std::cout << (first_my > second_my) << std::endl;
+}
+
+void    greater_or_equal()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['c']=30;
+    first['d']=50;
+    first['e']=70;
+    first['m']=10;
+    std::map<char,int> second;
+    second['a']=10;
+    second['c']=30;
+    second['d']=50;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 3 elem (value_pair are equivalent): " << COL_END;
+    std::cout << (first >= second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 6 elem (value_pair are equivalent): " << COL_END;
+    second['e']=70;
+    second['m']=10;
+    second['l']=95;
+    std::cout << (first >= second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value_pair are equivalent): " << COL_END;
+    second.erase('l');
+    std::cout << (first >= second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value of d in map 1 is greater): " << COL_END;
+    first['d']=100;
+    std::cout << (first >= second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 5 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    second['d']=120;
+    std::cout << (first >= second) << std::endl;
+
+    std::cout << COL_ST << "St 1 - 7 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    first['x']=20;
+    first['y']=23;
+    std::cout << (first >= second) << std::endl;
+    std::cout << std::endl;
+
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['c']=30;
+    first_my['d']=50;
+    first_my['e']=70;
+    first_my['m']=10;
+    ft::Map<char,int> second_my;
+    second_my['a']=10;
+    second_my['c']=30;
+    second_my['d']=50;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 3 elem (value_pair are equivalent): " << COL_END;
+    std::cout << (first_my >= second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 6 elem (value_pair are equivalent): " << COL_END;
+    second_my['e']=70;
+    second_my['m']=10;
+    second_my['l']=95;
+    std::cout << (first_my >= second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value_pair are equivalent): " << COL_END;
+    second_my.erase('l');
+    std::cout << (first_my >= second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value of d in map 1 is greater): " << COL_END;
+    first_my['d']=100;
+    std::cout << (first_my >= second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 5 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    second_my['d']=120;
+    std::cout << (first_my >= second_my) << std::endl;
+
+    std::cout << COL_MY << "My 1 - 7 elem, 2 - 5 elem (value of d in map 2 is greater): " << COL_END;
+    first_my['x']=20;
+    first_my['y']=23;
+    std::cout << (first_my >= second_my) << std::endl;
+}
+
+void    ft_swap()
+{
+    std::map<char,int> first;
+    first['a']=10;
+    first['c']=30;
+    first['d']=50;
+    first['e']=70;
+    first['m']=10;
+    std::map<char,int> second;
+    second['a']=10;
+    second['c']=30;
+    second['d']=50;
+    std::cout << COL_ST << "St 1 before swap: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_ON, COL_ST);
+    std::cout << COL_ST << "St 2 before swap: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    std::swap(first, second);
+    std::cout << COL_ST << "St 1 after swap: " << COL_END;
+    print_container<std::map<char, int> >(first, PARAMS_ON, COL_ST);
+    std::cout << COL_ST << "St 2 aftre swap: " << COL_END;
+    print_container<std::map<char, int> >(second, PARAMS_ON, COL_ST);
+    std::cout << std::endl;
+
+    ft::Map<char,int> first_my;
+    first_my['a']=10;
+    first_my['c']=30;
+    first_my['d']=50;
+    first_my['e']=70;
+    first_my['m']=10;
+    ft::Map<char,int> second_my;
+    second_my['a']=10;
+    second_my['c']=30;
+    second_my['d']=50;
+    std::cout << COL_MY << "My 1 before swap: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_ON, COL_MY);
+    std::cout << COL_MY << "My 2 before swap: " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+    std::swap(first_my, second_my);
+    std::cout << COL_MY << "My 1 after swap: " << COL_END;
+    print_container<ft::Map<char, int> >(first_my, PARAMS_ON, COL_MY);
+    std::cout << COL_MY << "My 2 aftre swap: " << COL_END;
+    print_container<ft::Map<char, int> >(second_my, PARAMS_ON, COL_MY);
+}
+
 int main()
 {
     std::cout << "___________________________________________________________" << std::endl;
@@ -930,6 +1346,55 @@ int main()
     value_comp();
     std::cout << std::endl;
 
-    // sleep(10000);
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                    |" << std::endl;
+    std::cout << "|     Operator==     |" << std::endl;
+    std::cout << "|____________________|" << std::endl << std::endl;
+    equal();
+    std::cout << std::endl;
+
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                    |" << std::endl;
+    std::cout << "|     Operator!=     |" << std::endl;
+    std::cout << "|____________________|" << std::endl << std::endl;
+    not_equal();
+    std::cout << std::endl;
+
+    std::cout << "_____________________" << std::endl;
+    std::cout << "|                   |" << std::endl;
+    std::cout << "|     Operator<     |" << std::endl;
+    std::cout << "|___________________|" << std::endl << std::endl;
+    less();
+    std::cout << std::endl;
+
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                    |" << std::endl;
+    std::cout << "|     Operator<=     |" << std::endl;
+    std::cout << "|____________________|" << std::endl << std::endl;
+    less_or_egual();
+    std::cout << std::endl;
+
+    std::cout << "_____________________" << std::endl;
+    std::cout << "|                   |" << std::endl;
+    std::cout << "|     Operator>     |" << std::endl;
+    std::cout << "|___________________|" << std::endl << std::endl;
+    greater();
+    std::cout << std::endl;
+
+    std::cout << "______________________" << std::endl;
+    std::cout << "|                    |" << std::endl;
+    std::cout << "|     Operator>=     |" << std::endl;
+    std::cout << "|____________________|" << std::endl << std::endl;
+    greater_or_equal();
+    std::cout << std::endl;
+
+    std::cout << "____________________" << std::endl;
+    std::cout << "|                  |" << std::endl;
+    std::cout << "|     ft::swap     |" << std::endl;
+    std::cout << "|__________________|" << std::endl << std::endl;
+    ft_swap();
+    std::cout << std::endl;
+
+    sleep(10000);
     return (0);
 }
